@@ -1,0 +1,2 @@
+rootProject.name = "Roadside User"
+include ':app'

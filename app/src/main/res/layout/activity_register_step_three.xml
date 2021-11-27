@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_5"
+        android:clipToPadding="false"
+        android:padding="@dimen/spacing_mlarge"
+        android:scrollbars="none"
+        android:scrollingCache="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/service"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/spacing_large"
+                />
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Services"
+                android:layout_marginBottom="@dimen/spacing_large"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:textColor="@color/grey_80"
+                android:textStyle="bold" />
+
+            <LinearLayout
+
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <CheckBox
+                    android:tag="0"
+                    android:id="@+id/tire"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Tire"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="1"
+                    android:id="@+id/battery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Battery"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="2"
+                    android:id="@+id/gas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Gas"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="3"
+                    android:id="@+id/coveredTowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Covered Towing"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="4"
+                    android:id="@+id/regularTowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Regular Towing"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="5"
+                    android:id="@+id/flatbedTowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Flatbed Towing"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="6"
+                    android:id="@+id/locksmith"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Locksmith"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="7"
+                    android:id="@+id/winch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Winch"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="8"
+                    android:id="@+id/lowbedTowing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Lowbed Towing"
+                    android:onClick="onCheckboxClicked"/>
+                <CheckBox
+                    android:tag="9"
+                    android:id="@+id/periodicInspection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Motor Vehicle Periodic Inspection"
+                    android:onClick="onCheckboxClicked"/>
+
+            </LinearLayout>
+
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/spacing_mlarge" />
+
+            <Button
+                android:id="@+id/nextBtn"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginLeft="-4dp"
+                android:layout_marginRight="-4dp"
+                android:background="@drawable/btn_rounded_red"
+                android:text="Next"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@android:color/white" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="@dimen/spacing_mlarge" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>
