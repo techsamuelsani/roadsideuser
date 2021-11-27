@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,7 +34,7 @@ public class DialogServiceAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView serviceName;
+        public CheckBox serviceName;
 
         public OriginalViewHolder(View v) {
             super(v);
@@ -46,7 +47,7 @@ public class DialogServiceAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.dialog_select_service, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service_dialog, parent, false);
         vh = new OriginalViewHolder(v);
         return vh;
     }
