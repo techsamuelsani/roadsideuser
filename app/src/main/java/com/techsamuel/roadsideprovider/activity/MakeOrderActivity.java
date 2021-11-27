@@ -21,12 +21,15 @@ import com.bumptech.glide.Glide;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.DialogServiceAdapter;
+import com.techsamuel.roadsideprovider.adapter.DialogVehicleAdapter;
 import com.techsamuel.roadsideprovider.adapter.ServiceAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
+import com.techsamuel.roadsideprovider.listener.VehicleItemOnclickListener;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
+import com.techsamuel.roadsideprovider.model.VehicleModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
 
@@ -39,6 +42,7 @@ public class MakeOrderActivity extends AppCompatActivity {
     String userId;
     String providerId;
     EditText selectService;
+    EditText selectVehicle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,23 +68,35 @@ public class MakeOrderActivity extends AppCompatActivity {
         providerId=intent.getStringExtra("provider_id");
         Tools.showToast(MakeOrderActivity.this,providerId);
         selectService=findViewById(R.id.select_service);
+        selectVehicle=findViewById(R.id.select_vehicle);
+        selectVehicle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog(false);
+            }
+        });
         selectService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog();
+                showDialog(true);
             }
         });
 
     }
 
-    private void showDialog(){
+    private void showDialog(boolean isService){
         final Dialog dialog = new Dialog(MakeOrderActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
         dialog.setContentView(R.layout.dialog_select_service);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(true);
         RecyclerView recyclerView=dialog.findViewById(R.id.recycler_service);
-        getProviderSerivces(providerId,recyclerView,dialog);
+        if(isService){
+            getProviderSerivces(providerId,recyclerView,dialog);
+        }else{
+            getRegisteredVehicle(recyclerView,dialog);
+        }
+
 
         dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +105,39 @@ public class MakeOrderActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getRegisteredVehicle(RecyclerView recyclerView,Dialog dialog){
+        Log.d("MainActivity","Called");
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<VehicleModel> call=apiInterface.getRegisteredVehicle(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId);
+        call.enqueue(new Callback<VehicleModel>() {
+            @Override
+            public void onResponse(Call<VehicleModel> call, Response<VehicleModel> response) {
+                Log.d("MainActivity",response.body().getMessage().toString());
+                if(response.body().getStatus()== Config.API_SUCCESS){
+                    DialogVehicleAdapter dialogVehicleAdapter=new DialogVehicleAdapter(MakeOrderActivity.this, response.body(), new VehicleItemOnclickListener() {
+                        @Override
+                        public void onItemClick(VehicleModel.Datum item) {
+                            Tools.showToast(MakeOrderActivity.this,item.getVmake());
+                        }
+                    });
+                    LinearLayoutManager layoutManager
+                            = new LinearLayoutManager(MakeOrderActivity.this, LinearLayoutManager.VERTICAL, false);
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setAdapter(dialogVehicleAdapter);
+                    dialog.show();
+                    Log.d("MainActivity",response.body().getMessage().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VehicleModel> call, Throwable t) {
+                Log.d("MainActivity",t.getMessage().toString());
+
+            }
+        });
+    }
+
 
     private void getProviderSerivces(String providerId, RecyclerView recyclerView,Dialog dialog) {
         Log.d("MainActivity","Called");
