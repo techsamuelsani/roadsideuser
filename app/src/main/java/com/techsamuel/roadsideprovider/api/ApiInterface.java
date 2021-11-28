@@ -56,7 +56,7 @@ public interface ApiInterface {
     @POST("registerVehicle")
     Call<DataSavedModel> registerVehicle(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
                                             @Field("user_type") String user_type, @Field("user_id") String user_id,
-                                       @Field("vmake") String vmake, @Field("plate_no") String plate_no,
+                                       @Field("vmake") String vmake,@Field("vmodel") String vmodel, @Field("plate_no") String plate_no,
                                        @Field("vyear") String vyear, @Field("vr_exp_date") String vr_exp_date
                                        );
 

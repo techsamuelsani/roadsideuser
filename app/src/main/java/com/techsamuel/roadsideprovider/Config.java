@@ -19,6 +19,8 @@ public class Config {
     public static int API_FAILED=500;
     public static String DEVICE_TYPE="android";
     public static String USER_TYPE="user";
+    public static String ORDER_TYPE_DELIVERY="delivery";
+    public static String ORDER_TYPE_PICKUP="pickup";
     //All Configuration will go here
 
     public static long LOCATION_BUTTON_INVISIBLE_TIME=3000; //1 sec =1000

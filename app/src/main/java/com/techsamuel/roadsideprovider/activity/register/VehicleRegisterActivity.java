@@ -42,6 +42,7 @@ public class VehicleRegisterActivity extends AppCompatActivity {
     EditText vmake;
     EditText vmodel;
     EditText vyear;
+    EditText plateno;
     EditText vrExpDate;
     Calendar calendar;
     Button registerBtn;
@@ -71,6 +72,7 @@ public class VehicleRegisterActivity extends AppCompatActivity {
     private void init(){
         vmake=findViewById(R.id.vmake);
         vmodel=findViewById(R.id.vmodel);
+        plateno=findViewById(R.id.plateNumber);
         vyear=findViewById(R.id.vyear);
         vrExpDate=findViewById(R.id.exp_date);
         registerBtn=findViewById(R.id.registerBtn);
@@ -98,7 +100,7 @@ public class VehicleRegisterActivity extends AppCompatActivity {
     private void registerVehicle(){
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<DataSavedModel> call=apiInterface.registerVehicle(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId,vmake.getText().toString(),
-                vmodel.getText().toString(),vyear.getText().toString(),vrExpDate.getText().toString()
+                vmodel.getText().toString(),plateno.getText().toString(),vyear.getText().toString(),vrExpDate.getText().toString()
                 );
         call.enqueue(new Callback<DataSavedModel>() {
             @Override

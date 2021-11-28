@@ -23,7 +23,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Select Service"
+                android:text="Select Order Type"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 android:textColor="@color/grey_80"
                 android:layout_weight="1" />
@@ -56,12 +56,28 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_service"
+                <RadioGroup
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content">
 
+                    <RadioButton
+                        android:id="@+id/radio_delivery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Delivery (Provider will give service on your location"
+                        />
+                    <RadioButton
+                        android:id="@+id/radio_pickup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="Pickup (You have to go on provider location)"
+                        />
+
+
+
+                </RadioGroup>
             </LinearLayout>
 
         </LinearLayout>

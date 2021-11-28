@@ -33,6 +33,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -67,6 +68,7 @@ import com.techsamuel.roadsideprovider.adapter.ServiceAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
+import com.techsamuel.roadsideprovider.listener.ServiceItemClickListener;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
@@ -127,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements
     String userId;
     TextView userPhone;
     private boolean isVehicleRegistered=false;
+    BeautifulProgressDialog beautifulProgressDialog;
 
 
 
@@ -176,6 +179,9 @@ public class MainActivity extends AppCompatActivity implements
         };
         initNavigationMenu();
         initBottomSheet();
+        beautifulProgressDialog = new BeautifulProgressDialog(MainActivity.this,
+                BeautifulProgressDialog.withImage,
+                "Please wait");
 
         floatingActionButton=findViewById(R.id.fab);
         providerName=findViewById(R.id.provider_name);
@@ -341,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onResponse(Call<ServiceModel> call, Response<ServiceModel> response) {
                 Log.d("MainActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
-                    serviceAdapter=new ServiceAdapter(MainActivity.this, response.body(), false, new OnItemClickListener() {
+                    serviceAdapter=new ServiceAdapter(MainActivity.this, response.body(), false, new ServiceItemClickListener() {
                         @Override
                         public void onItemClick(ServiceModel.Datum item) {
                             Tools.showToast(MainActivity.this,item.getName());
@@ -484,6 +490,7 @@ public class MainActivity extends AppCompatActivity implements
                         @Override
                         public boolean onMarkerClick(@NonNull Marker marker) {
                             String providerId=marker.getSnippet().replace("Store ID: ","");
+                            beautifulProgressDialog.show();
                             showProviderInfo(providerId);
                             return false;
                         }
@@ -564,11 +571,13 @@ public class MainActivity extends AppCompatActivity implements
                     dialog.show();
 
                 }
+                beautifulProgressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ProviderModel> call, Throwable t) {
                 Log.d("MainActivity",t.getMessage().toString());
+                beautifulProgressDialog.dismiss();
 
             }
         });
@@ -584,7 +593,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onResponse(Call<ServiceModel> call, Response<ServiceModel> response) {
                 Log.d("MainActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
-                    ServiceAdapter serviceAdapter=new ServiceAdapter(MainActivity.this, response.body(), true, new OnItemClickListener() {
+                    ServiceAdapter serviceAdapter=new ServiceAdapter(MainActivity.this, response.body(), true, new ServiceItemClickListener() {
                         @Override
                         public void onItemClick(ServiceModel.Datum item) {
                             Tools.showToast(MainActivity.this,item.getName());

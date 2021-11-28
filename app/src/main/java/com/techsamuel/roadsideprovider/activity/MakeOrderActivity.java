@@ -14,9 +14,13 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.bumptech.glide.Glide;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
@@ -33,6 +37,8 @@ import com.techsamuel.roadsideprovider.model.VehicleModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
 
+import java.util.ArrayList;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,6 +49,34 @@ public class MakeOrderActivity extends AppCompatActivity {
     String providerId;
     EditText selectService;
     EditText selectVehicle;
+    BeautifulProgressDialog beautifulProgressDialog;
+    EditText selectLocation;
+    EditText selectType;
+    EditText orderDescription;
+    TextView selectImages;
+    TextView selectAttachment;
+    Button calculateBtn;
+    ImageButton doneBtn;
+    LinearLayout lytLocation;
+
+
+
+    ArrayList<String> selectedServiceId;
+    ArrayList<String> choosenServiceId;
+    ArrayList<String> selectedServiceName;
+    ArrayList<String> choosenServiceName;
+    String selectedVehicleId;
+    String selectedVehicleName;
+    double selectedLat;
+    double selectedLong;
+    String orderType="";
+    String serviceDescription;
+    ArrayList<String> serviceImages;
+    String serviceAttachments;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +95,9 @@ public class MakeOrderActivity extends AppCompatActivity {
                 finish();
             }
         });
+         beautifulProgressDialog = new BeautifulProgressDialog(MakeOrderActivity.this,
+                BeautifulProgressDialog.withImage,
+                "Please wait");
 
     }
     private void init(){
@@ -69,6 +106,23 @@ public class MakeOrderActivity extends AppCompatActivity {
         Tools.showToast(MakeOrderActivity.this,providerId);
         selectService=findViewById(R.id.select_service);
         selectVehicle=findViewById(R.id.select_vehicle);
+
+        selectLocation=findViewById(R.id.select_location);
+        selectType=findViewById(R.id.select_type);
+        orderDescription=findViewById(R.id.order_description);
+        selectImages=findViewById(R.id.select_images);
+        selectAttachment=findViewById(R.id.select_attachment);
+        calculateBtn=findViewById(R.id.calculate_btn);
+        doneBtn=findViewById(R.id.done_btn);
+        lytLocation=findViewById(R.id.lyt_location);
+
+        selectedServiceId=new ArrayList<>();
+        choosenServiceId=new ArrayList<>();
+        selectedServiceName=new ArrayList<>();
+        choosenServiceName=new ArrayList<>();
+        serviceImages=new ArrayList<>();
+
+
         selectVehicle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,8 +135,69 @@ public class MakeOrderActivity extends AppCompatActivity {
                 showDialog(true);
             }
         });
+        selectType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOrderTypeDialog();
+            }
+        });
 
     }
+    private void showOrderTypeDialog(){
+        final Dialog dialog = new Dialog(MakeOrderActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.dialog_select_type);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(true);
+        dialog.findViewById(R.id.bt_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+
+            }
+        });
+        dialog.findViewById(R.id.ok_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+
+        RadioButton radioDelivery=(dialog).findViewById(R.id.radio_delivery);
+        RadioButton radioPickup=(dialog).findViewById(R.id.radio_pickup);
+
+        radioDelivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(radioDelivery.isChecked()){
+                    orderType=Config.ORDER_TYPE_DELIVERY;
+                    selectType.setText("Delivery");
+                    lytLocation.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        radioPickup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(radioPickup.isChecked()){
+                    orderType=Config.ORDER_TYPE_PICKUP;
+                    selectType.setText("Pickup");
+                    lytLocation.setVisibility(View.GONE);
+                }
+            }
+        });
+
+
+
+
+
+
+        dialog.show();
+    }
+
+
 
     private void showDialog(boolean isService){
         final Dialog dialog = new Dialog(MakeOrderActivity.this);
@@ -91,6 +206,7 @@ public class MakeOrderActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(true);
         RecyclerView recyclerView=dialog.findViewById(R.id.recycler_service);
+        beautifulProgressDialog.show();
         if(isService){
             getProviderSerivces(providerId,recyclerView,dialog);
         }else{
@@ -102,6 +218,18 @@ public class MakeOrderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.cancel();
+            }
+        });
+        dialog.findViewById(R.id.ok_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isService){
+                    selectService.setText(selectedServiceName.toString());
+                    choosenServiceId=selectedServiceId;
+                    choosenServiceName=selectedServiceName;
+                    Tools.showToast(MakeOrderActivity.this,choosenServiceId.toString());
+                    dialog.cancel();
+                }
             }
         });
     }
@@ -119,6 +247,7 @@ public class MakeOrderActivity extends AppCompatActivity {
                         @Override
                         public void onItemClick(VehicleModel.Datum item) {
                             Tools.showToast(MakeOrderActivity.this,item.getVmake());
+                            dialog.dismiss();
                         }
                     });
                     LinearLayoutManager layoutManager
@@ -127,7 +256,11 @@ public class MakeOrderActivity extends AppCompatActivity {
                     recyclerView.setAdapter(dialogVehicleAdapter);
                     dialog.show();
                     Log.d("MainActivity",response.body().getMessage().toString());
+                }else{
+
+                    Tools.showToast(MakeOrderActivity.this,"No vehicle registerd, please register a vehicle");
                 }
+                beautifulProgressDialog.dismiss();
             }
 
             @Override
@@ -150,8 +283,15 @@ public class MakeOrderActivity extends AppCompatActivity {
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     DialogServiceAdapter serviceAdapter=new DialogServiceAdapter(MakeOrderActivity.this, response.body(), new OnItemClickListener() {
                         @Override
-                        public void onItemClick(ServiceModel.Datum item) {
-                            Tools.showToast(MakeOrderActivity.this,item.getName());
+                        public void onItemClick(ServiceModel.Datum item,boolean isChecked) {
+                            if(isChecked){
+                                selectedServiceId.add(item.getId());
+                                selectedServiceName.add(item.getName());
+                            }else{
+                                selectedServiceId.remove(item.getId());
+                                selectedServiceName.remove(item.getName());
+                            }
+                            //Tools.showToast(MakeOrderActivity.this,item.getName());
                         }
                     });
                     LinearLayoutManager layoutManager
@@ -161,6 +301,7 @@ public class MakeOrderActivity extends AppCompatActivity {
                     dialog.show();
                     Log.d("MainActivity",response.body().getMessage().toString());
                 }
+                beautifulProgressDialog.dismiss();
             }
 
             @Override

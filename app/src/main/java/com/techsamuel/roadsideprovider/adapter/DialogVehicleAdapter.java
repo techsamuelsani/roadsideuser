@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.RadioButton;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,11 +32,12 @@ public class DialogVehicleAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class OriginalViewHolder extends RecyclerView.ViewHolder {
 
-        public CheckBox serviceName;
+        public RadioButton serviceName;
 
         public OriginalViewHolder(View v) {
             super(v);
             serviceName=v.findViewById(R.id.service_name);
+            //serviceName=v.findViewWithTag("service_tag");
 
         }
 
@@ -44,7 +46,7 @@ public class DialogVehicleAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder vh;
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_service_dialog, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_vehicle_dialog, parent, false);
         vh = new OriginalViewHolder(v);
         return vh;
     }
@@ -54,6 +56,7 @@ public class DialogVehicleAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(RecyclerView.ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         if (holder instanceof OriginalViewHolder) {
             OriginalViewHolder view = (OriginalViewHolder) holder;
+            //view.serviceName.setId(Integer.parseInt(vehicleModel.getData().get(position).getId()));
             view.serviceName.setText(vehicleModel.getData().get(position).getVmake()+" "+vehicleModel.getData().get(position).getVmodel());
             view.serviceName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -61,6 +64,8 @@ public class DialogVehicleAdapter extends RecyclerView.Adapter<RecyclerView.View
                     listener.onItemClick(vehicleModel.getData().get(position));
                 }
             });
+
+
 
         }
     }

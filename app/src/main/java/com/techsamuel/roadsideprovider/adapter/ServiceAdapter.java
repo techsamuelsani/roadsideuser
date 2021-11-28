@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
+import com.techsamuel.roadsideprovider.listener.ServiceItemClickListener;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.tools.Tools;
 
@@ -24,10 +25,10 @@ public class ServiceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     ServiceModel serviceModel;
     private Context ctx;
     private boolean isProviderInfo;
-    private final OnItemClickListener listener;
+    private final ServiceItemClickListener listener;
 
 
-    public ServiceAdapter(Context context, ServiceModel serviceModel, boolean isProviderInfo, OnItemClickListener listener) {
+    public ServiceAdapter(Context context, ServiceModel serviceModel, boolean isProviderInfo, ServiceItemClickListener listener) {
         this.serviceModel = serviceModel;
         ctx = context;
         this.isProviderInfo=isProviderInfo;

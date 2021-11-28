@@ -61,7 +61,12 @@ public class DialogServiceAdapter extends RecyclerView.Adapter<RecyclerView.View
             view.serviceName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onItemClick(serviceModel.getData().get(position));
+                    if(view.serviceName.isChecked()){
+                        listener.onItemClick(serviceModel.getData().get(position),true);
+                    }else{
+                        listener.onItemClick(serviceModel.getData().get(position),false);
+                    }
+
                 }
             });
 
