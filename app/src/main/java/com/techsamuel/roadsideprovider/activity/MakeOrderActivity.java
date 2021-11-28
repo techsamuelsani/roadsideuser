@@ -1,14 +1,20 @@
 package com.techsamuel.roadsideprovider.activity;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.ClipData;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.bumptech.glide.Glide;
@@ -27,6 +34,7 @@ import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.DialogServiceAdapter;
 import com.techsamuel.roadsideprovider.adapter.DialogVehicleAdapter;
 import com.techsamuel.roadsideprovider.adapter.ServiceAdapter;
+import com.techsamuel.roadsideprovider.adapter.ToolboxUploadinPhotosGridAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
@@ -35,10 +43,16 @@ import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.VehicleModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
+import com.techsamuel.roadsideprovider.tools.SpacingItemDecoration;
 import com.techsamuel.roadsideprovider.tools.Tools;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,6 +73,13 @@ public class MakeOrderActivity extends AppCompatActivity {
     ImageButton doneBtn;
     LinearLayout lytLocation;
 
+    int PICK_IMAGE_MULTIPLE = 1;
+    ToolboxUploadinPhotosGridAdapter toolboxUploadinPhotosGridAdapter;
+    List<String> imagesEncodedList;
+    String imageEncoded;
+    RecyclerView recyclerView;
+    LinearLayout lytOrderImages;
+    LinearLayout lytSelectImages;
 
 
     ArrayList<String> selectedServiceId;
@@ -70,11 +91,9 @@ public class MakeOrderActivity extends AppCompatActivity {
     double selectedLat;
     double selectedLong;
     String orderType="";
+    String choosenOrderType;
     String serviceDescription;
-    ArrayList<String> serviceImages;
-    String serviceAttachments;
-
-
+    List<MultipartBody.Part> serviceImages=new ArrayList<MultipartBody.Part>();
 
 
 
@@ -115,6 +134,10 @@ public class MakeOrderActivity extends AppCompatActivity {
         calculateBtn=findViewById(R.id.calculate_btn);
         doneBtn=findViewById(R.id.done_btn);
         lytLocation=findViewById(R.id.lyt_location);
+        lytOrderImages=findViewById(R.id.lyt_order_images);
+        recyclerView=findViewById(R.id.recyclerView);
+        lytSelectImages=findViewById(R.id.lyt_select_images);
+
 
         selectedServiceId=new ArrayList<>();
         choosenServiceId=new ArrayList<>();
@@ -141,6 +164,17 @@ public class MakeOrderActivity extends AppCompatActivity {
                 showOrderTypeDialog();
             }
         });
+        lytSelectImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Add images"), PICK_IMAGE_MULTIPLE);
+            }
+        });
+
 
     }
     private void showOrderTypeDialog(){
@@ -159,6 +193,17 @@ public class MakeOrderActivity extends AppCompatActivity {
         dialog.findViewById(R.id.ok_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                choosenOrderType=orderType;
+                if(choosenOrderType.equals(Config.ORDER_TYPE_DELIVERY)){
+                    selectType.setText("Delivery");
+                    lytLocation.setVisibility(View.VISIBLE);
+                }else if(choosenOrderType.equals(Config.ORDER_TYPE_PICKUP)){
+                    selectType.setText("Pickup");
+                    lytLocation.setVisibility(View.GONE);
+                }else{
+                    selectType.setText("Delivery/Pickup");
+                    lytLocation.setVisibility(View.GONE);
+                }
                 dialog.cancel();
             }
         });
@@ -172,8 +217,7 @@ public class MakeOrderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(radioDelivery.isChecked()){
                     orderType=Config.ORDER_TYPE_DELIVERY;
-                    selectType.setText("Delivery");
-                    lytLocation.setVisibility(View.VISIBLE);
+
                 }
             }
         });
@@ -183,8 +227,7 @@ public class MakeOrderActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(radioPickup.isChecked()){
                     orderType=Config.ORDER_TYPE_PICKUP;
-                    selectType.setText("Pickup");
-                    lytLocation.setVisibility(View.GONE);
+
                 }
             }
         });
@@ -246,7 +289,9 @@ public class MakeOrderActivity extends AppCompatActivity {
                     DialogVehicleAdapter dialogVehicleAdapter=new DialogVehicleAdapter(MakeOrderActivity.this, response.body(), new VehicleItemOnclickListener() {
                         @Override
                         public void onItemClick(VehicleModel.Datum item) {
-                            Tools.showToast(MakeOrderActivity.this,item.getVmake());
+                            selectedVehicleName=item.getVmake()+" "+item.getVmodel()+" "+item.getVyear();
+                            selectedVehicleId=item.getId();
+                            selectVehicle.setText(selectedVehicleName);
                             dialog.dismiss();
                         }
                     });
@@ -308,11 +353,98 @@ public class MakeOrderActivity extends AppCompatActivity {
             public void onFailure(Call<ServiceModel> call, Throwable t) {
                 Log.d("MainActivity",t.getMessage().toString());
 
+
             }
         });
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        try{
+            if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == RESULT_OK
+                    && null != data) {
+                // Get the Image from data
+
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                imagesEncodedList = new ArrayList<String>();
+                if(data.getData()!=null){
+
+                    Uri mImageUri=data.getData();
+
+                    // Get the cursor
+                    Cursor cursor = getContentResolver().query(mImageUri,
+                            filePathColumn, null, null, null);
+                    // Move to first row
+                    cursor.moveToFirst();
+
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    imageEncoded  = cursor.getString(columnIndex);
+                    cursor.close();
+
+                    ArrayList<Uri> imageUri = new ArrayList<Uri>();
+                    serviceImages.clear();
+                    imageUri.add(mImageUri);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    lytOrderImages.setVisibility(View.GONE);
+                    toolboxUploadinPhotosGridAdapter=new ToolboxUploadinPhotosGridAdapter(MakeOrderActivity.this,imageUri);
+                    recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+                    recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(MakeOrderActivity.this, 2), true));
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setAdapter(toolboxUploadinPhotosGridAdapter);
+                    //toolboxFile=new MultipartBody.Part[services.size()];
+                    for(int i=0;i<imageUri.size();i++){
+                        File file=Tools.getFile(MakeOrderActivity.this,imageUri.get(i));
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+                        MultipartBody.Part part=MultipartBody.Part.createFormData("service_images[]", file.getName(), requestBody);
+                        serviceImages.add(part);
+
+                    }
+
+                } else {
+                    if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        ArrayList<Uri> imageUri = new ArrayList<Uri>();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            imageUri.add(uri);
+                            // Get the cursor
+                            Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null, null);
+                            // Move to first row
+                            cursor.moveToFirst();
+                            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                            imageEncoded  = cursor.getString(columnIndex);
+                            imagesEncodedList.add(imageEncoded);
+                            cursor.close();
+
+                        }
+                            serviceImages.clear();
+                            recyclerView.setVisibility(View.VISIBLE);
+                            lytOrderImages.setVisibility(View.GONE);
+                            toolboxUploadinPhotosGridAdapter=new ToolboxUploadinPhotosGridAdapter(MakeOrderActivity.this,imageUri);
+                            recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+                            recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(MakeOrderActivity.this, 2), true));
+                            recyclerView.setHasFixedSize(true);
+                            recyclerView.setAdapter(toolboxUploadinPhotosGridAdapter);
+                            //toolboxFile=new MultipartBody.Part[services.size()];
+                            for(int i=0;i<imageUri.size();i++){
+                                File file=Tools.getFile(MakeOrderActivity.this,imageUri.get(i));
+                                RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), file);
+                                MultipartBody.Part part=MultipartBody.Part.createFormData("service_images[]", file.getName(), requestBody);
+                                serviceImages.add(part);
+
+                            }
+                    }
+                }
+            }
+
+        }catch (Exception e){
+            Tools.showToast(MakeOrderActivity.this, "Something went wrong");
+            e.printStackTrace();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

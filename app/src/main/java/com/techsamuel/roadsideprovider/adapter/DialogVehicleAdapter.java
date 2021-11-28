@@ -57,15 +57,13 @@ public class DialogVehicleAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (holder instanceof OriginalViewHolder) {
             OriginalViewHolder view = (OriginalViewHolder) holder;
             //view.serviceName.setId(Integer.parseInt(vehicleModel.getData().get(position).getId()));
-            view.serviceName.setText(vehicleModel.getData().get(position).getVmake()+" "+vehicleModel.getData().get(position).getVmodel());
+            view.serviceName.setText(vehicleModel.getData().get(position).getVmake()+" "+vehicleModel.getData().get(position).getVmodel()+" "+vehicleModel.getData().get(position).getVyear());
             view.serviceName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listener.onItemClick(vehicleModel.getData().get(position));
                 }
             });
-
-
 
         }
     }
@@ -74,8 +72,6 @@ public class DialogVehicleAdapter extends RecyclerView.Adapter<RecyclerView.View
     public int getItemCount() {
         return vehicleModel.getData().size();
     }
-
-
 
 }
 
