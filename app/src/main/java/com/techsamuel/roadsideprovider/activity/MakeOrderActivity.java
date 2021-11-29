@@ -122,7 +122,7 @@ public class MakeOrderActivity extends AppCompatActivity {
     private void init(){
         Intent intent=getIntent();
         providerId=intent.getStringExtra("provider_id");
-        Tools.showToast(MakeOrderActivity.this,providerId);
+        //Tools.showToast(MakeOrderActivity.this,providerId);
         selectService=findViewById(R.id.select_service);
         selectVehicle=findViewById(R.id.select_vehicle);
 
@@ -232,11 +232,6 @@ public class MakeOrderActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
         dialog.show();
     }
 
@@ -270,7 +265,7 @@ public class MakeOrderActivity extends AppCompatActivity {
                     selectService.setText(selectedServiceName.toString());
                     choosenServiceId=selectedServiceId;
                     choosenServiceName=selectedServiceName;
-                    Tools.showToast(MakeOrderActivity.this,choosenServiceId.toString());
+                    //Tools.showToast(MakeOrderActivity.this,choosenServiceId.toString());
                     dialog.cancel();
                 }
             }

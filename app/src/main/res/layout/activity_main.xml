@@ -76,6 +76,7 @@
                         app:tint="@color/white" />
 
                     <EditText
+                        android:focusable="false"
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:id="@+id/et_search"

@@ -24,6 +24,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.MessageActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.MakeOrderActivity"
             android:exported="false" />
         <activity
@@ -62,7 +65,7 @@
         <activity android:name=".activity.MainActivity" />
         <activity
             android:name=".activity.register.UserLoginActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
 
         <service
             android:name=".service.AppFirebaseInstanceIdService"

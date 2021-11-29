@@ -14,6 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -45,12 +47,18 @@ import com.mapbox.android.core.location.LocationEngineCallback;
 import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.annotations.PolygonOptions;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.location.LocationComponent;
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
@@ -60,6 +68,9 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
+import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.activity.register.UserLoginActivity;
@@ -90,6 +101,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements
         OnMapReadyCallback, PermissionsListener{
 
+    int REQUEST_CODE_AUTOCOMPLETE=2127;
     private MapView mapView;
     private PermissionsManager permissionsManager;
     private MapboxMap mapboxMap;
@@ -130,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements
     TextView userPhone;
     private boolean isVehicleRegistered=false;
     BeautifulProgressDialog beautifulProgressDialog;
+    EditText etSearch;
 
 
 
@@ -204,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements
         lytSearch=findViewById(R.id.lyt_search);
         userPhone=findViewById(R.id.userPhone);
         currency=findViewById(R.id.currency);
+        etSearch=findViewById(R.id.et_search);
 
         currency.setText(settingsModel.getData().getAppCurrency());
 
@@ -251,6 +265,27 @@ public class MainActivity extends AppCompatActivity implements
             public void onClick(View view) {
                 Intent intent=new Intent(MainActivity.this,WalletActivity.class);
                 startActivity(intent);
+            }
+        });
+        lytMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,MessageActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        etSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new PlaceAutocomplete.IntentBuilder()
+                        .accessToken(Mapbox.getAccessToken() != null ? Mapbox.getAccessToken() : getString(R.string.mapbox_access_token))
+                        .placeOptions(PlaceOptions.builder()
+                                .backgroundColor(Color.parseColor("#EEEEEE"))
+                                .limit(10)
+                                .build(PlaceOptions.MODE_CARDS))
+                        .build(MainActivity.this);
+                startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
             }
         });
 
@@ -707,5 +742,38 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onBackPressed() {
         exitApp();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
+            CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
+            if (mapboxMap != null) {
+                Style style = mapboxMap.getStyle();
+                if (style != null) {
+                    GeoJsonSource source = style.getSourceAs("geojsonSourceLayerId");
+                    if (source != null) {
+                        source.setGeoJson(FeatureCollection.fromFeatures(
+                                new Feature[] {Feature.fromJson(selectedCarmenFeature.toJson())}));
+                    }
+
+                    LatLng selectedLocation=new LatLng(((Point) selectedCarmenFeature.geometry()).latitude(),
+                            ((Point) selectedCarmenFeature.geometry()).longitude());
+
+                    setAllProviderStoreLocation(mapboxMap,selectedLocation);
+                    mapboxMap.addPolygon(generatePerimeter(selectedLocation,
+                            Double.valueOf(settingsModel.getData().getRadius()),
+                            64));
+                    mapboxMap.addMarker(new MarkerOptions()
+                            .position(selectedLocation));
+                    mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(
+                            new CameraPosition.Builder()
+                                    .target(selectedLocation)
+                                    .zoom(7)
+                                    .build()), 4000);
+                }
+            }
+        }
     }
 }

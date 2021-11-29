@@ -2,6 +2,7 @@ package com.techsamuel.roadsideprovider.api;
 
 import com.techsamuel.roadsideprovider.model.AdminUser;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
+import com.techsamuel.roadsideprovider.model.MessageModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
@@ -85,6 +86,13 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("getProviderById")
     Call<ProviderModel> getProviderById(@Field("provider_id") String providerId);
+
+    @FormUrlEncoded
+    @POST("getMessageByTypeAndId")
+    Call<MessageModel> getMessageByTypeAndId(@Field("device_type") String device_type,@Field("lang_code") String lang_code,
+                                             @Field("user_type") String user_type,@Field("user_id") String user_id);
+
+
 
 
 }
