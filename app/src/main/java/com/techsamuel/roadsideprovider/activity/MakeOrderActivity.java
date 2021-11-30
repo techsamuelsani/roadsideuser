@@ -28,7 +28,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
-import com.bumptech.glide.Glide;
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.mapboxsdk.plugins.places.picker.PlacePicker;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.DialogServiceAdapter;
@@ -58,6 +59,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MakeOrderActivity extends AppCompatActivity {
+    private static final int PLACE_PICKER_REQUEST =4687 ;
     //Toolbar toolbar;
     String userId;
     String providerId;
@@ -174,9 +176,17 @@ public class MakeOrderActivity extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(intent, "Add images"), PICK_IMAGE_MULTIPLE);
             }
         });
+        selectLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MakeOrderActivity.this,LocationPickerActivity.class));
+
+            }
+        });
 
 
     }
+
     private void showOrderTypeDialog(){
         final Dialog dialog = new Dialog(MakeOrderActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
@@ -357,6 +367,7 @@ public class MakeOrderActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try{
+
             if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == RESULT_OK
                     && null != data) {
                 // Get the Image from data
@@ -451,4 +462,9 @@ public class MakeOrderActivity extends AppCompatActivity {
     public void onBackPressed() {
         MakeOrderActivity.this.finish();
     }
+
+
+
+
+
 }

@@ -58,4 +58,11 @@
         \n\nPraesent interdum lectus suscipit enim dictum, sed laoreet nisl posuere. Curabitur accumsan tellus ac iaculis fermentum. Curabitur a purus nec nibh porta imperdiet. Vivamus dignissim libero ut mauris rhoncus finibus non at urna. Phasellus a varius elit, a blandit est. Cras sodales tincidunt purus sit amet condimentum. Phasellus consectetur sem nec nisi congue, id gravida risus tristique. Curabitur vulputate convallis purus, vel bibendum nunc ultricies at.
         \n\nInteger condimentum egestas eros mollis facilisis. Praesent vitae diam ac diam efficitur pretium nec vitae dui. Nunc quam est, porttitor ut dapibus non, sodales id nulla. Mauris facilisis malesuada dapibus. Aliquam erat volutpat. Vivamus vitae consequat mauris, nec dictum erat. Aliquam in consectetur est, sit amet varius risus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Praesent vulputate dapibus lorem, ut interdum lectus bibendum nec. Suspendisse potenti. Cras elementum cursus nisl, ac pulvinar eros fringilla vitae. Cras ac tortor sagittis diam feugiat tincidunt id at est. Curabitur consequat ante purus. Nunc malesuada scelerisque leo vel efficitur.
     </string>
+    <string name="move_map_instruction">Move map instruction</string>
+    <string name="location_picker_select_location_button_cancel">location_picker_select_location_button_cancel</string>
+    <string name="location_picker_select_location_button_select">location_picker_select_location_button_select</string>
+    <string name="user_location_permission_explanation">user_location_permission_explanation</string>
+    <string name="user_location_permission_not_granted">user_location_permission_not_granted</string>
+    <string name="location_picker_place_name_result">location_picker_place_name_result</string>
+    <string name="location_picker_dropped_marker_snippet_no_results">location_picker_dropped_marker_snippet_no_results</string>
 </resources>
