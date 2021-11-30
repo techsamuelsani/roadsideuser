@@ -143,7 +143,16 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
                     @Override
                     public void onClick(View view) {
                             final LatLng mapTargetLatLng = mapboxMap.getCameraPosition().target;
-                            Tools.showToast(LocationPickerActivity.this,mapTargetLatLng.toString());
+                            String latitude=String.valueOf(mapTargetLatLng.getLatitude());
+                            String longitude= String.valueOf(mapTargetLatLng.getLongitude());
+                            String location= Tools.getAdressFromLatLong(LocationPickerActivity.this,
+                                    latitude,longitude);
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("location",location);
+                        returnIntent.putExtra("latitude",latitude);
+                        returnIntent.putExtra("longitude",longitude);
+                        setResult(Activity.RESULT_OK,returnIntent);
+                        finish();
 
                     }
                 });
@@ -260,6 +269,9 @@ public class LocationPickerActivity extends AppCompatActivity implements Permiss
                                     .target(selectedLocation)
                                     .zoom(7)
                                     .build()), 4000);
+                    String location= Tools.getAdressFromLatLong(LocationPickerActivity.this,
+                            String.valueOf(selectedLocation.getLatitude()), String.valueOf(selectedLocation.getLongitude()));
+                    etSearch.setText(location);
                 }
             }
         }

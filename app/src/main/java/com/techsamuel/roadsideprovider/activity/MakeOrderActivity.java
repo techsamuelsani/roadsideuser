@@ -90,8 +90,9 @@ public class MakeOrderActivity extends AppCompatActivity {
     ArrayList<String> choosenServiceName;
     String selectedVehicleId;
     String selectedVehicleName;
-    double selectedLat;
-    double selectedLong;
+    String  selectedLat;
+    String selectedLong;
+    String selectedLocation;
     String orderType="";
     String choosenOrderType;
     String serviceDescription;
@@ -179,7 +180,8 @@ public class MakeOrderActivity extends AppCompatActivity {
         selectLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MakeOrderActivity.this,LocationPickerActivity.class));
+                Intent intent=new Intent(MakeOrderActivity.this,LocationPickerActivity.class);
+                startActivityForResult(intent,PLACE_PICKER_REQUEST);
 
             }
         });
@@ -367,6 +369,12 @@ public class MakeOrderActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         try{
+            if(requestCode==PLACE_PICKER_REQUEST && resultCode==RESULT_OK && data!=null){
+               selectedLat=data.getStringExtra("latitude");
+               selectedLong=data.getStringExtra("longitude");
+               selectedLocation=data.getStringExtra("location");
+               selectLocation.setText(selectedLocation);
+            }
 
             if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == RESULT_OK
                     && null != data) {
