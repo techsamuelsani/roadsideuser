@@ -3,6 +3,7 @@ package com.techsamuel.roadsideprovider.api;
 import com.techsamuel.roadsideprovider.model.AdminUser;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.MessageModel;
+import com.techsamuel.roadsideprovider.model.OrderModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
@@ -20,6 +21,7 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface ApiInterface {
 
@@ -91,6 +93,29 @@ public interface ApiInterface {
     @POST("getMessageByTypeAndId")
     Call<MessageModel> getMessageByTypeAndId(@Field("device_type") String device_type,@Field("lang_code") String lang_code,
                                              @Field("user_type") String user_type,@Field("user_id") String user_id);
+
+
+    @Multipart
+    @POST("createNewOrder")
+    Call<OrderModel> createNewOrder(@Query("device_type") String device_type, @Query("lang_code") String lang_code,
+                                    @Query("user_id") String user_id, @Query("provider_id") String provider_id,
+                                    @Query("service_id[]") ArrayList<String> service_id, @Query("service_name[]") ArrayList<String> service_name,
+                                    @Query("vehicle_id") String vehicle_id, @Query("vehicle_name") String vehicle_name,
+                                    @Query("order_type") String order_type, @Query("service_description") String service_description,
+                                    @Query("location") String location, @Query("latitude") String latitude, @Query("longitude") String longitude,
+                                    @Part List<MultipartBody.Part> service_images);
+
+
+
+//    @Multipart
+//    @POST("./")
+//    Call<JsonElement> addSubEvent(@Part(EndAPI.USE_CASE) RequestBody useCase,
+//                                  @Query("event_id[]") ArrayList<String> event_id,
+//                                  @Query("user_id[]") ArrayList<String> user_id,
+//                                  @Query("name[]") ArrayList<String> name,
+//                                  @Query("date_time[]") ArrayList<String> date_time,
+//                                  @Part("token") RequestBody token,
+//                                  @Part MultipartBody.Part... profilePic);
 
 
 

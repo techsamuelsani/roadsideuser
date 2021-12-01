@@ -40,6 +40,8 @@ import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
 import com.techsamuel.roadsideprovider.listener.VehicleItemOnclickListener;
+import com.techsamuel.roadsideprovider.model.DataSavedModel;
+import com.techsamuel.roadsideprovider.model.OrderModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.VehicleModel;
@@ -84,18 +86,18 @@ public class MakeOrderActivity extends AppCompatActivity {
     LinearLayout lytSelectImages;
 
 
-    ArrayList<String> selectedServiceId;
-    ArrayList<String> choosenServiceId;
-    ArrayList<String> selectedServiceName;
-    ArrayList<String> choosenServiceName;
-    String selectedVehicleId;
-    String selectedVehicleName;
-    String  selectedLat;
-    String selectedLong;
-    String selectedLocation;
+    ArrayList<String> selectedServiceId=new ArrayList<>();
+    ArrayList<String> choosenServiceId=new ArrayList<>();
+    ArrayList<String> selectedServiceName=new ArrayList<>();
+    ArrayList<String> choosenServiceName=new ArrayList<>();
+    String selectedVehicleId="";
+    String selectedVehicleName="";
+    String selectedLat="";
+    String selectedLong="";
+    String selectedLocation="";
     String orderType="";
-    String choosenOrderType;
-    String serviceDescription;
+    String choosenOrderType="";
+    String serviceDescription="";
     List<MultipartBody.Part> serviceImages=new ArrayList<MultipartBody.Part>();
 
 
@@ -185,9 +187,35 @@ public class MakeOrderActivity extends AppCompatActivity {
 
             }
         });
+        calculateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                serviceDescription=orderDescription.getText().toString();
+                ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+                Call<OrderModel> call=apiInterface.createNewOrder(Config.DEVICE_TYPE,Config.LANG_CODE,userId,providerId,
+                        choosenServiceId,choosenServiceName,selectedVehicleId,selectedVehicleName,choosenOrderType,serviceDescription,
+                        selectedLocation,selectedLat,selectedLong,serviceImages);
+                call.enqueue(new Callback<OrderModel>() {
+                    @Override
+                    public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                        //Tools.showToast(MainActivity.this,response.body().getMessage().toString());
+                        Tools.showToast(MakeOrderActivity.this,response.body().getMessage().toString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<OrderModel> call, Throwable t) {
+                        Log.d("MainActivity",t.getMessage().toString());
+
+                    }
+                });
+
+            }
+        });
 
 
     }
+
+
 
     private void showOrderTypeDialog(){
         final Dialog dialog = new Dialog(MakeOrderActivity.this);
@@ -277,7 +305,6 @@ public class MakeOrderActivity extends AppCompatActivity {
                     selectService.setText(selectedServiceName.toString());
                     choosenServiceId=selectedServiceId;
                     choosenServiceName=selectedServiceName;
-                    //Tools.showToast(MakeOrderActivity.this,choosenServiceId.toString());
                     dialog.cancel();
                 }
             }

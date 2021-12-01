@@ -513,8 +513,9 @@ public class MainActivity extends AppCompatActivity implements
                     Tools.showToast(MainActivity.this,response.body().getSize()+" Provider found within your area Zoom-In for more details");
                     for(int i=0;i<response.body().getData().size();i++){
                         //Tools.showToast(MainActivity.this,response.body().getServices().get(i).getServices().toString());
+                        Bitmap bitmap=Tools.drawableToBitmap(MainActivity.this.getDrawable(R.drawable.ic_placeholder));
                         IconFactory iconFactory = IconFactory.getInstance(MainActivity.this);
-                        Icon icon=iconFactory.fromResource(R.drawable.green_marker);
+                        Icon icon=iconFactory.fromBitmap(bitmap);
                         mapboxMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.valueOf(response.body().getData().get(i).getLatitude()),Double.valueOf(response.body().getData().get(i).getLongitude())))
                                 .setTitle(response.body().getData().get(i).getStoreName()).setIcon(icon))
@@ -548,6 +549,8 @@ public class MainActivity extends AppCompatActivity implements
 
 
     }
+
+
 
     private void showProviderInfo(String providerId) {
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
