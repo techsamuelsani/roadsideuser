@@ -14,6 +14,10 @@ public class Config {
     public static final String SHARED_PREF_DEVICE_ID = "device_id";
     public static final long SPLASH_SCREEN_TIMEOUT = 2000;
     public static final String SHARED_PREF_SETTINGS_MODEL = "settings_model";
+    public static final String SHARED_PREF_ORDER_MODEL = "order_model";
+    public static final String ALL_ORDER_STATUS[] = {"pending","active","cancelled","rejected","completed","rated"};
+    public static final String PAGE_PROVIDER = "provider";
+    public static final String APP_PAGE = "page";
     public static int PHONE_VERIFICATION_CODE=101;
     public static int API_SUCCESS=200;
     public static int API_FAILED=500;

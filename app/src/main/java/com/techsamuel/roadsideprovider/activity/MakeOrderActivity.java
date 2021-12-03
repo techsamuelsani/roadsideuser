@@ -199,7 +199,17 @@ public class MakeOrderActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                         //Tools.showToast(MainActivity.this,response.body().getMessage().toString());
+                        if(response.body().getStatus().equals(Config.API_SUCCESS)){
+                            AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
+                            Intent intent=new Intent(MakeOrderActivity.this,OrderDetailsActivity.class);
+                            intent.putExtra(Config.APP_PAGE,Config.PAGE_PROVIDER);
+                            startActivity(intent);
+                        }
                         Tools.showToast(MakeOrderActivity.this,response.body().getMessage().toString());
+
+
+
+
                     }
 
                     @Override
