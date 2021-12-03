@@ -3,6 +3,7 @@ package com.techsamuel.roadsideprovider.tools;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -23,6 +24,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView;
 
+import com.techsamuel.roadsideprovider.Config;
+import com.techsamuel.roadsideprovider.activity.CurrentOrdersActivity;
+import com.techsamuel.roadsideprovider.activity.OrderDetailsActivity;
+import com.techsamuel.roadsideprovider.api.ApiInterface;
+import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
+import com.techsamuel.roadsideprovider.model.OrderModel;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,6 +40,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tools {
 
@@ -218,6 +230,28 @@ public class Tools {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    private void getOrderDetailsById(Context context,String id) {
+        AppSharedPreferences.init(context);
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<OrderModel> call=apiInterface.getOrderDetailsById(Config.DEVICE_TYPE,Config.LANG_CODE,id);
+        call.enqueue(new Callback<OrderModel>() {
+            @Override
+            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                if(response.body().getStatus()== Config.API_SUCCESS){
+                    AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
+
+                }
+            }
+            @Override
+            public void onFailure(Call<OrderModel> call, Throwable t) {
+                Log.d("CurrentOrdersActivity",t.getMessage().toString());
+
+            }
+        });
+
     }
 
 

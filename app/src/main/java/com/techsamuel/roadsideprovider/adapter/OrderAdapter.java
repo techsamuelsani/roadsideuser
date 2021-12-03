@@ -21,6 +21,8 @@ import com.techsamuel.roadsideprovider.listener.MessageItemClickListener;
 import com.techsamuel.roadsideprovider.listener.OrderItemClickListener;
 import com.techsamuel.roadsideprovider.model.MessageModel;
 import com.techsamuel.roadsideprovider.model.OrdersModel;
+import com.techsamuel.roadsideprovider.model.SettingsModel;
+import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
 import com.techsamuel.roadsideprovider.tools.ViewAnimation;
 
@@ -31,12 +33,15 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     OrdersModel ordersModel;
     private Context ctx;
     private final OrderItemClickListener listener;
+    SettingsModel settingsModel;
 
 
     public OrderAdapter(Context context, OrdersModel ordersModel, OrderItemClickListener listener) {
         this.ordersModel = ordersModel;
         ctx = context;
         this.listener=listener;
+        AppSharedPreferences.init(context);
+        settingsModel=AppSharedPreferences.readSettingsModel(Config.SHARED_PREF_SETTINGS_MODEL,"");
 
     }
 
@@ -93,7 +98,7 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             view.orderDescription.setText(ordersModel.getOrderDetails().get(position).getServiceDescription());
             view.orderStatus.setText(ordersModel.getOrderDetails().get(position).getStatus());
             view.orderDate.setText(ordersModel.getOrderDetails().get(position).getDate());
-            view.orderPrice.setText(ordersModel.getData().get(position).getPrice());
+            view.orderPrice.setText(settingsModel.getData().getCurrencySymbol()+" "+ordersModel.getData().get(position).getPrice());
             view.storeName.setText(ordersModel.getOrderDetails().get(position).getProviderName());
 
 

@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.listener.MessageItemClickListener;
 import com.techsamuel.roadsideprovider.listener.OrderItemClickListener;
 import com.techsamuel.roadsideprovider.model.MessageModel;
+import com.techsamuel.roadsideprovider.model.OrderModel;
 import com.techsamuel.roadsideprovider.model.OrdersModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
@@ -68,7 +70,8 @@ public class CurrentOrdersActivity extends AppCompatActivity {
                     orderAdapter=new OrderAdapter(CurrentOrdersActivity.this, response.body(),  new OrderItemClickListener() {
                         @Override
                         public void onItemClick(OrdersModel.Datum datum) {
-                            Tools.showToast(CurrentOrdersActivity.this,datum.getId());
+                            //Tools.showToast(CurrentOrdersActivity.this,datum.getId());
+                            getOrderDetailsById(datum.getId());
                         }
 
                     });
@@ -79,6 +82,29 @@ public class CurrentOrdersActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<OrdersModel> call, Throwable t) {
+                Log.d("CurrentOrdersActivity",t.getMessage().toString());
+
+            }
+        });
+
+    }
+
+    private void getOrderDetailsById(String id) {
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<OrderModel> call=apiInterface.getOrderDetailsById(Config.DEVICE_TYPE,Config.LANG_CODE,id);
+        call.enqueue(new Callback<OrderModel>() {
+            @Override
+            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                if(response.body().getStatus()== Config.API_SUCCESS){
+                    AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
+                    Intent intent=new Intent(CurrentOrdersActivity.this,OrderDetailsActivity.class);
+                    intent.putExtra(Config.APP_PAGE,Config.PAGE_CURRENT_ORDERS);
+                    startActivity(intent);
+                }
+            }
+            @Override
+            public void onFailure(Call<OrderModel> call, Throwable t) {
                 Log.d("CurrentOrdersActivity",t.getMessage().toString());
 
             }

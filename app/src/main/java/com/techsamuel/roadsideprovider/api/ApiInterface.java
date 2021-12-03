@@ -100,6 +100,10 @@ public interface ApiInterface {
     Call<OrdersModel> getAllOrders(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
                                    @Field("user_type") String user_type, @Field("order_status_type") String order_status_type);
 
+    @FormUrlEncoded
+    @POST("getOrderDetailsById")
+    Call<OrderModel> getOrderDetailsById(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
+                                   @Field("order_id") String order_id);
 
     @Multipart
     @POST("createNewOrder")

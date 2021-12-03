@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity implements
                     Tools.showToast(MainActivity.this,response.body().getSize()+" Provider found within your area Zoom-In for more details");
                     for(int i=0;i<response.body().getData().size();i++){
                         //Tools.showToast(MainActivity.this,response.body().getServices().get(i).getServices().toString());
-                        Bitmap bitmap=Tools.drawableToBitmap(MainActivity.this.getDrawable(R.drawable.ic_placeholder));
+                        Bitmap bitmap=Tools.drawableToBitmap(MainActivity.this.getDrawable(R.drawable.provider_marker));
                         IconFactory iconFactory = IconFactory.getInstance(MainActivity.this);
                         Icon icon=iconFactory.fromBitmap(bitmap);
                         mapboxMap.addMarker(new MarkerOptions()

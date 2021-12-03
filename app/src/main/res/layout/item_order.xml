@@ -14,7 +14,7 @@
     <LinearLayout
         android:id="@+id/lyt_order"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="120dp"
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/image_cover" />
+                android:src="@drawable/image_placeholder" />
 
         </androidx.cardview.widget.CardView>
 
