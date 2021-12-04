@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -36,7 +39,12 @@ import com.mapbox.mapboxsdk.maps.Style;
 import com.techsamuel.roadsideprovider.App;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
+import com.techsamuel.roadsideprovider.adapter.OrderPageServiceAdapter;
+import com.techsamuel.roadsideprovider.adapter.ServiceAdapter;
+import com.techsamuel.roadsideprovider.listener.OrderServiceItemClickListener;
+import com.techsamuel.roadsideprovider.listener.ServiceItemClickListener;
 import com.techsamuel.roadsideprovider.model.OrderModel;
+import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
@@ -62,6 +70,14 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     TextView servicePrice;
     TextView storeLocation;
     TextView orderDescription;
+    TextView distanceCost;
+    TextView distanceCostAmount;
+    TextView serviceCharge;
+    TextView serviceChargeAmount;
+    TextView totalCost;
+    TextView totalCostAmount;
+    TextView totalServiceCostAmount;
+    RecyclerView recyclerService;
 
 
 
@@ -81,6 +97,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         init();
         initToolbar();
         initComponent();
+        initAllServicesDetails();
 
     }
 
@@ -149,6 +166,18 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         }
     }
 
+    private void initAllServicesDetails(){
+        recyclerService=findViewById(R.id.recycler_service);
+        OrderPageServiceAdapter serviceAdapter =new OrderPageServiceAdapter(this, orderModel.getServiceDetails(), new OrderServiceItemClickListener() {
+            @Override
+            public void onItemClick(OrderModel.ServiceDetail serviceDetail) {
+                Tools.showToast(OrderDetailsActivity.this,serviceDetail.getId());
+            }
+        });
+        recyclerService.setLayoutManager(new LinearLayoutManager(this));
+        recyclerService.setAdapter(serviceAdapter);
+    }
+
 
     private void init(){
         orderModel= AppSharedPreferences.readOrderModel(Config.SHARED_PREF_ORDER_MODEL,"");
@@ -163,13 +192,37 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         servicePrice=findViewById(R.id.service_price);
         storeLocation=findViewById(R.id.store_location);
         orderDescription=findViewById(R.id.order_description);
+        distanceCost=findViewById(R.id.distance_cost);
+        distanceCostAmount=findViewById(R.id.distance_cost_amount);
+        serviceCharge=findViewById(R.id.service_charge);
+        serviceChargeAmount=findViewById(R.id.service_charge_amount);
+        totalCost=findViewById(R.id.total_cost);
+        totalCostAmount=findViewById(R.id.total_cost_amount);
+        totalServiceCostAmount=findViewById(R.id.total_service_cost_amount);
+
+
+        String distanceCostText="Distance Cost "+"( "+orderModel.getData().get(0).getDistance()+" KM"+" X "+settingsModel.getData().getCurrencySymbol()+" "+settingsModel.getData().getServiceFeeKm()+" )";
+        distanceCost.setText(distanceCostText);
+        distanceCostAmount.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getServiceFee());
+
+        totalServiceCostAmount.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalServiceCost());
+
+        String serviceChargeText="Service Charge "+"( "+settingsModel.getData().getCharge()+"% "+"Of Total Service Amount"+" )";
+        serviceCharge.setText(serviceChargeText);
+        serviceChargeAmount.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getServiceCharge());
+
+        totalCostAmount.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalCost());
 
 
         String providerStoreLocation=Tools.getAdressFromLatLong(OrderDetailsActivity.this,
                 orderModel.getProviderDetails().get(0).getLatitude(),orderModel.getProviderDetails().get(0).getLongitude()
                 );
 
-        serviceName.setText(orderModel.getData().get(0).getServicesName().toString());
+        String servicesName=orderModel.getData().get(0).getServicesName().toString();
+        servicesName=servicesName.replace("[","");
+        servicesName=servicesName.replace("]","");
+
+        serviceName.setText(servicesName);
         storeName.setText(orderModel.getProviderDetails().get(0).getStoreName());
         servicePrice.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalServiceCost());
         storeLocation.setText(providerStoreLocation);
