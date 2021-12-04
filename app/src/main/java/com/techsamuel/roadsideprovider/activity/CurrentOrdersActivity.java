@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.MessageAdapter;
@@ -33,6 +34,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerOrder;
     OrderAdapter orderAdapter;
+    BeautifulProgressDialog beautifulProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class CurrentOrdersActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
+        beautifulProgressDialog.setLottieLocation("service.json");
+        beautifulProgressDialog.setLottieLoop(true);
 
     }
     private void init(){
@@ -60,11 +65,13 @@ public class CurrentOrdersActivity extends AppCompatActivity {
 
     public void getAllOrders(String order_status_type){
         Log.d("CurrentOrdersActivity","Called");
+        beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<OrdersModel> call=apiInterface.getAllOrders(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,order_status_type);
         call.enqueue(new Callback<OrdersModel>() {
             @Override
             public void onResponse(Call<OrdersModel> call, Response<OrdersModel> response) {
+                beautifulProgressDialog.dismiss();
                 Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     orderAdapter=new OrderAdapter(CurrentOrdersActivity.this, response.body(),  new OrderItemClickListener() {
@@ -82,6 +89,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<OrdersModel> call, Throwable t) {
+                beautifulProgressDialog.dismiss();
                 Log.d("CurrentOrdersActivity",t.getMessage().toString());
 
             }
@@ -90,12 +98,14 @@ public class CurrentOrdersActivity extends AppCompatActivity {
     }
 
     private void getOrderDetailsById(String id) {
+        beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<OrderModel> call=apiInterface.getOrderDetailsById(Config.DEVICE_TYPE,Config.LANG_CODE,id);
         call.enqueue(new Callback<OrderModel>() {
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                 Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                beautifulProgressDialog.dismiss();
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
                     Intent intent=new Intent(CurrentOrdersActivity.this,OrderDetailsActivity.class);
@@ -106,6 +116,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<OrderModel> call, Throwable t) {
                 Log.d("CurrentOrdersActivity",t.getMessage().toString());
+                beautifulProgressDialog.dismiss();
 
             }
         });

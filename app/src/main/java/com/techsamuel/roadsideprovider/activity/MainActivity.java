@@ -192,9 +192,9 @@ public class MainActivity extends AppCompatActivity implements
         };
         initNavigationMenu();
         initBottomSheet();
-        beautifulProgressDialog = new BeautifulProgressDialog(MainActivity.this,
-                BeautifulProgressDialog.withImage,
-                "Please wait");
+        beautifulProgressDialog = new BeautifulProgressDialog(MainActivity.this, BeautifulProgressDialog.withLottie, null);
+        beautifulProgressDialog.setLottieLocation("service.json");
+        beautifulProgressDialog.setLottieLoop(true);
 
         floatingActionButton=findViewById(R.id.fab);
         providerName=findViewById(R.id.provider_name);

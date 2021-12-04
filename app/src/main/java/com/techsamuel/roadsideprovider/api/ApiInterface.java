@@ -105,6 +105,11 @@ public interface ApiInterface {
     Call<OrderModel> getOrderDetailsById(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
                                    @Field("order_id") String order_id);
 
+    @FormUrlEncoded
+    @POST("changeOrderStatusById")
+    Call<DataSavedModel> changeOrderStatusById(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
+                                         @Field("order_id") String order_id,@Field("input_status") String input_status);
+
     @Multipart
     @POST("createNewOrder")
     Call<OrderModel> createNewOrder(@Query("device_type") String device_type, @Query("lang_code") String lang_code,
@@ -116,16 +121,6 @@ public interface ApiInterface {
                                     @Part List<MultipartBody.Part> service_images);
 
 
-
-//    @Multipart
-//    @POST("./")
-//    Call<JsonElement> addSubEvent(@Part(EndAPI.USE_CASE) RequestBody useCase,
-//                                  @Query("event_id[]") ArrayList<String> event_id,
-//                                  @Query("user_id[]") ArrayList<String> user_id,
-//                                  @Query("name[]") ArrayList<String> name,
-//                                  @Query("date_time[]") ArrayList<String> date_time,
-//                                  @Part("token") RequestBody token,
-//                                  @Part MultipartBody.Part... profilePic);
 
 
 

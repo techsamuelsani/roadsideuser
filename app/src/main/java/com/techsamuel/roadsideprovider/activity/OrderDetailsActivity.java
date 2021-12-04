@@ -4,10 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,14 +20,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
-import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -36,21 +39,27 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
-import com.techsamuel.roadsideprovider.App;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
+import com.techsamuel.roadsideprovider.adapter.OrderPagePhotoGridAdapter;
 import com.techsamuel.roadsideprovider.adapter.OrderPageServiceAdapter;
-import com.techsamuel.roadsideprovider.adapter.ServiceAdapter;
+import com.techsamuel.roadsideprovider.api.ApiInterface;
+import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
+import com.techsamuel.roadsideprovider.listener.OrderPhotoItemClickListener;
 import com.techsamuel.roadsideprovider.listener.OrderServiceItemClickListener;
-import com.techsamuel.roadsideprovider.listener.ServiceItemClickListener;
+import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.OrderModel;
-import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
+import com.techsamuel.roadsideprovider.tools.SpacingItemDecoration;
 import com.techsamuel.roadsideprovider.tools.Tools;
 import com.techsamuel.roadsideprovider.tools.ViewAnimation;
 
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OrderDetailsActivity extends AppCompatActivity implements
         OnMapReadyCallback, PermissionsListener {
@@ -78,6 +87,11 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     TextView totalCostAmount;
     TextView totalServiceCostAmount;
     RecyclerView recyclerService;
+    TextView orderStatus;
+    RecyclerView recyclerView;
+    BeautifulProgressDialog beautifulProgressDialog;
+    Button btnCancelOrder;
+    Button btnAcceptOrder;
 
 
 
@@ -87,10 +101,10 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState != null ? savedInstanceState : getIntent().getBundleExtra("saved_state"));
         AppSharedPreferences.init(this);
         Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
-        setContentView(R.layout.activity_order_details_new);
+        setContentView(R.layout.activity_order_details);
         mapView=(MapView)findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -98,7 +112,22 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         initToolbar();
         initComponent();
         initAllServicesDetails();
+        initAllOrderImages();
 
+    }
+
+    private void initAllOrderImages(){
+        recyclerView=findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.addItemDecoration(new SpacingItemDecoration(3, Tools.dpToPx(this, 2), true));
+        recyclerView.setHasFixedSize(true);
+        OrderPagePhotoGridAdapter photoGridAdapter=new OrderPagePhotoGridAdapter(this, orderModel.getServiceImages(), new OrderPhotoItemClickListener() {
+            @Override
+            public void onItemClick(String s) {
+                Tools.showToast(OrderDetailsActivity.this,s);
+            }
+        });
+        recyclerView.setAdapter(photoGridAdapter);
     }
 
     private void initComponent() {
@@ -136,9 +165,16 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         });
 
         // expand first description
-        toggleArrow(bt_toggle_description);
-        lyt_expand_description.setVisibility(View.VISIBLE);
-
+        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[0])){
+            toggleArrow(bt_toggle_reviews);
+            lyt_expand_reviews.setVisibility(View.VISIBLE);
+        }else{
+            toggleArrow(bt_toggle_description);
+            lyt_expand_description.setVisibility(View.VISIBLE);
+        }
+        beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
+        beautifulProgressDialog.setLottieLocation("service.json");
+        beautifulProgressDialog.setLottieLoop(true);
 
     }
 
@@ -199,6 +235,27 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         totalCost=findViewById(R.id.total_cost);
         totalCostAmount=findViewById(R.id.total_cost_amount);
         totalServiceCostAmount=findViewById(R.id.total_service_cost_amount);
+        orderStatus=findViewById(R.id.order_status);
+        btnCancelOrder=findViewById(R.id.cancel_order);
+        btnAcceptOrder=findViewById(R.id.accept_order);
+
+        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[0])
+                ||orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[1])
+        ){
+            btnCancelOrder.setEnabled(true);
+            btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    changeOrderStatus(Config.ALL_ORDER_STATUS[2]);
+                }
+            });
+        }else{
+            btnCancelOrder.setText("This order is cancelled");
+            btnCancelOrder.setEnabled(false);
+            btnCancelOrder.setVisibility(View.GONE);
+        }
+
+        orderStatus.setText(orderModel.getOrder_status());
 
 
         String distanceCostText="Distance Cost "+"( "+orderModel.getData().get(0).getDistance()+" KM"+" X "+settingsModel.getData().getCurrencySymbol()+" "+settingsModel.getData().getServiceFeeKm()+" )";
@@ -217,6 +274,17 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         String providerStoreLocation=Tools.getAdressFromLatLong(OrderDetailsActivity.this,
                 orderModel.getProviderDetails().get(0).getLatitude(),orderModel.getProviderDetails().get(0).getLongitude()
                 );
+        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[1])){
+            providerStoreLocation=orderModel.getProviderDetails().get(0).getPhone();
+            String finalProviderStoreLocation = providerStoreLocation;
+            storeLocation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + finalProviderStoreLocation));
+                    startActivity(intent);
+                }
+            });
+        }
 
         String servicesName=orderModel.getData().get(0).getServicesName().toString();
         servicesName=servicesName.replace("[","");
@@ -224,15 +292,26 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
         serviceName.setText(servicesName);
         storeName.setText(orderModel.getProviderDetails().get(0).getStoreName());
-        servicePrice.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalServiceCost());
+        servicePrice.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalCost());
         storeLocation.setText(providerStoreLocation);
-        orderDescription.setText(orderModel.getData().get(0).getServiceDescription());
+
+        String orderDetailsText="This order was placed on "+orderModel.getData().get(0).getDate()+"\n"+"The order type is "+
+                orderModel.getData().get(0).getOrderType()+"\n"+"\n"+"Description:"+"\n"+orderModel.getData().get(0).getServiceDescription();
+        orderDescription.setText(orderDetailsText);
 
 
 
-        if(orderModel.getData().get(0).getStatus().equals(Config.ALL_ORDER_STATUS[0])){
+        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[0])){
             paymentFab.setVisibility(View.VISIBLE);
             floatingActionButton.setVisibility(View.GONE);
+            paymentFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    refreshOrderPage();
+                }
+            });
+        }else{
+            paymentFab.setVisibility(View.GONE);
         }
 
         if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_DELIVERY)){
@@ -242,6 +321,64 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         }
 
     }
+
+    private void changeOrderStatus(String inputStatus) {
+        beautifulProgressDialog.show();
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<DataSavedModel> call=apiInterface.changeOrderStatusById(Config.DEVICE_TYPE,Config.LANG_CODE,orderModel.getId().toString(),inputStatus);
+        call.enqueue(new Callback<DataSavedModel>() {
+            @Override
+            public void onResponse(Call<DataSavedModel> call, Response<DataSavedModel> response) {
+                Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                beautifulProgressDialog.dismiss();
+                if(response.body().getStatus()== Config.API_SUCCESS){
+                    Tools.showToast(OrderDetailsActivity.this,response.body().getMessage().toString());
+                    refreshOrderPage();
+                }
+            }
+            @Override
+            public void onFailure(Call<DataSavedModel> call, Throwable t) {
+                beautifulProgressDialog.dismiss();
+                Log.d("CurrentOrdersActivity",t.getMessage().toString());
+
+            }
+        });
+    }
+
+    private void refreshOrderPage(){
+            beautifulProgressDialog.show();
+            ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+            Call<OrderModel> call=apiInterface.getOrderDetailsById(Config.DEVICE_TYPE,Config.LANG_CODE,orderModel.getId().toString());
+            call.enqueue(new Callback<OrderModel>() {
+                @Override
+                public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                    Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                    beautifulProgressDialog.dismiss();
+                    if(response.body().getStatus()== Config.API_SUCCESS){
+                        AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
+                        transitionRecreate();
+
+                    }
+                }
+                @Override
+                public void onFailure(Call<OrderModel> call, Throwable t) {
+                    beautifulProgressDialog.dismiss();
+                    Log.d("CurrentOrdersActivity",t.getMessage().toString());
+
+                }
+            });
+
+    }
+    protected void transitionRecreate(){
+        Bundle bundle = new Bundle();
+        onSaveInstanceState(bundle);
+        Intent intent = new Intent(this, getClass());
+        intent.putExtra("saved_state", bundle);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
 
     private void initToolbar() {
         userId=AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,"");

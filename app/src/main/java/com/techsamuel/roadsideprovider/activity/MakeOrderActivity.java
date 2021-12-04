@@ -86,6 +86,7 @@ public class MakeOrderActivity extends AppCompatActivity {
     LinearLayout lytSelectImages;
 
 
+
     ArrayList<String> selectedServiceId=new ArrayList<>();
     ArrayList<String> choosenServiceId=new ArrayList<>();
     ArrayList<String> selectedServiceName=new ArrayList<>();
@@ -119,9 +120,9 @@ public class MakeOrderActivity extends AppCompatActivity {
                 finish();
             }
         });
-         beautifulProgressDialog = new BeautifulProgressDialog(MakeOrderActivity.this,
-                BeautifulProgressDialog.withImage,
-                "Please wait");
+        beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
+        beautifulProgressDialog.setLottieLocation("service.json");
+        beautifulProgressDialog.setLottieLoop(true);
 
     }
     private void init(){
@@ -190,6 +191,7 @@ public class MakeOrderActivity extends AppCompatActivity {
         calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                beautifulProgressDialog.show();
                 serviceDescription=orderDescription.getText().toString();
                 ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
                 Call<OrderModel> call=apiInterface.createNewOrder(Config.DEVICE_TYPE,Config.LANG_CODE,userId,providerId,
@@ -199,6 +201,7 @@ public class MakeOrderActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
                         //Tools.showToast(MainActivity.this,response.body().getMessage().toString());
+                        beautifulProgressDialog.dismiss();
                         if(response.body().getStatus().equals(Config.API_SUCCESS)){
                             AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
                             Intent intent=new Intent(MakeOrderActivity.this,OrderDetailsActivity.class);
@@ -207,13 +210,11 @@ public class MakeOrderActivity extends AppCompatActivity {
                         }
                         Tools.showToast(MakeOrderActivity.this,response.body().getMessage().toString());
 
-
-
-
                     }
 
                     @Override
                     public void onFailure(Call<OrderModel> call, Throwable t) {
+                        beautifulProgressDialog.dismiss();
                         Log.d("MainActivity",t.getMessage().toString());
 
                     }

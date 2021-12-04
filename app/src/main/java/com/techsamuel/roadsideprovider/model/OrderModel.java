@@ -11,6 +11,31 @@ public class OrderModel {
     @SerializedName("status")
     @Expose
     private Integer status;
+
+    @SerializedName("order_status")
+    @Expose
+    private String order_status;
+
+    @SerializedName("cancelation_reason")
+    @Expose
+    private String cancelation_reason;
+
+    public String getOrder_status() {
+        return order_status;
+    }
+
+    public void setOrder_status(String order_status) {
+        this.order_status = order_status;
+    }
+
+    public String getCancelation_reason() {
+        return cancelation_reason;
+    }
+
+    public void setCancelation_reason(String cancelation_reason) {
+        this.cancelation_reason = cancelation_reason;
+    }
+
     @SerializedName("error")
     @Expose
     private Boolean error;

@@ -96,15 +96,13 @@ public class OrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             });
 
             view.orderDescription.setText(ordersModel.getOrderDetails().get(position).getServiceDescription());
-            view.orderStatus.setText(ordersModel.getOrderDetails().get(position).getStatus());
+            view.orderStatus.setText(ordersModel.getData().get(position).getStatus());
             view.orderDate.setText(ordersModel.getOrderDetails().get(position).getDate());
             view.orderPrice.setText(settingsModel.getData().getCurrencySymbol()+" "+ordersModel.getData().get(position).getPrice());
             view.storeName.setText(ordersModel.getOrderDetails().get(position).getProviderName());
 
-
         }
     }
-
 
 
     @Override
