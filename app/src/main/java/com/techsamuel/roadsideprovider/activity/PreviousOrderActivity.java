@@ -1,36 +1,32 @@
 package com.techsamuel.roadsideprovider.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
-import com.techsamuel.roadsideprovider.adapter.MessageAdapter;
 import com.techsamuel.roadsideprovider.adapter.OrderAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
-import com.techsamuel.roadsideprovider.listener.MessageItemClickListener;
 import com.techsamuel.roadsideprovider.listener.OrderItemClickListener;
-import com.techsamuel.roadsideprovider.model.MessageModel;
 import com.techsamuel.roadsideprovider.model.OrderModel;
 import com.techsamuel.roadsideprovider.model.OrdersModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
-import com.techsamuel.roadsideprovider.tools.Tools;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CurrentOrdersActivity extends AppCompatActivity {
+public class PreviousOrderActivity extends AppCompatActivity {
 
     String userId;
     Toolbar toolbar;
@@ -51,7 +47,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
         AppSharedPreferences.init(this);
         userId=AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,"");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Current Orders");
+        toolbar.setTitle("Previous Orders");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -63,7 +59,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
     private void init(){
         recyclerOrder=findViewById(R.id.recyler_orders);
         lytNoOrder=findViewById(R.id.lyt_no_order);
-        getAllOrders("current");
+        getAllOrders("previous");
 
     }
 
@@ -81,7 +77,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
                     if(response.body().getSize()>0){
                         lytNoOrder.setVisibility(View.GONE);
                         recyclerOrder.setVisibility(View.VISIBLE);
-                        orderAdapter=new OrderAdapter(CurrentOrdersActivity.this, response.body(),  new OrderItemClickListener() {
+                        orderAdapter=new OrderAdapter(PreviousOrderActivity.this, response.body(),  new OrderItemClickListener() {
                             @Override
                             public void onItemClick(OrdersModel.Datum datum) {
                                 //Tools.showToast(CurrentOrdersActivity.this,datum.getId());
@@ -89,7 +85,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
                             }
 
                         });
-                        recyclerOrder.setLayoutManager(new LinearLayoutManager(CurrentOrdersActivity.this));
+                        recyclerOrder.setLayoutManager(new LinearLayoutManager(PreviousOrderActivity.this));
                         recyclerOrder.setAdapter(orderAdapter);
                         Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
                     }else{
@@ -122,7 +118,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
                 beautifulProgressDialog.dismiss();
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
-                    Intent intent=new Intent(CurrentOrdersActivity.this,OrderDetailsActivity.class);
+                    Intent intent=new Intent(PreviousOrderActivity.this,OrderDetailsActivity.class);
                     intent.putExtra(Config.APP_PAGE,Config.PAGE_CURRENT_ORDERS);
                     startActivity(intent);
                 }
@@ -139,7 +135,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        CurrentOrdersActivity.this.finish();
+        PreviousOrderActivity.this.finish();
     }
 
     @Override

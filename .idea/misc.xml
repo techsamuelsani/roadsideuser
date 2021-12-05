@@ -22,7 +22,9 @@
         <entry key="app/src/main/res/drawable/ic_placeholder.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.2074074074074074" />
         <entry key="app/src/main/res/drawable/provider_marker.xml" value="0.22962962962962963" />
+        <entry key="app/src/main/res/drawable/shape_circle.xml" value="0.2212962962962963" />
         <entry key="app/src/main/res/drawable/user_marker.xml" value="0.22962962962962963" />
+        <entry key="app/src/main/res/layout/activity_current_orders.xml" value="0.12447916666666667" />
         <entry key="app/src/main/res/layout/activity_location_picker.xml" value="0.1838768115942029" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1933876811594203" />
         <entry key="app/src/main/res/layout/activity_make_order.xml" value="0.25" />

@@ -215,6 +215,7 @@ public class MakeOrderActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<OrderModel> call, Throwable t) {
                         beautifulProgressDialog.dismiss();
+                        Tools.showToast(MakeOrderActivity.this,"Please insert all required data");
                         Log.d("MainActivity",t.getMessage().toString());
 
                     }

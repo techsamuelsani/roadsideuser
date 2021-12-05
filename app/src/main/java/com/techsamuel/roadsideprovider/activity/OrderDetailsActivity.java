@@ -1,6 +1,7 @@
 package com.techsamuel.roadsideprovider.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,6 +24,7 @@ import android.widget.Toast;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.Mapbox;
@@ -50,6 +53,7 @@ import com.techsamuel.roadsideprovider.listener.OrderServiceItemClickListener;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.OrderModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
+import com.techsamuel.roadsideprovider.model.UserModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.SpacingItemDecoration;
 import com.techsamuel.roadsideprovider.tools.Tools;
@@ -67,6 +71,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
     OrderModel orderModel;
     SettingsModel settingsModel;
+    UserModel userModel;
     MapView mapView;
     MapboxMap mapboxMap;
     private PermissionsManager permissionsManager;
@@ -92,6 +97,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     BeautifulProgressDialog beautifulProgressDialog;
     Button btnCancelOrder;
     Button btnAcceptOrder;
+
+    double userBalance;
+    double orderAmount;
 
 
 
@@ -217,8 +225,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
     private void init(){
         orderModel= AppSharedPreferences.readOrderModel(Config.SHARED_PREF_ORDER_MODEL,"");
+        userModel=AppSharedPreferences.readUserModel(Config.SHARED_PREF_USER_MODEL,"");
         settingsModel=AppSharedPreferences.readSettingsModel(Config.SHARED_PREF_SETTINGS_MODEL,"");
-        if(orderModel.equals("")){
+        if(orderModel.equals("")||userModel.equals("")){
             OrderDetailsActivity.this.finish();
         }
         floatingActionButton=findViewById(R.id.fab);
@@ -238,6 +247,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         orderStatus=findViewById(R.id.order_status);
         btnCancelOrder=findViewById(R.id.cancel_order);
         btnAcceptOrder=findViewById(R.id.accept_order);
+
+        userBalance= Double.parseDouble(userModel.getData().getWallet());
+        orderAmount= Double.parseDouble(orderModel.getData().get(0).getTotalCost());
 
         if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[0])
                 ||orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[1])
@@ -307,7 +319,11 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             paymentFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    refreshOrderPage();
+                    if(userBalance>orderAmount){
+                        showConfirmDialog(true);
+                    }else {
+                        showConfirmDialog(false);
+                    }
                 }
             });
         }else{
@@ -320,6 +336,38 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             floatingActionButton.setImageResource(R.drawable.ic_baseline_navigation_24);
         }
 
+    }
+    private void showConfirmDialog(boolean enoughBalance) {
+        String title = "";
+        String description="";
+        String okText="";
+        if(enoughBalance){
+            title="Do you want to purchase this service?";
+            description="You will be charged about "+settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalCost()+" for this service.";
+            okText="PURCHASE";
+        }else{
+            title="Do you want to recharge your wallet";
+            description="You don't have enough balance in your wallet please recharge your wallet ang try again.";
+            okText="RECHARGE WALLET";
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title);
+        builder.setMessage(description);
+        builder.setPositiveButton(okText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(enoughBalance){
+                    changeOrderStatus(Config.ALL_ORDER_STATUS[1]);
+                }else{
+                    Intent intent=new Intent(OrderDetailsActivity.this,WalletActivity.class);
+                    startActivity(intent);
+                }
+
+            }
+        });
+        builder.setNegativeButton("CANCEL", null);
+        builder.show();
     }
 
     private void changeOrderStatus(String inputStatus) {

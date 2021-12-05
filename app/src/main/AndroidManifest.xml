@@ -28,6 +28,9 @@
             android:name=".activity.CurrentOrdersActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.PreviousOrderActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.OrderDetailsActivity"
             android:exported="false" />
         <activity

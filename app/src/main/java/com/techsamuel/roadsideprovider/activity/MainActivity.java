@@ -281,6 +281,13 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+        lytPreviousOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,PreviousOrderActivity.class);
+                startActivity(intent);
+            }
+        });
 
         etSearch.setOnClickListener(new View.OnClickListener() {
             @Override
