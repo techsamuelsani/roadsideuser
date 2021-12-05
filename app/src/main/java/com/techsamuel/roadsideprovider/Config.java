@@ -15,7 +15,6 @@ public class Config {
     public static final long SPLASH_SCREEN_TIMEOUT = 2000;
     public static final String SHARED_PREF_SETTINGS_MODEL = "settings_model";
     public static final String SHARED_PREF_ORDER_MODEL = "order_model";
-    public static final String ALL_ORDER_STATUS[] = {"pending","active","cancelled","rejected","completed","rated"};
     public static final String PAGE_PROVIDER = "provider";
     public static final String APP_PAGE = "page";
     public static final String PAGE_CURRENT_ORDERS = "current_orders";
@@ -39,5 +38,6 @@ public class Config {
     public static String SHARED_PREF_KEY_FCM="fcmtoken";
     public static String SHARED_PREF_USER_ID="user_id";
     public static String SHARED_PREF_USER_MODEL="user_model";
+
 
 }

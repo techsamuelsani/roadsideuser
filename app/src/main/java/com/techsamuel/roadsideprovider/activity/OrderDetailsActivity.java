@@ -48,6 +48,8 @@ import com.techsamuel.roadsideprovider.adapter.OrderPagePhotoGridAdapter;
 import com.techsamuel.roadsideprovider.adapter.OrderPageServiceAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
+import com.techsamuel.roadsideprovider.helper.AllOrderStatus;
+import com.techsamuel.roadsideprovider.helper.Status;
 import com.techsamuel.roadsideprovider.listener.OrderPhotoItemClickListener;
 import com.techsamuel.roadsideprovider.listener.OrderServiceItemClickListener;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
@@ -100,6 +102,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
     double userBalance;
     double orderAmount;
+    String providerStoreLocation="";
+    double userOrderLat;
+    double userOrderLong;
 
 
 
@@ -110,7 +115,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState != null ? savedInstanceState : getIntent().getBundleExtra("saved_state"));
-        AppSharedPreferences.init(this);
+        initAllModelsAndUserOrderLatLng();
         Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
         setContentView(R.layout.activity_order_details);
         mapView=(MapView)findViewById(R.id.mapView);
@@ -122,6 +127,22 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         initAllServicesDetails();
         initAllOrderImages();
 
+    }
+    private void initAllModelsAndUserOrderLatLng(){
+        AppSharedPreferences.init(this);
+        orderModel= AppSharedPreferences.readOrderModel(Config.SHARED_PREF_ORDER_MODEL,"");
+        userModel=AppSharedPreferences.readUserModel(Config.SHARED_PREF_USER_MODEL,"");
+        settingsModel=AppSharedPreferences.readSettingsModel(Config.SHARED_PREF_SETTINGS_MODEL,"");
+        if(orderModel.equals("")||userModel.equals("")){
+            OrderDetailsActivity.this.finish();
+        }
+        if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_DELIVERY)){
+            userOrderLat=Double.valueOf(orderModel.getUserDetails().get(0).getLatitude());
+            userOrderLong=Double.valueOf(orderModel.getUserDetails().get(0).getLongitude());
+        }else if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_PICKUP)){
+            userOrderLat=Double.valueOf(orderModel.getData().get(0).getUserLat());
+            userOrderLong=Double.valueOf(orderModel.getData().get(0).getUserLong());
+        }
     }
 
     private void initAllOrderImages(){
@@ -173,7 +194,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         });
 
         // expand first description
-        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[0])){
+        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))){
             toggleArrow(bt_toggle_reviews);
             lyt_expand_reviews.setVisibility(View.VISIBLE);
         }else{
@@ -224,12 +245,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
 
     private void init(){
-        orderModel= AppSharedPreferences.readOrderModel(Config.SHARED_PREF_ORDER_MODEL,"");
-        userModel=AppSharedPreferences.readUserModel(Config.SHARED_PREF_USER_MODEL,"");
-        settingsModel=AppSharedPreferences.readSettingsModel(Config.SHARED_PREF_SETTINGS_MODEL,"");
-        if(orderModel.equals("")||userModel.equals("")){
-            OrderDetailsActivity.this.finish();
-        }
         floatingActionButton=findViewById(R.id.fab);
         paymentFab=findViewById(R.id.payment_fab);
         serviceName=findViewById(R.id.service_name);
@@ -251,22 +266,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         userBalance= Double.parseDouble(userModel.getData().getWallet());
         orderAmount= Double.parseDouble(orderModel.getData().get(0).getTotalCost());
 
-        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[0])
-                ||orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[1])
-        ){
-            btnCancelOrder.setEnabled(true);
-            btnCancelOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    changeOrderStatus(Config.ALL_ORDER_STATUS[2]);
-                }
-            });
-        }else{
-            btnCancelOrder.setText("This order is cancelled");
-            btnCancelOrder.setEnabled(false);
-            btnCancelOrder.setVisibility(View.GONE);
-        }
-
         orderStatus.setText(orderModel.getOrder_status());
 
 
@@ -282,22 +281,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
         totalCostAmount.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalCost());
 
-
-        String providerStoreLocation=Tools.getAdressFromLatLong(OrderDetailsActivity.this,
-                orderModel.getProviderDetails().get(0).getLatitude(),orderModel.getProviderDetails().get(0).getLongitude()
-                );
-        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[1])){
-            providerStoreLocation=orderModel.getProviderDetails().get(0).getPhone();
-            String finalProviderStoreLocation = providerStoreLocation;
-            storeLocation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + finalProviderStoreLocation));
-                    startActivity(intent);
-                }
-            });
-        }
-
         String servicesName=orderModel.getData().get(0).getServicesName().toString();
         servicesName=servicesName.replace("[","");
         servicesName=servicesName.replace("]","");
@@ -305,15 +288,60 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         serviceName.setText(servicesName);
         storeName.setText(orderModel.getProviderDetails().get(0).getStoreName());
         servicePrice.setText(settingsModel.getData().getCurrencySymbol()+" "+orderModel.getData().get(0).getTotalCost());
-        storeLocation.setText(providerStoreLocation);
+
 
         String orderDetailsText="This order was placed on "+orderModel.getData().get(0).getDate()+"\n"+"The order type is "+
                 orderModel.getData().get(0).getOrderType()+"\n"+"\n"+"Description:"+"\n"+orderModel.getData().get(0).getServiceDescription();
         orderDescription.setText(orderDetailsText);
+        allOrderStatusAndTypeRelatedMethods();
 
+    }
+    private void allOrderStatusAndTypeRelatedMethods(){
+        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))
+                ||orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))
+        ){
+            btnCancelOrder.setEnabled(true);
+            btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    changeOrderStatus(new AllOrderStatus().Status(Status.cancelled));
+                }
+            });
+        }else if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.cancelled))){
+            btnCancelOrder.setText("This order is cancelled");
+            btnCancelOrder.setEnabled(false);
 
+        }
 
-        if(orderModel.getOrder_status().equals(Config.ALL_ORDER_STATUS[0])){
+        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))){
+            if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_DELIVERY)){
+                providerStoreLocation=Tools.getAdressFromLatLong(OrderDetailsActivity.this,
+                        orderModel.getProviderDetails().get(0).getLatitude(),orderModel.getProviderDetails().get(0).getLongitude()
+                );
+                storeLocation.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        navigateToProviderLocation();
+                    }
+                });
+            }else{
+                providerStoreLocation=orderModel.getProviderDetails().get(0).getPhone();
+                storeLocation.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        callToProviderr(providerStoreLocation);
+                    }
+                });
+            }
+        }else{
+            providerStoreLocation=Tools.getAdressFromLatLong(OrderDetailsActivity.this,
+                    orderModel.getProviderDetails().get(0).getLatitude(),orderModel.getProviderDetails().get(0).getLongitude()
+            );
+
+        }
+        storeLocation.setText(providerStoreLocation);
+
+        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))){
             paymentFab.setVisibility(View.VISIBLE);
             floatingActionButton.setVisibility(View.GONE);
             paymentFab.setOnClickListener(new View.OnClickListener() {
@@ -332,11 +360,35 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
         if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_DELIVERY)){
             floatingActionButton.setImageResource(R.drawable.ic_baseline_phone_24);
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    callToProviderr(orderModel.getProviderDetails().get(0).getPhone());
+                }
+            });
         }else if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_PICKUP)){
             floatingActionButton.setImageResource(R.drawable.ic_baseline_navigation_24);
+            floatingActionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    navigateToProviderLocation();
+                }
+            });
         }
 
+
+
+
     }
+
+    private void navigateToProviderLocation() {
+        Tools.showToast(OrderDetailsActivity.this,"Navigating to provider location");
+    }
+    private void callToProviderr(String providerStoreLocation){
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + providerStoreLocation));
+        startActivity(intent);
+    }
+
     private void showConfirmDialog(boolean enoughBalance) {
         String title = "";
         String description="";
@@ -358,7 +410,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(enoughBalance){
-                    changeOrderStatus(Config.ALL_ORDER_STATUS[1]);
+                    changeOrderStatus(new AllOrderStatus().Status(Status.active));
                 }else{
                     Intent intent=new Intent(OrderDetailsActivity.this,WalletActivity.class);
                     startActivity(intent);
@@ -435,7 +487,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //new PaymentTask().execute("");
+
     }
 
     @Override
@@ -452,11 +504,9 @@ public class OrderDetailsActivity extends AppCompatActivity implements
                 String storeId=orderModel.getProviderDetails().get(0).getId();
                 LatLng provideLatLng=new LatLng(providerLat,providerLong);
 
-                double userLat=Double.valueOf(orderModel.getUserDetails().get(0).getLatitude());
-                double userLong=Double.valueOf(orderModel.getUserDetails().get(0).getLongitude());
                 String userName=orderModel.getUserDetails().get(0).getName();
                 String userId=orderModel.getUserDetails().get(0).getId();
-                LatLng userLatLng=new LatLng(userLat,userLong);
+                LatLng userOrderLatLng=new LatLng(userOrderLat,userOrderLong);
 
                 Bitmap bitmap= Tools.drawableToBitmap(OrderDetailsActivity.this.getDrawable(R.drawable.provider_marker));
                 IconFactory iconFactory = IconFactory.getInstance(OrderDetailsActivity.this);
@@ -471,14 +521,14 @@ public class OrderDetailsActivity extends AppCompatActivity implements
                 IconFactory iconFactory2 = IconFactory.getInstance(OrderDetailsActivity.this);
                 Icon icon2=iconFactory2.fromBitmap(bitmap2);
                 MarkerOptions userMarker=new MarkerOptions()
-                        .position(new LatLng(userLat,userLong))
+                        .position(userOrderLatLng)
                         .setTitle(userName).setIcon(icon2)
                         .setSnippet("User ID: "+userId);
                 mapboxMap.addMarker(userMarker);
 
                 LatLngBounds latLngBounds = new LatLngBounds.Builder()
                         .include(provideLatLng)
-                        .include(userLatLng)
+                        .include(userOrderLatLng)
                         .build();
                 mapboxMap.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 100), 5000);
               //  mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 100));
