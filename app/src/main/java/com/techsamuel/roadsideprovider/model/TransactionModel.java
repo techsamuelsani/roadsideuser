@@ -21,13 +21,13 @@ public class TransactionModel {
     private Integer size;
     @SerializedName("totalCredit")
     @Expose
-    private Integer totalCredit;
+    private Double totalCredit;
     @SerializedName("totalDebit")
     @Expose
-    private Integer totalDebit;
+    private Double totalDebit;
     @SerializedName("totalBalance")
     @Expose
-    private Integer totalBalance;
+    private Double totalBalance;
     @SerializedName("message")
     @Expose
     private List<String> message = null;
@@ -59,27 +59,27 @@ public class TransactionModel {
         this.size = size;
     }
 
-    public Integer getTotalCredit() {
+    public Double getTotalCredit() {
         return totalCredit;
     }
 
-    public void setTotalCredit(Integer totalCredit) {
+    public void setTotalCredit(Double totalCredit) {
         this.totalCredit = totalCredit;
     }
 
-    public Integer getTotalDebit() {
+    public Double getTotalDebit() {
         return totalDebit;
     }
 
-    public void setTotalDebit(Integer totalDebit) {
+    public void setTotalDebit(Double totalDebit) {
         this.totalDebit = totalDebit;
     }
 
-    public Integer getTotalBalance() {
+    public Double getTotalBalance() {
         return totalBalance;
     }
 
-    public void setTotalBalance(Integer totalBalance) {
+    public void setTotalBalance(Double totalBalance) {
         this.totalBalance = totalBalance;
     }
 

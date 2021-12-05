@@ -179,7 +179,7 @@ public class WalletActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<TransactionModel> call, Throwable t) {
                 Tools.showToast(WalletActivity.this,"Connecton to server failed");
-                Log.d("CommonRequest",t.getMessage().toString());
+                Log.d("WalletActivity",t.getMessage().toString());
             }
         });
 
