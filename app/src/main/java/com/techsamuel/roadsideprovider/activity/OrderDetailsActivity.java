@@ -384,7 +384,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
                 storeLocation.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        callToProviderr(providerStoreLocation);
+                        callToProvider(providerStoreLocation);
                     }
                 });
             }
@@ -418,7 +418,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    callToProviderr(orderModel.getProviderDetails().get(0).getPhone());
+                    callToProvider(orderModel.getProviderDetails().get(0).getPhone());
                 }
             });
         }else if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_PICKUP)){
@@ -436,13 +436,12 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     private void navigateToProviderLocation() {
 
         Tools.showToast(OrderDetailsActivity.this,"Navigating to provider location");
-
         String url = "https://www.google.com/maps/dir/?api=1&destination=" + providerLat + "," + providerLong + "&travelmode=driving";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
 
     }
-    private void callToProviderr(String providerStoreLocation){
+    private void callToProvider(String providerStoreLocation){
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + providerStoreLocation));
         startActivity(intent);
     }

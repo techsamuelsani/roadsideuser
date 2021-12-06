@@ -191,35 +191,52 @@ public class MakeOrderActivity extends AppCompatActivity {
         calculateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                beautifulProgressDialog.show();
-                serviceDescription=orderDescription.getText().toString();
-                ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
-                Call<OrderModel> call=apiInterface.createNewOrder(Config.DEVICE_TYPE,Config.LANG_CODE,userId,providerId,
-                        choosenServiceId,choosenServiceName,selectedVehicleId,selectedVehicleName,choosenOrderType,serviceDescription,
-                        selectedLocation,selectedLat,selectedLong,serviceImages);
-                call.enqueue(new Callback<OrderModel>() {
-                    @Override
-                    public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
-                        //Tools.showToast(MainActivity.this,response.body().getMessage().toString());
-                        beautifulProgressDialog.dismiss();
-                        if(response.body().getStatus().equals(Config.API_SUCCESS)){
-                            AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
-                            Intent intent=new Intent(MakeOrderActivity.this,OrderDetailsActivity.class);
-                            intent.putExtra(Config.APP_PAGE,Config.PAGE_PROVIDER);
-                            startActivity(intent);
-                        }
-                        Tools.showToast(MakeOrderActivity.this,response.body().getMessage().toString());
-
+                if(choosenOrderType.equals(Config.ORDER_TYPE_DELIVERY)){
+                    if(selectedLat.isEmpty()||selectedLong.isEmpty()||selectedLocation.isEmpty()){
+                        Tools.showToast(MakeOrderActivity.this,"Please Choose your location");
+                    }else{
+                        createOrderRequest();
                     }
 
-                    @Override
-                    public void onFailure(Call<OrderModel> call, Throwable t) {
-                        beautifulProgressDialog.dismiss();
-                        Tools.showToast(MakeOrderActivity.this,"Please insert all required data");
-                        Log.d("MainActivity",t.getMessage().toString());
+                }else if(choosenOrderType.equals(Config.ORDER_TYPE_PICKUP)){
+                    createOrderRequest();
 
-                    }
-                });
+                }
+
+
+            }
+        });
+
+
+    }
+
+    private void createOrderRequest(){
+        beautifulProgressDialog.show();
+        serviceDescription=orderDescription.getText().toString();
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<OrderModel> call=apiInterface.createNewOrder(Config.DEVICE_TYPE,Config.LANG_CODE,userId,providerId,
+                choosenServiceId,choosenServiceName,selectedVehicleId,selectedVehicleName,choosenOrderType,serviceDescription,
+                selectedLocation,selectedLat,selectedLong,serviceImages);
+        call.enqueue(new Callback<OrderModel>() {
+            @Override
+            public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
+                //Tools.showToast(MainActivity.this,response.body().getMessage().toString());
+                beautifulProgressDialog.dismiss();
+                if(response.body().getStatus().equals(Config.API_SUCCESS)){
+                    AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
+                    Intent intent=new Intent(MakeOrderActivity.this,OrderDetailsActivity.class);
+                    intent.putExtra(Config.APP_PAGE,Config.PAGE_PROVIDER);
+                    startActivity(intent);
+                }
+                Tools.showToast(MakeOrderActivity.this,response.body().getMessage().toString());
+
+            }
+
+            @Override
+            public void onFailure(Call<OrderModel> call, Throwable t) {
+                beautifulProgressDialog.dismiss();
+                Tools.showToast(MakeOrderActivity.this,"Please insert all required data");
+                Log.d("MainActivity",t.getMessage().toString());
 
             }
         });
