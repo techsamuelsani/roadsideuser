@@ -1,20 +1,25 @@
 package com.techsamuel.roadsideprovider.activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,10 +30,16 @@ import android.widget.Toast;
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEngineCallback;
+import com.mapbox.android.core.location.LocationEngineRequest;
+import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.api.directions.v5.models.RouteOptions;
+import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
@@ -46,6 +57,7 @@ import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.techsamuel.roadsideprovider.Config;
+import com.techsamuel.roadsideprovider.ImageViewFragment;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.OrderPagePhotoGridAdapter;
 import com.techsamuel.roadsideprovider.adapter.OrderPageServiceAdapter;
@@ -64,6 +76,7 @@ import com.techsamuel.roadsideprovider.tools.SpacingItemDecoration;
 import com.techsamuel.roadsideprovider.tools.Tools;
 import com.techsamuel.roadsideprovider.tools.ViewAnimation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -110,9 +123,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     double userOrderLong;
     double providerLat;
     double providerLong;
-
-    //NavigationMapRoute navigationMapRoute;
-
 
     private ImageButton bt_toggle_reviews, bt_toggle_warranty, bt_toggle_description;
     private View lyt_expand_reviews, lyt_expand_warranty, lyt_expand_description;
@@ -161,10 +171,18 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         OrderPagePhotoGridAdapter photoGridAdapter=new OrderPagePhotoGridAdapter(this, orderModel.getServiceImages(), new OrderPhotoItemClickListener() {
             @Override
             public void onItemClick(String s) {
-                Tools.showToast(OrderDetailsActivity.this,s);
+                //Tools.showToast(OrderDetailsActivity.this,s);
+                showOrderImageFullScreen(s);
             }
         });
         recyclerView.setAdapter(photoGridAdapter);
+    }
+    private void showOrderImageFullScreen(String imageUrl){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        ImageViewFragment newFragment = new ImageViewFragment(this,imageUrl);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
     }
 
     private void initComponent() {
@@ -416,39 +434,12 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     }
 
     private void navigateToProviderLocation() {
-        Point providerPoint=Point.fromLngLat(providerLong,providerLat);
-        Point userPoint=Point.fromLngLat(userOrderLong,userOrderLat);
+
         Tools.showToast(OrderDetailsActivity.this,"Navigating to provider location");
-        
-//        NavigationRoute.builder()
-//                .accessToken(getString(R.string.mapbox_access_token))
-//                .origin(userPoint)
-//                .destination(providerPoint)
-//                .build()
-//                .getRoute(new Callback<DirectionsResponse>() {
-//                    @Override
-//                    public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
-//                        if(response.body().equals(null)){
-//                            return;
-//
-//                        }else if(response.body().routes().size()==0){
-//                            return;
-//                        }
-//                        DirectionsRoute directionsRoute=response.body().routes().get(0);
-//                        if(navigationMapRoute!=null){
-//                            navigationMapRoute.removeRoute();
-//                        }else{
-//                            navigationMapRoute =new NavigationMapRoute(null,mapView,mapboxMap);
-//                        }
-//                        navigationMapRoute.addRoute(directionsRoute);
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<DirectionsResponse> call, Throwable t) {
-//
-//                    }
-//                });
+
+        String url = "https://www.google.com/maps/dir/?api=1&destination=" + providerLat + "," + providerLong + "&travelmode=driving";
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
 
     }
     private void callToProviderr(String providerStoreLocation){
