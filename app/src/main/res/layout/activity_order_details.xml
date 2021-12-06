@@ -563,6 +563,7 @@
             android:drawablePadding="10dp"
             />
         <Button
+            android:visibility="gone"
             android:id="@+id/accept_order"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

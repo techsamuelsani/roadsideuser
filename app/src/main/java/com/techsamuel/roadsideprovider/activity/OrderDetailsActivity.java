@@ -27,6 +27,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.api.directions.v5.models.DirectionsResponse;
+import com.mapbox.api.directions.v5.models.DirectionsRoute;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -105,7 +108,10 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     String providerStoreLocation="";
     double userOrderLat;
     double userOrderLong;
+    double providerLat;
+    double providerLong;
 
+    //NavigationMapRoute navigationMapRoute;
 
 
     private ImageButton bt_toggle_reviews, bt_toggle_warranty, bt_toggle_description;
@@ -137,12 +143,14 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             OrderDetailsActivity.this.finish();
         }
         if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_DELIVERY)){
-            userOrderLat=Double.valueOf(orderModel.getUserDetails().get(0).getLatitude());
-            userOrderLong=Double.valueOf(orderModel.getUserDetails().get(0).getLongitude());
-        }else if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_PICKUP)){
             userOrderLat=Double.valueOf(orderModel.getData().get(0).getUserLat());
             userOrderLong=Double.valueOf(orderModel.getData().get(0).getUserLong());
+        }else if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_PICKUP)){
+            userOrderLat=Double.valueOf(orderModel.getUserDetails().get(0).getLatitude());
+            userOrderLong=Double.valueOf(orderModel.getUserDetails().get(0).getLongitude());
         }
+        providerLat=Double.valueOf(orderModel.getProviderDetails().get(0).getLatitude());
+        providerLong=Double.valueOf(orderModel.getProviderDetails().get(0).getLongitude());
     }
 
     private void initAllOrderImages(){
@@ -297,6 +305,35 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
     }
     private void allOrderStatusAndTypeRelatedMethods(){
+        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.completed_request))){
+            btnAcceptOrder.setVisibility(View.VISIBLE);
+            btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeOrderStatus(new AllOrderStatus().Status(Status.completed));
+                }
+            });
+        }else{
+            btnAcceptOrder.setVisibility(View.GONE);
+        }
+
+        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.completed))){
+            btnAcceptOrder.setText("Rate the order");
+            btnAcceptOrder.setVisibility(View.VISIBLE);
+            btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Rate the order
+                   // changeOrderStatus(new AllOrderStatus().Status(Status.rated));
+                }
+            });
+
+
+        }
+
+
+
+
         if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))
                 ||orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))
         ){
@@ -376,13 +413,43 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             });
         }
 
-
-
-
     }
 
     private void navigateToProviderLocation() {
+        Point providerPoint=Point.fromLngLat(providerLong,providerLat);
+        Point userPoint=Point.fromLngLat(userOrderLong,userOrderLat);
         Tools.showToast(OrderDetailsActivity.this,"Navigating to provider location");
+        
+//        NavigationRoute.builder()
+//                .accessToken(getString(R.string.mapbox_access_token))
+//                .origin(userPoint)
+//                .destination(providerPoint)
+//                .build()
+//                .getRoute(new Callback<DirectionsResponse>() {
+//                    @Override
+//                    public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+//                        if(response.body().equals(null)){
+//                            return;
+//
+//                        }else if(response.body().routes().size()==0){
+//                            return;
+//                        }
+//                        DirectionsRoute directionsRoute=response.body().routes().get(0);
+//                        if(navigationMapRoute!=null){
+//                            navigationMapRoute.removeRoute();
+//                        }else{
+//                            navigationMapRoute =new NavigationMapRoute(null,mapView,mapboxMap);
+//                        }
+//                        navigationMapRoute.addRoute(directionsRoute);
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<DirectionsResponse> call, Throwable t) {
+//
+//                    }
+//                });
+
     }
     private void callToProviderr(String providerStoreLocation){
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + providerStoreLocation));
