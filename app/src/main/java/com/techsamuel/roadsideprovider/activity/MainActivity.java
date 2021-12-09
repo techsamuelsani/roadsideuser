@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppSharedPreferences.init(this);
         userModel=AppSharedPreferences.readUserModel(Config.SHARED_PREF_USER_MODEL,"");
         settingsModel=AppSharedPreferences.readSettingsModel(Config.SHARED_PREF_SETTINGS_MODEL,"");
         if(userModel.equals("")||settingsModel.equals("")){
@@ -208,7 +209,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private void init(){
        // CommonRequests.updateFcmToServer(this);
-        AppSharedPreferences.init(this);
         userId=AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,"");
         locationEngineCallback=new LocationEngineCallback<LocationEngineResult>() {
             @Override
@@ -565,7 +565,13 @@ public class MainActivity extends AppCompatActivity implements
                 Log.d("MainActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
 
-                    Tools.showToast(MainActivity.this,response.body().getSize()+" Provider found within your area Zoom-In for more details");
+                    if(response.body().getSize()>0){
+                        Tools.showToast(MainActivity.this,response.body().getSize()+" Provider found within your area Zoom-In for more details");
+                    }else{
+                        Tools.showToast(MainActivity.this,"No provider found within your area, try to search in another location");
+                    }
+                    //Tools.showToast(MainActivity.this,String.valueOf(response.body().getSize()));
+
                     for(int i=0;i<response.body().getData().size();i++){
                         //Tools.showToast(MainActivity.this,response.body().getServices().get(i).getServices().toString());
                         Bitmap bitmap=Tools.drawableToBitmap(MainActivity.this.getDrawable(R.drawable.provider_marker));
@@ -588,12 +594,13 @@ public class MainActivity extends AppCompatActivity implements
                     });
 
                 }else{
-                    Tools.showToast(MainActivity.this,"No provider found within your area");
+                    Tools.showToast(MainActivity.this,"No provider found within your area, try to search in another location");
                 }
             }
             @Override
             public void onFailure(Call<ProviderModel> call, Throwable t) {
                 Log.d("MainActivity",t.getMessage().toString());
+                Tools.showToast(MainActivity.this,"No provider found within your area, try to search in another location");
 
             }
         });
@@ -645,9 +652,6 @@ public class MainActivity extends AppCompatActivity implements
                         }
                     });
 
-
-
-                    
                     String address=Tools.getAdressFromLatLong(MainActivity.this,response.body().getData().get(0).getLatitude(),response.body().getData().get(0).getLongitude());
 
                     storeName.setText(response.body().getData().get(0).getStoreName());
