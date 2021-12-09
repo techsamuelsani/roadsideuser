@@ -183,6 +183,11 @@ public class MainActivity extends AppCompatActivity implements
                     PageAdapter pageAdapter=new PageAdapter(MainActivity.this, response.body(), new PageItemClickListener() {
                         @Override
                         public void onItemClick(PageModel.Datum item) {
+                            Intent intent=new Intent(MainActivity.this,WebViewActivity.class);
+                            intent.putExtra("title",item.getPageName());
+                            intent.putExtra("url",item.getPageUrl());
+                            intent.putExtra("content",item.getPageContent());
+                            startActivity(intent);
 
                         }
                     });
@@ -329,6 +334,12 @@ public class MainActivity extends AppCompatActivity implements
                 startActivity(intent);
             }
         });
+        lytRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Tools.openMarketForRatings(MainActivity.this);
+            }
+        });
 
         etSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -371,10 +382,6 @@ public class MainActivity extends AppCompatActivity implements
 
             }
         });
-
-
-
-
     }
 
     private void initBottomSheet(){
@@ -440,7 +447,9 @@ public class MainActivity extends AppCompatActivity implements
                     serviceAdapter=new ServiceAdapter(MainActivity.this, response.body(), false, new ServiceItemClickListener() {
                         @Override
                         public void onItemClick(ServiceModel.Datum item) {
-                            Tools.showToast(MainActivity.this,item.getName());
+                            setAllProviderStoreLocation(mapboxMap,lastLocation,item.getId());
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            Tools.showToast(MainActivity.this,"Searching... "+item.getName()+" service provider in your location");
                         }
                     });
                     recyclerService.setLayoutManager(new LinearLayoutManager(MainActivity.this));
@@ -518,10 +527,10 @@ public class MainActivity extends AppCompatActivity implements
         mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
             @Override
             public void onStyleLoaded(@NonNull Style style) {
-                mapboxMap.addPolygon(generatePerimeter(
-                        new LatLng(Double.valueOf(userModel.getData().getLatitude()), Double.valueOf(userModel.getData().getLongitude())),
-                        Double.valueOf(settingsModel.getData().getRadius()),
-                        64));
+//                mapboxMap.addPolygon(generatePerimeter(
+//                        new LatLng(Double.valueOf(userModel.getData().getLatitude()), Double.valueOf(userModel.getData().getLongitude())),
+//                        Double.valueOf(settingsModel.getData().getRadius()),
+//                        64));
                 enableLocationComponent(style);
                 mapboxStyle=style;
 
@@ -555,13 +564,17 @@ public class MainActivity extends AppCompatActivity implements
                 .alpha(0.1f);
     }
 
-    private void setAllProviderStoreLocation(MapboxMap mapboxMap, LatLng lastLocation){
-
+    private void setAllProviderStoreLocation(MapboxMap mapboxMap, LatLng lastLocation,String service_id){
+        mapboxMap.clear();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
-        Call<ProviderModel> call=apiInterface.getAllProviders(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId,String.valueOf(lastLocation.getLatitude()),String.valueOf(lastLocation.getLongitude()));
+        Call<ProviderModel> call=apiInterface.getAllProviders(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId,
+                String.valueOf(lastLocation.getLatitude()),String.valueOf(lastLocation.getLongitude()),service_id);
         call.enqueue(new Callback<ProviderModel>() {
             @Override
             public void onResponse(Call<ProviderModel> call, Response<ProviderModel> response) {
+                mapboxMap.addPolygon(generatePerimeter(lastLocation,
+                        Double.valueOf(settingsModel.getData().getRadius()),
+                        64));
                 Log.d("MainActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
 
@@ -570,8 +583,6 @@ public class MainActivity extends AppCompatActivity implements
                     }else{
                         Tools.showToast(MainActivity.this,"No provider found within your area, try to search in another location");
                     }
-                    //Tools.showToast(MainActivity.this,String.valueOf(response.body().getSize()));
-
                     for(int i=0;i<response.body().getData().size();i++){
                         //Tools.showToast(MainActivity.this,response.body().getServices().get(i).getServices().toString());
                         Bitmap bitmap=Tools.drawableToBitmap(MainActivity.this.getDrawable(R.drawable.provider_marker));
@@ -605,13 +616,7 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-
-
-
-
-
     }
-
 
 
     private void showProviderInfo(String providerId) {
@@ -723,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements
             locationComponent.setCameraMode(CameraMode.TRACKING);
             locationComponent.setRenderMode(RenderMode.COMPASS);
             locationComponent.getLocationEngine().getLastLocation(locationEngineCallback);
-            setAllProviderStoreLocation(mapboxMap,lastLocation);
+            setAllProviderStoreLocation(mapboxMap,lastLocation,"0");
 
 
         } else {
@@ -823,7 +828,7 @@ public class MainActivity extends AppCompatActivity implements
                     LatLng selectedLocation=new LatLng(((Point) selectedCarmenFeature.geometry()).latitude(),
                             ((Point) selectedCarmenFeature.geometry()).longitude());
 
-                    setAllProviderStoreLocation(mapboxMap,selectedLocation);
+                    setAllProviderStoreLocation(mapboxMap,selectedLocation,"0");
                     mapboxMap.addPolygon(generatePerimeter(selectedLocation,
                             Double.valueOf(settingsModel.getData().getRadius()),
                             64));

@@ -1,6 +1,7 @@
 package com.techsamuel.roadsideprovider.tools;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -255,6 +256,18 @@ public class Tools {
             }
         });
 
+    }
+
+    public static void openMarketForRatings(Context context){
+        try {
+            Uri uri = Uri.parse("market://details?id="+context.getPackageName()+"");
+            Intent goMarket = new Intent(Intent.ACTION_VIEW, uri);
+            context.startActivity(goMarket);
+        }catch (ActivityNotFoundException e){
+            Uri uri = Uri.parse("https://play.google.com/store/apps/details?id="+context.getPackageName()+"");
+            Intent goMarket = new Intent(Intent.ACTION_VIEW, uri);
+            context.startActivity(goMarket);
+        }
     }
 
 

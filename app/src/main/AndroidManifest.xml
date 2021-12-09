@@ -46,6 +46,9 @@
             android:name=".activity.MakeOrderActivity"
             android:exported="false" />
         <activity
+            android:name=".activity.WebViewActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>

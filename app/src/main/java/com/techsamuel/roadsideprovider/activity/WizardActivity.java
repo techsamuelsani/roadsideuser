@@ -21,6 +21,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.kishan.askpermission.AskPermission;
 import com.kishan.askpermission.ErrorCallback;
 import com.kishan.askpermission.PermissionCallback;
@@ -28,6 +31,7 @@ import com.kishan.askpermission.PermissionInterface;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.activity.register.UserLoginActivity;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
+import com.techsamuel.roadsideprovider.tools.CommonRequests;
 import com.techsamuel.roadsideprovider.tools.Tools;
 
 import java.util.List;
@@ -79,11 +83,22 @@ public class WizardActivity extends AppCompatActivity implements PermissionCallb
 
         if(isPermissionDenied==false){
             WizardActivity.this.finish();
-            Intent intent=new Intent(WizardActivity.this, UserLoginActivity.class);
-            startActivity(intent);
+//            Intent intent=new Intent(WizardActivity.this, UserLoginActivity.class);
+//            startActivity(intent);
+            checkAuth();
         }
 
         initComponent();
+    }
+
+    private void checkAuth() {
+        FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser!=null){
+            CommonRequests.checkUserByPhone(this,firebaseUser.getPhoneNumber());
+        }else{
+            Intent intent=new Intent(WizardActivity.this, UserLoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void initComponent() {
@@ -183,8 +198,9 @@ public class WizardActivity extends AppCompatActivity implements PermissionCallb
     public void onPermissionsGranted(int requestCode) {
         AppSharedPreferences.write("permissionDenied",false);
         WizardActivity.this.finish();
-        Intent intent=new Intent(WizardActivity.this,UserLoginActivity.class);
-        startActivity(intent);
+//        Intent intent=new Intent(WizardActivity.this,UserLoginActivity.class);
+//        startActivity(intent);
+          checkAuth();
     }
 
     @Override
@@ -234,14 +250,12 @@ public class WizardActivity extends AppCompatActivity implements PermissionCallb
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
             View view = layoutInflater.inflate(R.layout.item_wizard, container, false);
             ((TextView) view.findViewById(R.id.title)).setText(title_array[position]);
             ((TextView) view.findViewById(R.id.description)).setText(description_array[position]);
             ((ImageView) view.findViewById(R.id.image)).setImageResource(about_images_array[position]);
             ((RelativeLayout) view.findViewById(R.id.lyt_parent)).setBackgroundColor(getResources().getColor(color_array[position]));
             container.addView(view);
-
             return view;
         }
 

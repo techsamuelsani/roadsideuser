@@ -84,7 +84,8 @@ public interface ApiInterface {
     @POST("getAllProviders")
     Call<ProviderModel> getAllProviders(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
                                         @Field("user_type") String user_type, @Field("user_id") String user_id,
-                                        @Field("user_lat") String user_lat, @Field("user_long") String user_long
+                                        @Field("user_lat") String user_lat, @Field("user_long") String user_long,
+                                        @Field("service_id") String service_id
                                         );
 
     @FormUrlEncoded
