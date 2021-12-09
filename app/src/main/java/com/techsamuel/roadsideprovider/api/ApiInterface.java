@@ -5,6 +5,7 @@ import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.MessageModel;
 import com.techsamuel.roadsideprovider.model.OrderModel;
 import com.techsamuel.roadsideprovider.model.OrdersModel;
+import com.techsamuel.roadsideprovider.model.PageModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
@@ -120,9 +121,8 @@ public interface ApiInterface {
                                     @Query("location") String location, @Query("latitude") String latitude, @Query("longitude") String longitude,
                                     @Part List<MultipartBody.Part> service_images);
 
-
-
-
-
+    @FormUrlEncoded
+    @POST("getPagesByDevicyType")
+    Call<PageModel> getPagesByDevicyType(@Field("device_type") String device_type, @Field("lang_code") String lang_code);
 
 }

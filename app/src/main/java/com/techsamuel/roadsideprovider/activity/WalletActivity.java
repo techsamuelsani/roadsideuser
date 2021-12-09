@@ -20,29 +20,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
-import com.techsamuel.roadsideprovider.App;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.TransactionAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
-import com.techsamuel.roadsideprovider.model.IyizicoPaymentInitializeModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
 import com.techsamuel.roadsideprovider.model.TransactionModel;
 import com.techsamuel.roadsideprovider.model.UserModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
-import com.techsamuel.roadsideprovider.tools.CommonRequests;
 import com.techsamuel.roadsideprovider.tools.Tools;
-
-import java.io.IOException;
-import java.util.List;
-
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

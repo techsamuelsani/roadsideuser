@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
@@ -29,13 +30,9 @@ import android.widget.Toast;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.mapbox.android.core.location.LocationEngine;
-import com.mapbox.android.core.location.LocationEngineCallback;
-import com.mapbox.android.core.location.LocationEngineRequest;
-import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
+import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.DirectionsResponse;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.directions.v5.models.RouteOptions;
@@ -75,10 +72,7 @@ import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.SpacingItemDecoration;
 import com.techsamuel.roadsideprovider.tools.Tools;
 import com.techsamuel.roadsideprovider.tools.ViewAnimation;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -349,9 +343,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
         }
 
-
-
-
         if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))
                 ||orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))
         ){
@@ -434,13 +425,18 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     }
 
     private void navigateToProviderLocation() {
-
         Tools.showToast(OrderDetailsActivity.this,"Navigating to provider location");
+        navigateUsingGoogleMaps();
+
+    }
+
+
+    private void navigateUsingGoogleMaps(){
         String url = "https://www.google.com/maps/dir/?api=1&destination=" + providerLat + "," + providerLong + "&travelmode=driving";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
-
     }
+
     private void callToProvider(String providerStoreLocation){
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + providerStoreLocation));
         startActivity(intent);
@@ -554,7 +550,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             @Override
             public void onStyleLoaded(@NonNull Style style) {
                 enableLocationComponent(style);
-
                 double providerLat=Double.valueOf(orderModel.getProviderDetails().get(0).getLatitude());
                 double providerLong=Double.valueOf(orderModel.getProviderDetails().get(0).getLongitude());
                 String storeName=orderModel.getProviderDetails().get(0).getStoreName();
@@ -589,11 +584,10 @@ public class OrderDetailsActivity extends AppCompatActivity implements
                         .build();
                 mapboxMap.easeCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 100), 5000);
               //  mapboxMap.animateCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 100));
-
             }
         });
-
     }
+
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
         if (PermissionsManager.areLocationPermissionsGranted(this)) {

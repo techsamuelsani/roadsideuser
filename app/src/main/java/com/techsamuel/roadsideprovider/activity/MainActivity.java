@@ -75,12 +75,15 @@ import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.activity.register.UserLoginActivity;
 import com.techsamuel.roadsideprovider.activity.register.VehicleRegisterActivity;
+import com.techsamuel.roadsideprovider.adapter.PageAdapter;
 import com.techsamuel.roadsideprovider.adapter.ServiceAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
+import com.techsamuel.roadsideprovider.listener.PageItemClickListener;
 import com.techsamuel.roadsideprovider.listener.ServiceItemClickListener;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
+import com.techsamuel.roadsideprovider.model.PageModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
@@ -123,10 +126,10 @@ public class MainActivity extends AppCompatActivity implements
     LinearLayout lytMessage;
     LinearLayout lytLanguages;
     LinearLayout lytNotification;
-    LinearLayout lytAbout;
-    LinearLayout lytTerms;
-    LinearLayout lytFaq;
-    LinearLayout lytContact;
+//    LinearLayout lytAbout;
+//    LinearLayout lytTerms;
+//    LinearLayout lytFaq;
+//    LinearLayout lytContact;
     LinearLayout lytRate;
     LinearLayout lytExit;
     TextView balance;
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements
     private boolean isVehicleRegistered=false;
     BeautifulProgressDialog beautifulProgressDialog;
     EditText etSearch;
+    RecyclerView recyclerPage;
 
 
 
@@ -161,6 +165,43 @@ public class MainActivity extends AppCompatActivity implements
         mapView.getMapAsync(this);
         //Tools.hideSystemUI(this);
         init();
+        initSideMenuItem();
+    }
+
+    private void initSideMenuItem(){
+        recyclerPage=findViewById(R.id.recycler_page);
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<PageModel> call=apiInterface.getPagesByDevicyType(Config.DEVICE_TYPE,Config.LANG_CODE);
+        call.enqueue(new Callback<PageModel>() {
+            @Override
+            public void onResponse(Call<PageModel> call, Response<PageModel> response) {
+                //Tools.showToast(MainActivity.this,response.body().getMessage().toString());
+                Log.d("PageAdapter",response.body().toString());
+                if(response.body().getStatus()== Config.API_SUCCESS){
+                    recyclerPage.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+                    PageAdapter pageAdapter=new PageAdapter(MainActivity.this, response.body(), new PageItemClickListener() {
+                        @Override
+                        public void onItemClick(PageModel.Datum item) {
+
+                        }
+                    });
+                    recyclerPage.setAdapter(pageAdapter);
+                }else{
+                    Log.d("MainActivity","Failed to update device information");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PageModel> call, Throwable t) {
+                Log.d("MainActivity",t.getMessage().toString());
+
+            }
+        });
+
+
+
+
+
     }
 
 
@@ -204,10 +245,10 @@ public class MainActivity extends AppCompatActivity implements
         lytPreviousOrders=findViewById(R.id.lyt_previous_orders);
         lytMessage=findViewById(R.id.lyt_message);
         lytNotification=findViewById(R.id.lyt_notifications);
-        lytAbout=findViewById(R.id.lyt_about);
-        lytTerms=findViewById(R.id.lyt_terms);
-        lytFaq=findViewById(R.id.lyt_faq);
-        lytContact=findViewById(R.id.lyt_contact);
+//        lytAbout=findViewById(R.id.lyt_about);
+//        lytTerms=findViewById(R.id.lyt_terms);
+//        lytFaq=findViewById(R.id.lyt_faq);
+//        lytContact=findViewById(R.id.lyt_contact);
         lytRate=findViewById(R.id.lyt_rate);
         lytExit=findViewById(R.id.lyt_exit);
         balance=findViewById(R.id.balance);
