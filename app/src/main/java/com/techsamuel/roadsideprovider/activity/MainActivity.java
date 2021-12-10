@@ -473,8 +473,6 @@ public class MainActivity extends AppCompatActivity implements
                 .setMessage(R.string.logout_app_description)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        AppSharedPreferences.init(MainActivity.this);
-                        AppSharedPreferences.clear();
                         FirebaseAuth.getInstance().signOut();
                         startActivity(new Intent(MainActivity.this, UserLoginActivity.class));
                     }

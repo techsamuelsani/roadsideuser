@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
@@ -47,7 +48,7 @@ public class VehicleRegisterActivity extends AppCompatActivity {
     Calendar calendar;
     Button registerBtn;
     String userId;
-
+    BeautifulProgressDialog beautifulProgressDialog;
 
 
     @Override
@@ -56,7 +57,13 @@ public class VehicleRegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_vehicle_register);
         initToolbar();
         init();
+        initBeautifulProgressDialog();
 
+    }
+    private void initBeautifulProgressDialog(){
+        beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
+        beautifulProgressDialog.setLottieLocation("service.json");
+        beautifulProgressDialog.setLottieLoop(true);
     }
 
     private void initToolbar() {
@@ -98,6 +105,7 @@ public class VehicleRegisterActivity extends AppCompatActivity {
     }
 
     private void registerVehicle(){
+        beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<DataSavedModel> call=apiInterface.registerVehicle(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId,vmake.getText().toString(),
                 vmodel.getText().toString(),plateno.getText().toString(),vyear.getText().toString(),vrExpDate.getText().toString()
@@ -106,6 +114,8 @@ public class VehicleRegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<DataSavedModel> call, retrofit2.Response<DataSavedModel> response) {
                 Log.d("VehicleRegisterActivity",response.body().getMessage().toString());
+                beautifulProgressDialog.dismiss();
+
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     Tools.showToast(VehicleRegisterActivity.this,"Vehicle Registered");
                     VehicleRegisterActivity.this.finish();
@@ -113,10 +123,10 @@ public class VehicleRegisterActivity extends AppCompatActivity {
                     Tools.showToast(VehicleRegisterActivity.this,response.body().getMessage().toString());
                 }
             }
-
             @Override
             public void onFailure(Call<DataSavedModel> call, Throwable t) {
                 Log.d("VehicleRegisterActivity",t.getMessage().toString());
+                beautifulProgressDialog.dismiss();
 
             }
         });
@@ -127,7 +137,6 @@ public class VehicleRegisterActivity extends AppCompatActivity {
 
     private void selectDateOrYear(boolean isOnlyYear,EditText editText){
         calendar = Calendar.getInstance();
-
             DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -151,9 +160,6 @@ public class VehicleRegisterActivity extends AppCompatActivity {
             new DatePickerDialog(VehicleRegisterActivity.this, date, calendar
                     .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                     calendar.get(Calendar.DAY_OF_MONTH)).show();
-
-
-
     }
 
     @Override
@@ -166,9 +172,5 @@ public class VehicleRegisterActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
     }
-
-
-
-
 
 }

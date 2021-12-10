@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +52,7 @@ public class UserRegisterActivity extends AppCompatActivity {
     ImageView imageMask;
     int PICK_IMAGE_PROFILE_PHOTO=1;
     MultipartBody.Part profilePhotoFile;
+    BeautifulProgressDialog beautifulProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,13 @@ public class UserRegisterActivity extends AppCompatActivity {
         Tools.hideSystemUI(this);
         setContentView(R.layout.activity_user_register);
         init();
+        initBeautifulProgressDialog();
+    }
+
+    private void initBeautifulProgressDialog(){
+        beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
+        beautifulProgressDialog.setLottieLocation("service.json");
+        beautifulProgressDialog.setLottieLoop(true);
     }
 
 
@@ -127,11 +136,13 @@ public class UserRegisterActivity extends AppCompatActivity {
 
     private void saveUserDetailsToServer(MultipartBody.Part phoneNumber, MultipartBody.Part fullname, MultipartBody.Part email, MultipartBody.Part password, MultipartBody.Part confirm_password
     ,MultipartBody.Part device_type) {
+        beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<UserModel> call=apiInterface.saveUserDetails(phoneNumber,fullname,profilePhotoFile,email,password,confirm_password,device_type);
         call.enqueue(new Callback<UserModel>() {
             @Override
             public void onResponse(Call<UserModel> call, Response<UserModel> response) {
+                beautifulProgressDialog.dismiss();
                 //Tools.showToast(RegisterStepFourActivity.this,response.body().getMessage().toString());
                 AppSharedPreferences.init(UserRegisterActivity.this);
                 Intent intent = null;
@@ -154,6 +165,7 @@ public class UserRegisterActivity extends AppCompatActivity {
             public void onFailure(Call<UserModel> call, Throwable t) {
                 Log.d("UserRegisterActivity",t.getMessage().toString());
                 Tools.showToast(UserRegisterActivity.this,"Connecton to server failed");
+                beautifulProgressDialog.dismiss();
             }
         });
 

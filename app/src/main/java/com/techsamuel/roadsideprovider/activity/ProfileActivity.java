@@ -37,7 +37,6 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Tools.hideSystemUI(this);
         setContentView(R.layout.activity_profile);
         initToolbar();
         init();
@@ -86,7 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Provider Profile");
+        toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
