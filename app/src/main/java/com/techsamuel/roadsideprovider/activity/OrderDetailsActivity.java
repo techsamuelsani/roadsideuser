@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
@@ -53,6 +54,10 @@ import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
+import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
+import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationMapRoute;
+import com.mapbox.services.android.navigation.v5.navigation.NavigationRoute;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.ImageViewFragment;
 import com.techsamuel.roadsideprovider.R;
@@ -121,6 +126,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     private ImageButton bt_toggle_reviews, bt_toggle_warranty, bt_toggle_description;
     private View lyt_expand_reviews, lyt_expand_warranty, lyt_expand_description;
     private NestedScrollView nested_scroll_view;
+    NavigationMapRoute navigationMapRoute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -425,17 +431,63 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     }
 
     private void navigateToProviderLocation() {
-        Tools.showToast(OrderDetailsActivity.this,"Navigating to provider location");
-        navigateUsingGoogleMaps();
+       navigateUsingMapbox();
 
     }
+    private void navigateUsingMapbox(){
+        Tools.showToast(OrderDetailsActivity.this,"Searching... best route for you");
 
+        Point providerPoint=Point.fromLngLat(providerLong,providerLat);
+        Point userPoint=Point.fromLngLat(userOrderLong,userOrderLat);
 
+        NavigationRoute.builder(OrderDetailsActivity.this).accessToken(
+                getResources().getString(R.string.mapbox_access_token)
+        ).origin(providerPoint).destination(userPoint).build().getRoute(new Callback<DirectionsResponse>() {
+            @Override
+            public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
+
+                if(response.body()==null){
+                    Tools.showToast(OrderDetailsActivity.this,"No route found");
+                    return;
+                }else if(response.body().routes().size()==0){
+                    Tools.showToast(OrderDetailsActivity.this,"No route found");
+                    return;
+                }
+                DirectionsRoute directionsRoute=response.body().routes().get(0);
+                if(navigationMapRoute!=null){
+                    navigationMapRoute.removeRoute();
+                }else{
+                    navigationMapRoute=new NavigationMapRoute(null,mapView,mapboxMap);
+                }
+                navigationMapRoute.addRoute(directionsRoute);
+
+                Handler handler=new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        NavigationLauncherOptions navigationLauncherOptions= NavigationLauncherOptions.builder().directionsRoute(directionsRoute).build();
+                        NavigationLauncher.startNavigation(OrderDetailsActivity.this,navigationLauncherOptions);
+                    }
+                },2000);
+
+            }
+
+            @Override
+            public void onFailure(Call<DirectionsResponse> call, Throwable t) {
+                Log.e("MapBoxNavigation",t.getMessage());
+
+            }
+        });
+    }
     private void navigateUsingGoogleMaps(){
+        Tools.showToast(OrderDetailsActivity.this,"Navigating to provider location");
         String url = "https://www.google.com/maps/dir/?api=1&destination=" + providerLat + "," + providerLong + "&travelmode=driving";
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(intent);
     }
+
+
+
 
     private void callToProvider(String providerStoreLocation){
         Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + providerStoreLocation));

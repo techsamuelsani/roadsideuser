@@ -52,6 +52,10 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0'//Mapbox Map
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-annotation-v9:0.9.0'//Mapbox Map
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0'//
+    implementation('com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.42.6') {
+        exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-telemetry'
+        exclude module: 'mapbox-android-plugin-annotation-v8'
+    }
     implementation 'de.hdodenhof:circleimageview:3.1.0'  //Circle Image Library
     implementation 'com.github.bumptech.glide:glide:4.12.0' //Glide library
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
