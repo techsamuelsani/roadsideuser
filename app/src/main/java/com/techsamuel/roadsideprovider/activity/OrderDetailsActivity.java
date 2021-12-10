@@ -509,6 +509,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
                     beautifulProgressDialog.dismiss();
                     if(response.body().getStatus()== Config.API_SUCCESS){
                         AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
+                        Config.balance= Double.valueOf(orderModel.getUserDetails().get(0).getWallet());
                         transitionRecreate();
 
                     }

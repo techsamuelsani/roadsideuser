@@ -66,7 +66,7 @@ public class UserModel {
     }
 
     @Generated("jsonschema2pojo")
-    public class Data {
+    public static class Data {
 
         @SerializedName("id")
         @Expose

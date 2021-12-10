@@ -204,10 +204,6 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-
-
-
-
     }
 
 
@@ -270,6 +266,7 @@ public class MainActivity extends AppCompatActivity implements
         providerName.setText(userModel.getData().getName());
         Glide.with(MainActivity.this).load(Config.BASE_URL+userModel.getData().getUserPhoto()).into(providerImage);
         userPhone.setText(userModel.getData().getPhone());
+        Config.balance=Double.valueOf(userModel.getData().getWallet());
         balance.setText(userModel.getData().getWallet());
 
         lytregisterVehicle.setOnClickListener(new View.OnClickListener() {
@@ -772,6 +769,7 @@ public class MainActivity extends AppCompatActivity implements
         super.onResume();
         mapView.onResume();
         getRegisteredVehicle();
+        balance.setText(String.valueOf(Config.balance));
     }
 
     @Override

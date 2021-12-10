@@ -154,6 +154,8 @@ public class WalletActivity extends AppCompatActivity {
                     recyclerPayment.setLayoutManager(new LinearLayoutManager(WalletActivity.this));
                     transactionAdapter=new TransactionAdapter(WalletActivity.this,response.body());
                     recyclerPayment.setAdapter(transactionAdapter);
+                    Config.balance=response.body().getTotalBalance();
+
 
                 }else{
                     userBalance.setText(response.body().getTotalBalance()+" "+settingsModel.getData().getAppCurrency());

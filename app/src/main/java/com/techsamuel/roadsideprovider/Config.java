@@ -39,5 +39,7 @@ public class Config {
     public static String SHARED_PREF_USER_ID="user_id";
     public static String SHARED_PREF_USER_MODEL="user_model";
 
+    public static Double balance=0.0;
+
 
 }
