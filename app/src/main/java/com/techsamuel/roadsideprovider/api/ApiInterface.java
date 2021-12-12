@@ -126,4 +126,10 @@ public interface ApiInterface {
     @POST("getPagesByDevicyType")
     Call<PageModel> getPagesByDevicyType(@Field("device_type") String device_type, @Field("lang_code") String lang_code);
 
+    @FormUrlEncoded
+    @POST("orderActivityRequest")
+    Call<DataSavedModel> orderActivityRequest(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
+                                         @Field("user_type") String user_type,@Field("user_id") String user_id,
+                                         @Field("order_id") String order_id,@Field("details") String details,@Field("type") String type);
+
 }

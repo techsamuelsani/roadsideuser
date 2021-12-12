@@ -22,15 +22,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -356,7 +359,12 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             btnCancelOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    changeOrderStatus(new AllOrderStatus().Status(Status.cancelation_request));
+                    if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))){
+                        openCancelDialog(new AllOrderStatus().Status(Status.cancelled));
+
+                    }else if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))){
+                        openCancelDialog(new AllOrderStatus().Status(Status.cancelation_request));
+                    }
                 }
             });
         }else if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.cancelled))){
@@ -427,6 +435,44 @@ public class OrderDetailsActivity extends AppCompatActivity implements
                 }
             });
         }
+
+    }
+
+    private String selectedType="";
+    private void openCancelDialog(String type){
+        String[] DETAILS = new String[]{
+                "None", "Callisto", "Ganymede", "Others"
+        };
+        selectedType = DETAILS[0];
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Choose Cancelation Reason");
+        final EditText input = new EditText(this);
+        builder.setView(input);
+// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setHint("Enter Others reason");
+        input.setVisibility(View.GONE);
+
+        builder.setSingleChoiceItems(DETAILS, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(selectedType.equals("Others")){
+                    input.setVisibility(View.VISIBLE);
+                    selectedType=input.getText().toString();
+                }else{
+                    input.setVisibility(View.GONE);
+                    selectedType = DETAILS[i];
+                }
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Tools.showToast(OrderDetailsActivity.this,selectedType);
+            }
+        });
+        builder.setNegativeButton("Cancel", null);
+        builder.show();
 
     }
 
@@ -531,6 +577,30 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<DataSavedModel> call=apiInterface.changeOrderStatusById(Config.DEVICE_TYPE,Config.LANG_CODE,orderModel.getId().toString(),inputStatus);
+        call.enqueue(new Callback<DataSavedModel>() {
+            @Override
+            public void onResponse(Call<DataSavedModel> call, Response<DataSavedModel> response) {
+                Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                beautifulProgressDialog.dismiss();
+                if(response.body().getStatus()== Config.API_SUCCESS){
+                    Tools.showToast(OrderDetailsActivity.this,response.body().getMessage().toString());
+                    refreshOrderPage();
+                }
+            }
+            @Override
+            public void onFailure(Call<DataSavedModel> call, Throwable t) {
+                beautifulProgressDialog.dismiss();
+                Log.d("CurrentOrdersActivity",t.getMessage().toString());
+
+            }
+        });
+    }
+
+    private void orderActivityRequest(String type,String details) {
+        beautifulProgressDialog.show();
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<DataSavedModel> call=apiInterface.orderActivityRequest(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,
+                userId,orderModel.getId().toString(),details,type);
         call.enqueue(new Callback<DataSavedModel>() {
             @Override
             public void onResponse(Call<DataSavedModel> call, Response<DataSavedModel> response) {
