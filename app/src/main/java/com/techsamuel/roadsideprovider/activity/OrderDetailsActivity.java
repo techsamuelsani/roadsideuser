@@ -438,37 +438,48 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
     }
 
-    private String selectedType="";
+    private String selectedDetails="";
     private void openCancelDialog(String type){
+        final boolean[] isOthers = {false};
         String[] DETAILS = new String[]{
-                "None", "Callisto", "Ganymede", "Others"
+                "Longer waiting time", "I want another provider", "I want another service", "Other"
         };
-        selectedType = DETAILS[0];
+        selectedDetails = DETAILS[0];
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Choose Cancelation Reason");
+        builder.setTitle("Please selecet a cancelation reason");
         final EditText input = new EditText(this);
         builder.setView(input);
 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setHint("Enter Others reason");
+        input.setHint("Enter Other reason");
         input.setVisibility(View.GONE);
 
         builder.setSingleChoiceItems(DETAILS, 0, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(selectedType.equals("Others")){
+                if(i==DETAILS.length-1){
                     input.setVisibility(View.VISIBLE);
-                    selectedType=input.getText().toString();
+                    isOthers[0] =true;
                 }else{
+                    isOthers[0] =false;
                     input.setVisibility(View.GONE);
-                    selectedType = DETAILS[i];
+
                 }
+                selectedDetails = DETAILS[i];
+
             }
         });
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Tools.showToast(OrderDetailsActivity.this,selectedType);
+                if(isOthers[0]){
+                    orderActivityRequest(type,input.getText().toString());
+                    Tools.showToast(OrderDetailsActivity.this,input.getText().toString());
+                }else{
+                   orderActivityRequest(type,selectedDetails);
+                    Tools.showToast(OrderDetailsActivity.this,selectedDetails);
+                }
+
             }
         });
         builder.setNegativeButton("Cancel", null);
