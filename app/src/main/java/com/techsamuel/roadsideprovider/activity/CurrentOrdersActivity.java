@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.MessageAdapter;
@@ -64,6 +65,8 @@ public class CurrentOrdersActivity extends AppCompatActivity {
         recyclerOrder=findViewById(R.id.recyler_orders);
         lytNoOrder=findViewById(R.id.lyt_no_order);
         getAllOrders("current");
+        Tools.showToast(CurrentOrdersActivity.this, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+        Tools.showToast(CurrentOrdersActivity.this, userId);
 
     }
 

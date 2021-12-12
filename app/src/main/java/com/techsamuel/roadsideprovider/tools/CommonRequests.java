@@ -24,8 +24,6 @@ import retrofit2.Response;
 
 public class CommonRequests {
 
-
-
     public static void checkUserByPhone(Context context,String userPhone){
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<UserModel> call=apiInterface.checkUserByPhone(userPhone);

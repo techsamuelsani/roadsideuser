@@ -356,7 +356,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             btnCancelOrder.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    changeOrderStatus(new AllOrderStatus().Status(Status.cancelled));
+                    changeOrderStatus(new AllOrderStatus().Status(Status.cancelation_request));
                 }
             });
         }else if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.cancelled))){
