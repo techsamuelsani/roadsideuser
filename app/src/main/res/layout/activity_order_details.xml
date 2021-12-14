@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_refresh"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:mapbox="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/parent_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -204,7 +210,6 @@
                         app:srcCompat="@drawable/ic_arrow_drop" />
 
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/lyt_expand_description"
                     android:layout_width="match_parent"
@@ -519,15 +524,200 @@
                             <View
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/spacing_middle" />
-
-
-
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="?attr/actionBarSize"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@android:color/transparent"
+                        app:srcCompat="@drawable/ic_baseline_directions_car_24"
+                        app:tint="@color/grey_60" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Provider Vehicle Details"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/grey_80" />
+
+                    <View
+                        android:layout_width="@dimen/spacing_smlarge"
+                        android:layout_height="wrap_content" />
+
+                    <ImageButton
+                        android:id="@+id/bt_toggle_vehicles"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        app:srcCompat="@drawable/ic_arrow_drop"
+                        app:tint="@color/grey_60" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/lyt_expand_vehicles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:layout_marginLeft="@dimen/actionBarSize"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/car_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Car Details: "
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/grey_60" />
+                    <TextView
+                        android:id="@+id/exp_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Registration Exp Date: "
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/grey_60" />
+
+                    <TextView
+                        android:id="@+id/plate_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Plate no: "
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                        android:textColor="@color/grey_60" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/order_conclusion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="?attr/actionBarSize"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="@android:color/transparent"
+                        android:tint="@color/grey_60"
+                        app:srcCompat="@drawable/ic_baseline_info_24" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Order Conclusion"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/grey_80" />
+
+                    <View
+                        android:layout_width="@dimen/spacing_large"
+                        android:layout_height="wrap_content" />
+
+                    <ImageButton
+                        android:id="@+id/bt_toggle_conclusion"
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:tint="@color/grey_60"
+                        app:srcCompat="@drawable/ic_arrow_drop" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/lyt_expand_conclusion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_middle"
+                    android:layout_marginEnd="@dimen/spacing_smlarge"
+                    android:layout_marginLeft="?attr/actionBarSize"
+                    android:layout_marginRight="@dimen/spacing_smlarge"
+                    android:layout_marginStart="?attr/actionBarSize"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingBottom="@dimen/spacing_large"
+                    android:paddingTop="@dimen/spacing_medium"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/conclusion_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text=""
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                    <LinearLayout
+                        android:id="@+id/lyt_review"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="@dimen/spacing_large"
+                        android:paddingBottom="@dimen/spacing_large"
+                        android:visibility="gone"
+                        >
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:layout_gravity="left|center_vertical"
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/rating_user_image"
+                            android:layout_width="@dimen/spacing_xxxlarge"
+                            android:layout_height="@dimen/spacing_xxxlarge"
+                            android:src="@drawable/profile_photo"
+                            app:civ_border_color="#FF000000"/>
+
+
+                        <View
+                            android:layout_width="@dimen/spacing_large"
+                            android:layout_height="0dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.AppCompatRatingBar
+                                style="@style/Yellow.AppCompatRatingBar"
+                                android:id="@+id/rating_bar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:isIndicator="false"
+                                android:numStars="5"
+                                android:rating="5"
+                                android:stepSize="1"
+                                android:theme="@style/Yellow.AppCompatRatingBar" />
+
+                            <TextView
+                                android:id="@+id/conclusion_review"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_small"
+                                android:gravity="center_vertical"
+                                android:text="Some demo reviews"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:textColor="@color/grey_40" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
@@ -536,12 +726,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="65dp"
                     />
-
             </LinearLayout>
             </androidx.core.widget.NestedScrollView>
-
     </LinearLayout>
-
     <LinearLayout
         android:layout_gravity="bottom"
         android:orientation="vertical"
@@ -616,3 +803,4 @@
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

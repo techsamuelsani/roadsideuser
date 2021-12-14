@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -39,13 +40,13 @@ public class CurrentOrdersActivity extends AppCompatActivity {
     OrderAdapter orderAdapter;
     BeautifulProgressDialog beautifulProgressDialog;
     LinearLayout lytNoOrder;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_orders);
-        initToolbar();
-        init();
+        
     }
 
     private void initToolbar() {
@@ -59,16 +60,23 @@ public class CurrentOrdersActivity extends AppCompatActivity {
         beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
         beautifulProgressDialog.setLottieLocation("service.json");
         beautifulProgressDialog.setLottieLoop(true);
+        init();
 
     }
     private void init(){
         recyclerOrder=findViewById(R.id.recyler_orders);
         lytNoOrder=findViewById(R.id.lyt_no_order);
         getAllOrders("current");
-        Tools.showToast(CurrentOrdersActivity.this, FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-        Tools.showToast(CurrentOrdersActivity.this, userId);
+        swipeRefreshLayout=findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initToolbar();
+            }
+        });
 
     }
+
 
     public void getAllOrders(String order_status_type){
         Log.d("CurrentOrdersActivity","Called");
@@ -79,6 +87,9 @@ public class CurrentOrdersActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<OrdersModel> call, Response<OrdersModel> response) {
                 beautifulProgressDialog.dismiss();
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
                 Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     if(response.body().getSize()>0){
@@ -138,6 +149,12 @@ public class CurrentOrdersActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initToolbar();
     }
 
     @Override

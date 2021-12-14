@@ -101,7 +101,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
            });
 
 
-            String imageUrl=Config.IMAGE_URL+"services/"+messageModel.getData().get(0).get(position).getMessageImage();
+            String imageUrl=Config.BASE_URL+messageModel.getData().get(0).get(position).getMessageImage();
             Glide.with(ctx).load(imageUrl).into(view.messageImage);
 
 

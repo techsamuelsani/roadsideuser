@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
@@ -11,7 +13,9 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,15 +29,23 @@ import android.os.Looper;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.mapbox.android.core.location.LocationEngine;
+import com.mapbox.android.core.location.LocationEngineCallback;
+import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.android.core.permissions.PermissionsListener;
 import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
@@ -74,6 +86,7 @@ import com.techsamuel.roadsideprovider.listener.OrderPhotoItemClickListener;
 import com.techsamuel.roadsideprovider.listener.OrderServiceItemClickListener;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.OrderModel;
+import com.techsamuel.roadsideprovider.model.ReviewReasonModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
 import com.techsamuel.roadsideprovider.model.UserModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
@@ -81,6 +94,8 @@ import com.techsamuel.roadsideprovider.tools.SpacingItemDecoration;
 import com.techsamuel.roadsideprovider.tools.Tools;
 import com.techsamuel.roadsideprovider.tools.ViewAnimation;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -117,6 +132,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     BeautifulProgressDialog beautifulProgressDialog;
     Button btnCancelOrder;
     Button btnAcceptOrder;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     double userBalance;
     double orderAmount;
@@ -126,10 +142,21 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     double providerLat;
     double providerLong;
 
-    private ImageButton bt_toggle_reviews, bt_toggle_warranty, bt_toggle_description;
-    private View lyt_expand_reviews, lyt_expand_warranty, lyt_expand_description;
+    private LinearLayout lytReview;
+    private TextView conclusionDetails;
+    private ImageView ratingUserImage;
+    private AppCompatRatingBar ratingBar;
+    private TextView conclusionReview;
+
+    private TextView carDetails,expDate,plateNo;
+
+    private ImageButton bt_toggle_reviews, bt_toggle_warranty, bt_toggle_description,bt_toggle_conclusion,bt_toggle_vehicles;
+    private View lyt_expand_reviews, lyt_expand_warranty, lyt_expand_description,lyt_expand_conclusion,lyt_expand_vehicles;
     private NestedScrollView nested_scroll_view;
     NavigationMapRoute navigationMapRoute;
+    LocationEngineCallback<LocationEngineResult> locationEngineCallback;
+    LatLng deviceLocation=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,8 +172,10 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         initComponent();
         initAllServicesDetails();
         initAllOrderImages();
+        initDeviceLocation();
 
     }
+
     private void initAllModelsAndUserOrderLatLng(){
         AppSharedPreferences.init(this);
         orderModel= AppSharedPreferences.readOrderModel(Config.SHARED_PREF_ORDER_MODEL,"");
@@ -189,6 +218,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     }
 
     private void initComponent() {
+
         // nested scrollview
         nested_scroll_view = (NestedScrollView) findViewById(R.id.nested_scroll_view);
 
@@ -222,13 +252,43 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             }
         });
 
+        bt_toggle_vehicles = (ImageButton) findViewById(R.id.bt_toggle_vehicles);
+        lyt_expand_vehicles = (View) findViewById(R.id.lyt_expand_vehicles);
+        bt_toggle_vehicles.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSection(view, lyt_expand_vehicles);
+            }
+        });
+
+        bt_toggle_conclusion = (ImageButton) findViewById(R.id.bt_toggle_conclusion);
+        lyt_expand_conclusion = (View) findViewById(R.id.lyt_expand_conclusion);
+        bt_toggle_conclusion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                toggleSection(view, lyt_expand_conclusion);
+            }
+        });
+
         // expand first description
         if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))){
             toggleArrow(bt_toggle_reviews);
             lyt_expand_reviews.setVisibility(View.VISIBLE);
-        }else{
+        }else if((orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active)))){
             toggleArrow(bt_toggle_description);
             lyt_expand_description.setVisibility(View.VISIBLE);
+        }else if((orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.completed)))){
+            toggleArrow(bt_toggle_conclusion);
+            lyt_expand_conclusion.setVisibility(View.VISIBLE);
+        }
+        else if((orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.rated)))){
+            toggleArrow(bt_toggle_conclusion);
+            lyt_expand_conclusion.setVisibility(View.VISIBLE);
+            lytReview.setVisibility(View.VISIBLE);
+        }
+        else if((orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.cancelled)))){
+            toggleArrow(bt_toggle_conclusion);
+            lyt_expand_conclusion.setVisibility(View.VISIBLE);
         }
         beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
         beautifulProgressDialog.setLottieLocation("service.json");
@@ -272,6 +332,18 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         recyclerService.setAdapter(serviceAdapter);
     }
 
+    private void setVehicleDetails(){
+        carDetails=findViewById(R.id.car_details);
+        expDate=findViewById(R.id.exp_date);
+        plateNo=findViewById(R.id.plate_no);
+
+        carDetails.setText(carDetails.getText()+orderModel.getProviderDetails().get(0).getVmake()+
+                " "+orderModel.getProviderDetails().get(0).getVmodel()+" "+orderModel.getProviderDetails().get(0).getVyear());
+        expDate.setText(expDate.getText()+orderModel.getProviderDetails().get(0).getVyear());
+        plateNo.setText(plateNo.getText()+orderModel.getProviderDetails().get(0).getPlateNo());
+
+    }
+
 
     private void init(){
         floatingActionButton=findViewById(R.id.fab);
@@ -291,6 +363,17 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         orderStatus=findViewById(R.id.order_status);
         btnCancelOrder=findViewById(R.id.cancel_order);
         btnAcceptOrder=findViewById(R.id.accept_order);
+        swipeRefreshLayout=findViewById(R.id.swipe_refresh);
+
+        getReviewAndReason();
+        setVehicleDetails();
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshOrderPage();
+            }
+        });
 
         userBalance= Double.parseDouble(userModel.getData().getWallet());
         orderAmount= Double.parseDouble(orderModel.getData().get(0).getTotalCost());
@@ -325,53 +408,249 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         allOrderStatusAndTypeRelatedMethods();
 
     }
-    private void allOrderStatusAndTypeRelatedMethods(){
-        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.completed_request))){
-            btnAcceptOrder.setVisibility(View.VISIBLE);
-            btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    changeOrderStatus(new AllOrderStatus().Status(Status.completed));
-                }
-            });
-        }else{
-            btnAcceptOrder.setVisibility(View.GONE);
-        }
 
-        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.completed))){
-            btnAcceptOrder.setText("Rate the order");
-            btnAcceptOrder.setVisibility(View.VISIBLE);
-            btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Rate the order
-                   // changeOrderStatus(new AllOrderStatus().Status(Status.rated));
-                }
-            });
+    private void getReviewAndReason(){
+        lytReview=findViewById(R.id.lyt_review);
+        conclusionDetails=findViewById(R.id.conclusion_details);
+        ratingUserImage=findViewById(R.id.rating_user_image);
+        ratingBar=findViewById(R.id.rating_bar);
+        conclusionReview=findViewById(R.id.conclusion_review);
 
+        Glide.with(OrderDetailsActivity.this).load(Config.BASE_URL+orderModel.getUserDetails().get(0).getUserPhoto()).into(ratingUserImage);
 
-        }
+        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+        Call<ReviewReasonModel> call=apiInterface.getReviewAndReason(Config.DEVICE_TYPE,Config.LANG_CODE,orderModel.getId().toString());
+        call.enqueue(new Callback<ReviewReasonModel>() {
+            @Override
+            public void onResponse(Call<ReviewReasonModel> call, Response<ReviewReasonModel> response) {
+                Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                if(response.body().getStatus()== Config.API_SUCCESS){
+                    if(response.body().getData().get(0).getType().equals("review")){
+                        lytReview.setVisibility(View.VISIBLE);
+                        ratingBar.setRating(Float.parseFloat(response.body().getData().get(0).getRatings()));
+                        conclusionReview.setText(response.body().getData().get(0).getReview());
+                        conclusionDetails.setText(response.body().getData().get(0).getDetails());
 
-        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))
-                ||orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))
-        ){
-            btnCancelOrder.setEnabled(true);
-            btnCancelOrder.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))){
-                        openCancelDialog(new AllOrderStatus().Status(Status.cancelled));
+                    }
+                    if(response.body().getData().get(0).getType().equals("reason")){
+                        conclusionDetails.setText(response.body().getData().get(0).getDetails());
+                        lytReview.setVisibility(View.GONE);
 
-                    }else if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))){
-                        openCancelDialog(new AllOrderStatus().Status(Status.cancelation_request));
+                    }else if(response.body().getData().get(0).getType().equals("empty")){
+                        lytReview.setVisibility(View.GONE);
                     }
                 }
-            });
-        }else if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.cancelled))){
-            btnCancelOrder.setText("This order is cancelled");
-            btnCancelOrder.setEnabled(false);
+            }
+            @Override
+            public void onFailure(Call<ReviewReasonModel> call, Throwable t) {
+                Log.d("CurrentOrdersActivity",t.getMessage().toString());
 
+            }
+        });
+    }
+
+
+    private void orderPendingOrActive(String status){
+        btnCancelOrder.setEnabled(true);
+        btnAcceptOrder.setVisibility(View.GONE);
+        btnCancelOrder.setVisibility(View.VISIBLE);
+        btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCancelDialog(status);
+            }
+        });
+
+    }
+    private void orderIsActive(){
+        paymentFab.setVisibility(View.GONE);
+        floatingActionButton.setVisibility(View.VISIBLE);
+        conclusionDetails.setText("Order is active");
+    }
+    private void orderIsPending(){
+        paymentFab.setVisibility(View.VISIBLE);
+        floatingActionButton.setVisibility(View.GONE);
+        paymentFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(userBalance>orderAmount){
+                    showConfirmDialog(true);
+                }else {
+                    showConfirmDialog(false);
+                }
+            }
+        });
+        conclusionDetails.setText("Order is pending");
+    }
+
+    private void orderIsCancelled(){
+        btnCancelOrder.setText("This order is cancelled");
+        btnCancelOrder.setEnabled(false);
+        btnCancelOrder.setVisibility(View.VISIBLE);
+        btnAcceptOrder.setVisibility(View.GONE);
+
+        paymentFab.setVisibility(View.GONE);
+        floatingActionButton.setVisibility(View.GONE);
+        conclusionDetails.setText("Order is cancelled");
+    }
+    private void orderCancelationRequest(){
+        btnCancelOrder.setText("Cancelation request sent");
+        btnCancelOrder.setEnabled(false);
+        btnAcceptOrder.setText("Cancel the request");
+        btnAcceptOrder.setVisibility(View.VISIBLE);
+        btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderActivityRequest("active","Order is active again","");
+            }
+        });
+
+        paymentFab.setVisibility(View.GONE);
+        floatingActionButton.setVisibility(View.GONE);
+        conclusionDetails.setText("Order cancelation request sent");
+    }
+
+    private void orderIsCompleted(String status){
+        btnAcceptOrder.setText("Rate the order");
+        btnAcceptOrder.setVisibility(View.VISIBLE);
+        btnCancelOrder.setVisibility(View.GONE);
+        btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Rate the order
+                // changeOrderStatus(new AllOrderStatus().Status(Status.rated));
+                openRatingDialog(status);
+            }
+        });
+
+        paymentFab.setVisibility(View.GONE);
+        floatingActionButton.setVisibility(View.GONE);
+        conclusionDetails.setText("Order is completed");
+    }
+
+    private void openRatingDialog(String status) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
+        dialog.setContentView(R.layout.dialog_add_review);
+        dialog.setCancelable(true);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        CircleImageView userImage=(CircleImageView) dialog.findViewById(R.id.user_image);
+        TextView userName=(TextView) dialog.findViewById(R.id.user_name);
+
+        userName.setText(orderModel.getUserDetails().get(0).getName());
+        Glide.with(OrderDetailsActivity.this).load(Config.BASE_URL+orderModel.getUserDetails().get(0).getUserPhoto())
+                .into(userImage);
+
+        final EditText et_post = (EditText) dialog.findViewById(R.id.et_post);
+        final AppCompatRatingBar rating_bar = (AppCompatRatingBar) dialog.findViewById(R.id.rating_bar);
+        ((AppCompatButton) dialog.findViewById(R.id.bt_cancel)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        ((AppCompatButton) dialog.findViewById(R.id.bt_submit)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String review = et_post.getText().toString().trim();
+                if (review.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Please fill review text", Toast.LENGTH_SHORT).show();
+                } else {
+//                    Tools.showToast(OrderDetailsActivity.this, String.valueOf(rating_bar.getRating()));
+//                    rating_bar.getRating();
+                    orderActivityRequest(status,review, String.valueOf(rating_bar.getRating()));
+                }
+
+                dialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Submitted", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+
+    }
+
+    private void orderIsRated(){
+        btnAcceptOrder.setText("This Order is Completed and Rated");
+        btnAcceptOrder.setVisibility(View.VISIBLE);
+        btnCancelOrder.setVisibility(View.GONE);
+
+        paymentFab.setVisibility(View.GONE);
+        floatingActionButton.setVisibility(View.GONE);
+        conclusionDetails.setText("Order is rated");
+
+    }
+    private void orderCompletedRequest(){
+        btnAcceptOrder.setVisibility(View.VISIBLE);
+        btnCancelOrder.setVisibility(View.GONE);
+        btnAcceptOrder.setText("Accept The Order");
+        btnCancelOrder.setText("Cancel the request");
+        btnAcceptOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeOrderStatus(new AllOrderStatus().Status(Status.completed));
+            }
+        });
+        btnCancelOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeOrderStatus(new AllOrderStatus().Status(Status.active));
+            }
+        });
+
+        paymentFab.setVisibility(View.GONE);
+        floatingActionButton.setVisibility(View.GONE);
+        conclusionDetails.setText("Order completion request received");
+    }
+
+
+
+    private void allOrderStatusAndTypeRelatedMethods(){
+        //{"pending","active","cancelled","cancelation_request","completed_request","completed","rated"};
+        //btnCancelOrder,btnAcceptOrder;
+        switch(orderModel.getOrder_status()) {
+            case "pending":
+                // code block
+                orderPendingOrActive("cancelled");
+                orderIsPending();
+                break;
+            case "active":
+                // code block
+                orderPendingOrActive("cancelation_request");
+                orderIsActive();
+                break;
+            case "cancelled":
+                // code block
+                orderIsCancelled();
+
+                break;
+            case "cancelation_request":
+                // code block
+                orderCancelationRequest();
+                break;
+            case "completed_request":
+                // code block
+                orderCompletedRequest();
+                break;
+            case "completed":
+                // code block
+                orderIsCompleted("rated");
+                break;
+            case "rated":
+                orderIsRated();
+                // code block
+                break;
+            default:
+                // code block
         }
+
 
         if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.active))){
             if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_DELIVERY)){
@@ -400,23 +679,6 @@ public class OrderDetailsActivity extends AppCompatActivity implements
 
         }
         storeLocation.setText(providerStoreLocation);
-
-        if(orderModel.getOrder_status().equals(new AllOrderStatus().Status(Status.pending))){
-            paymentFab.setVisibility(View.VISIBLE);
-            floatingActionButton.setVisibility(View.GONE);
-            paymentFab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(userBalance>orderAmount){
-                        showConfirmDialog(true);
-                    }else {
-                        showConfirmDialog(false);
-                    }
-                }
-            });
-        }else{
-            paymentFab.setVisibility(View.GONE);
-        }
 
         if(orderModel.getData().get(0).getOrderType().equals(Config.ORDER_TYPE_DELIVERY)){
             floatingActionButton.setImageResource(R.drawable.ic_baseline_phone_24);
@@ -473,11 +735,11 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(isOthers[0]){
-                    orderActivityRequest(type,input.getText().toString());
-                    Tools.showToast(OrderDetailsActivity.this,input.getText().toString());
+                    orderActivityRequest(type,input.getText().toString(),"");
+                   // Tools.showToast(OrderDetailsActivity.this,input.getText().toString());
                 }else{
-                   orderActivityRequest(type,selectedDetails);
-                    Tools.showToast(OrderDetailsActivity.this,selectedDetails);
+                   orderActivityRequest(type,selectedDetails,"");
+                    //Tools.showToast(OrderDetailsActivity.this,selectedDetails);
                 }
 
             }
@@ -488,18 +750,26 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     }
 
     private void navigateToProviderLocation() {
-       navigateUsingMapbox();
+        if(deviceLocation!=null){
+            navigateUsingMapbox();
+        }else{
+            Tools.showToast(OrderDetailsActivity.this,"Please turn on your gps");
+        }
+
 
     }
     private void navigateUsingMapbox(){
         Tools.showToast(OrderDetailsActivity.this,"Searching... best route for you");
 
-        Point providerPoint=Point.fromLngLat(providerLong,providerLat);
-        Point userPoint=Point.fromLngLat(userOrderLong,userOrderLat);
+        //Point providerPoint=Point.fromLngLat(providerLong,providerLat);
+        //Point userPoint=Point.fromLngLat(userOrderLong,userOrderLat);
+
+        Point devicePoint=Point.fromLngLat(deviceLocation.getLongitude(),deviceLocation.getLatitude());
+        Point destinationPoint=Point.fromLngLat(providerLong,providerLat);
 
         NavigationRoute.builder(OrderDetailsActivity.this).accessToken(
                 getResources().getString(R.string.mapbox_access_token)
-        ).origin(providerPoint).destination(userPoint).build().getRoute(new Callback<DirectionsResponse>() {
+        ).origin(devicePoint).destination(destinationPoint).build().getRoute(new Callback<DirectionsResponse>() {
             @Override
             public void onResponse(Call<DirectionsResponse> call, Response<DirectionsResponse> response) {
 
@@ -607,11 +877,11 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         });
     }
 
-    private void orderActivityRequest(String type,String details) {
+    private void orderActivityRequest(String type,String details,String ratings) {
         beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<DataSavedModel> call=apiInterface.orderActivityRequest(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,
-                userId,orderModel.getId().toString(),details,type);
+                userId,orderModel.getId().toString(),details,type,ratings);
         call.enqueue(new Callback<DataSavedModel>() {
             @Override
             public void onResponse(Call<DataSavedModel> call, Response<DataSavedModel> response) {
@@ -722,6 +992,20 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         });
     }
 
+    private void initDeviceLocation(){
+        locationEngineCallback=new LocationEngineCallback<LocationEngineResult>() {
+            @Override
+            public void onSuccess(LocationEngineResult locationEngineResult) {
+                deviceLocation=new LatLng(locationEngineResult.getLastLocation().getLatitude(),locationEngineResult.getLastLocation().getLongitude());
+            }
+
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                deviceLocation=null;
+            }
+        };
+    }
+
     @SuppressWarnings( {"MissingPermission"})
     private void enableLocationComponent(@NonNull Style loadedMapStyle) {
         if (PermissionsManager.areLocationPermissionsGranted(this)) {
@@ -730,6 +1014,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
             locationComponent.setLocationComponentEnabled(true);
             locationComponent.setCameraMode(CameraMode.TRACKING);
             locationComponent.setRenderMode(RenderMode.COMPASS);
+            locationComponent.getLocationEngine().getLastLocation(locationEngineCallback);
 
         } else {
             permissionsManager = new PermissionsManager(this);

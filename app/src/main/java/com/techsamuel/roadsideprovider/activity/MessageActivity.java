@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.adapter.MessageAdapter;
@@ -31,6 +32,7 @@ public class MessageActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView recyclerMessage;
     MessageAdapter messageAdapter;
+    BeautifulProgressDialog beautifulProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,9 @@ public class MessageActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         //new PaymentTask().execute("");
+        beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
+        beautifulProgressDialog.setLottieLocation("service.json");
+        beautifulProgressDialog.setLottieLoop(true);
     }
     private void init(){
         recyclerMessage=findViewById(R.id.recyler_message);
@@ -58,11 +63,13 @@ public class MessageActivity extends AppCompatActivity {
 
     public void getMessageByTypeAndId(){
         Log.d("MainActivity","Called");
+        beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<MessageModel> call=apiInterface.getMessageByTypeAndId(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId);
         call.enqueue(new Callback<MessageModel>() {
             @Override
             public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                beautifulProgressDialog.dismiss();
                 Log.d("MainActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     messageAdapter=new MessageAdapter(MessageActivity.this, response.body(),  new MessageItemClickListener() {
