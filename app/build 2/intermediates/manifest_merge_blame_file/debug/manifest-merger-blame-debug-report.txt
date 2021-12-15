@@ -1,0 +1,552 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.techsamuel.roadsideuser"
+4    android:versionCode="2"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml
+9        android:targetSdkVersion="31" />
+9-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml
+10    <!--
+11         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+12         Google Maps Android API v2, but you must specify either coarse or fine
+13         location permissions for the "MyLocation" functionality.
+14    -->
+15    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+15-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:9:5-79
+15-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:9:22-76
+16    <uses-permission android:name="android.permission.INTERNET" />
+16-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:10:5-67
+16-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:10:22-64
+17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+17-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:11:5-79
+17-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:11:22-76
+18    <uses-permission android:name="android.permission.CAMERA" />
+18-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:12:5-65
+18-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:12:22-62
+19    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+19-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:13:5-80
+19-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:13:22-77
+20    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+20-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:14:5-81
+20-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:14:22-78
+21    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+21-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:15:5-81
+21-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:15:22-78
+22    <uses-permission android:name="android.permission.CALL_PHONE" />
+22-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:16:5-69
+22-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:16:22-66
+23    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+23-->[com.mapbox.mapboxsdk:mapbox-android-navigation:0.42.6] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/7fa7e31c7a632d5e1e89345ae426364b/jetified-mapbox-android-navigation-0.42.6/AndroidManifest.xml:11:5-77
+23-->[com.mapbox.mapboxsdk:mapbox-android-navigation:0.42.6] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/7fa7e31c7a632d5e1e89345ae426364b/jetified-mapbox-android-navigation-0.42.6/AndroidManifest.xml:11:22-74
+24    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+24-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:23:5-68
+24-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:23:22-65
+25    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+25-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:25:5-82
+25-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:25:22-79
+26
+27    <uses-feature
+27-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:9:5-11:35
+28        android:glEsVersion="0x00020000"
+28-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:10:9-41
+29        android:required="true" />
+29-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:11:9-32
+30    <uses-feature
+30-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:12:5-14:36
+31        android:name="android.hardware.wifi"
+31-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:13:9-45
+32        android:required="false" />
+32-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:14:9-33
+33
+34    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+34-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:18:5-76
+34-->[com.mapbox.mapboxsdk:mapbox-android-sdk:9.7.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/439c4808d8baa3ca1be36159b84c9ecd/mapbox-android-sdk-9.7.0/AndroidManifest.xml:18:22-73
+35    <uses-permission android:name="com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE" />
+35-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:26:5-110
+35-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:26:22-107
+36    <uses-permission
+36-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:16:5-18:38
+37        android:name="android.permission.GET_TASKS"
+37-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:17:9-52
+38        android:maxSdkVersion="20" />
+38-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:18:9-35
+39
+40    <application
+40-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:18:5-96:19
+41        android:name="com.techsamuel.roadsideprovider.App"
+41-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:19:9-28
+42        android:allowBackup="true"
+42-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:20:9-35
+43        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+43-->[androidx.core:core:1.5.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/e81257837f1767da48ac036f752f439b/core-1.5.0/AndroidManifest.xml:24:18-86
+44        android:debuggable="true"
+45        android:icon="@mipmap/ic_launcher"
+45-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:21:9-43
+46        android:label="@string/app_name"
+46-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:22:9-41
+47        android:roundIcon="@mipmap/ic_launcher_round"
+47-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:23:9-54
+48        android:supportsRtl="true"
+48-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:24:9-35
+49        android:testOnly="true"
+50        android:theme="@style/AppTheme"
+50-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:25:9-40
+51        android:usesCleartextTraffic="true" >
+51-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:26:9-44
+52        <activity
+52-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:27:9-29:40
+53            android:name="com.techsamuel.roadsideprovider.activity.WizardActivity"
+53-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:28:13-52
+54            android:exported="false" />
+54-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:29:13-37
+55        <activity
+55-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:30:9-32:40
+56            android:name="com.techsamuel.roadsideprovider.activity.CurrentOrdersActivity"
+56-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:31:13-59
+57            android:exported="false" />
+57-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:32:13-37
+58        <activity
+58-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:33:9-35:40
+59            android:name="com.techsamuel.roadsideprovider.activity.PreviousOrderActivity"
+59-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:34:13-59
+60            android:exported="false" />
+60-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:35:13-37
+61        <activity
+61-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:36:9-38:40
+62            android:name="com.techsamuel.roadsideprovider.activity.OrderDetailsActivity"
+62-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:37:13-58
+63            android:exported="false" />
+63-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:38:13-37
+64        <activity
+64-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:39:9-41:40
+65            android:name="com.techsamuel.roadsideprovider.activity.LocationPickerActivity"
+65-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:40:13-60
+66            android:exported="false" />
+66-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:41:13-37
+67        <activity
+67-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:42:9-44:40
+68            android:name="com.techsamuel.roadsideprovider.activity.MessageActivity"
+68-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:43:13-53
+69            android:exported="false" />
+69-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:44:13-37
+70        <activity
+70-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:45:9-47:40
+71            android:name="com.techsamuel.roadsideprovider.activity.MakeOrderActivity"
+71-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:46:13-55
+72            android:exported="false" />
+72-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:47:13-37
+73        <activity
+73-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:48:9-50:40
+74            android:name="com.techsamuel.roadsideprovider.activity.WebViewActivity"
+74-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:49:13-53
+75            android:exported="false" />
+75-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:50:13-37
+76        <activity
+76-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:51:9-59:20
+77            android:name="com.techsamuel.roadsideprovider.activity.SplashActivity"
+77-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:52:13-52
+78            android:exported="true" >
+78-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:53:13-36
+79            <intent-filter>
+79-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:54:13-58:29
+80                <action android:name="android.intent.action.MAIN" />
+80-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:55:17-69
+80-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:55:25-66
+81
+82                <category android:name="android.intent.category.LAUNCHER" />
+82-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:57:17-77
+82-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:57:27-74
+83            </intent-filter>
+84        </activity>
+85        <activity
+85-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:60:9-62:40
+86            android:name="com.techsamuel.roadsideprovider.activity.PaymentWebview"
+86-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:61:13-52
+87            android:exported="false" />
+87-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:62:13-37
+88        <activity
+88-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:63:9-65:40
+89            android:name="com.techsamuel.roadsideprovider.activity.WalletActivity"
+89-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:64:13-52
+90            android:exported="false" />
+90-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:65:13-37
+91        <activity
+91-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:66:9-68:40
+92            android:name="com.techsamuel.roadsideprovider.activity.register.VehicleRegisterActivity"
+92-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:67:13-70
+93            android:exported="false" />
+93-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:68:13-37
+94        <activity
+94-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:69:9-71:40
+95            android:name="com.techsamuel.roadsideprovider.activity.register.UserRegisterActivity"
+95-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:70:13-67
+96            android:exported="false" />
+96-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:71:13-37
+97        <activity
+97-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:72:9-74:40
+98            android:name="com.techsamuel.roadsideprovider.activity.ProfileActivity"
+98-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:73:13-53
+99            android:exported="false" />
+99-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:74:13-37
+100        <!--
+101             The API key for Google Maps-based APIs is defined as a string resource.
+102             (See the file "res/values/google_maps_api.xml").
+103             Note that the API key is linked to the encryption key used to sign the APK.
+104             You need a different API key for each encryption key, including the release key that is used to
+105             sign the APK for publishing.
+106             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+107        -->
+108        <activity android:name="com.techsamuel.roadsideprovider.activity.register.PhoneVerificationActivity" />
+108-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:83:9-81
+108-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:83:19-78
+109        <activity android:name="com.techsamuel.roadsideprovider.activity.MainActivity" />
+109-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:84:9-59
+109-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:84:19-56
+110        <activity
+110-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:85:9-87:40
+111            android:name="com.techsamuel.roadsideprovider.activity.register.UserLoginActivity"
+111-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:86:13-64
+112            android:exported="false" />
+112-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:87:13-37
+113
+114        <service
+114-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:89:9-95:19
+115            android:name="com.techsamuel.roadsideprovider.service.AppFirebaseInstanceIdService"
+115-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:90:13-65
+116            android:exported="false" >
+116-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:91:13-37
+117            <intent-filter>
+117-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:92:13-94:29
+118                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+118-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:93:17-78
+118-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:93:25-75
+119            </intent-filter>
+120        </service>
+121
+122        <activity
+122-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:10:9-14:68
+123            android:name="com.mapbox.mapboxsdk.plugins.places.autocomplete.ui.PlaceAutocompleteActivity"
+123-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:11:13-105
+124            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+124-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:12:13-122
+125            android:theme="@style/mapbox_plugins_translucent"
+125-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:13:13-62
+126            android:windowSoftInputMode="stateVisible|adjustPan" />
+126-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:14:13-65
+127        <activity
+127-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:15:9-17:125
+128            android:name="com.mapbox.mapboxsdk.plugins.places.picker.ui.PlacePickerActivity"
+128-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:16:13-93
+129            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+129-->[com.mapbox.mapboxsdk:mapbox-android-plugin-places-v9:0.12.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/068fdf23be6e146cd946ee5d1e278ba4/mapbox-android-plugin-places-v9-0.12.0/AndroidManifest.xml:17:13-122
+130        <activity android:name="com.mapbox.services.android.navigation.ui.v5.MapboxNavigationActivity" />
+130-->[com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.42.6] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/ae53acdb80ec456be61ace4434c36ea2/jetified-mapbox-android-navigation-ui-0.42.6/AndroidManifest.xml:10:9-106
+130-->[com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.42.6] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/ae53acdb80ec456be61ace4434c36ea2/jetified-mapbox-android-navigation-ui-0.42.6/AndroidManifest.xml:10:19-103
+131
+132        <service android:name="com.mapbox.services.android.navigation.v5.navigation.NavigationService" />
+132-->[com.mapbox.mapboxsdk:mapbox-android-navigation:0.42.6] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/7fa7e31c7a632d5e1e89345ae426364b/jetified-mapbox-android-navigation-0.42.6/AndroidManifest.xml:14:9-106
+132-->[com.mapbox.mapboxsdk:mapbox-android-navigation:0.42.6] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/7fa7e31c7a632d5e1e89345ae426364b/jetified-mapbox-android-navigation-0.42.6/AndroidManifest.xml:14:18-103
+133
+134        <receiver
+134-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:28:9-35:20
+135            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+135-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:29:13-78
+136            android:exported="true"
+136-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:30:13-36
+137            android:permission="com.google.android.c2dm.permission.SEND" >
+137-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:31:13-73
+138            <intent-filter>
+138-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:32:13-34:29
+139                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+139-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:33:17-81
+139-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:33:25-78
+140            </intent-filter>
+141        </receiver>
+142        <!--
+143             FirebaseMessagingService performs security checks at runtime,
+144             but set to not exported to explicitly avoid allowing another app to call it.
+145        -->
+146        <service
+146-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:41:9-48:19
+147            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+147-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:42:13-82
+148            android:directBootAware="true"
+148-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:43:13-43
+149            android:exported="false" >
+149-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:44:13-37
+150            <intent-filter android:priority="-500" >
+150-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:92:13-94:29
+151                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+151-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:93:17-78
+151-->/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/src/main/AndroidManifest.xml:93:25-75
+152            </intent-filter>
+153        </service>
+154        <service
+154-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:49:9-55:19
+155            android:name="com.google.firebase.components.ComponentDiscoveryService"
+155-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:50:13-84
+156            android:directBootAware="true"
+156-->[com.google.firebase:firebase-common:20.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/f974751ac5677ce8830189f78881ba9c/firebase-common-20.0.0/AndroidManifest.xml:35:13-43
+157            android:exported="false" >
+157-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:51:13-37
+158            <meta-data
+158-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:52:13-54:85
+159                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+159-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:53:17-119
+160                android:value="com.google.firebase.components.ComponentRegistrar" />
+160-->[com.google.firebase:firebase-messaging:22.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/d9361bd3532b3f8b7678d8be90bc8da9/firebase-messaging-22.0.0/AndroidManifest.xml:54:17-82
+161            <meta-data
+161-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:77:13-79:85
+162                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+162-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:78:17-109
+163                android:value="com.google.firebase.components.ComponentRegistrar" />
+163-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:79:17-82
+164            <meta-data
+164-->[com.google.firebase:firebase-datatransport:18.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/68990a88058c5a1648b6b34ee2744c7c/firebase-datatransport-18.0.0/AndroidManifest.xml:28:13-30:85
+165                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+165-->[com.google.firebase:firebase-datatransport:18.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/68990a88058c5a1648b6b34ee2744c7c/firebase-datatransport-18.0.0/AndroidManifest.xml:29:17-115
+166                android:value="com.google.firebase.components.ComponentRegistrar" />
+166-->[com.google.firebase:firebase-datatransport:18.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/68990a88058c5a1648b6b34ee2744c7c/firebase-datatransport-18.0.0/AndroidManifest.xml:30:17-82
+167            <meta-data
+167-->[com.google.android.gms:play-services-measurement-api:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/5cd2cea2e3f4f0e0a3821ae9e5b45e56/play-services-measurement-api-19.0.1/AndroidManifest.xml:30:13-32:85
+168                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+168-->[com.google.android.gms:play-services-measurement-api:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/5cd2cea2e3f4f0e0a3821ae9e5b45e56/play-services-measurement-api-19.0.1/AndroidManifest.xml:31:17-139
+169                android:value="com.google.firebase.components.ComponentRegistrar" />
+169-->[com.google.android.gms:play-services-measurement-api:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/5cd2cea2e3f4f0e0a3821ae9e5b45e56/play-services-measurement-api-19.0.1/AndroidManifest.xml:32:17-82
+170            <meta-data
+170-->[com.google.firebase:firebase-installations:17.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/2aae6c639194544a0dae8dfba6f260df/firebase-installations-17.0.0/AndroidManifest.xml:18:13-20:85
+171                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+171-->[com.google.firebase:firebase-installations:17.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/2aae6c639194544a0dae8dfba6f260df/firebase-installations-17.0.0/AndroidManifest.xml:19:17-127
+172                android:value="com.google.firebase.components.ComponentRegistrar" />
+172-->[com.google.firebase:firebase-installations:17.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/2aae6c639194544a0dae8dfba6f260df/firebase-installations-17.0.0/AndroidManifest.xml:20:17-82
+173        </service>
+174
+175        <activity
+175-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:27:9-44:20
+176            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+176-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:28:13-80
+177            android:excludeFromRecents="true"
+177-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:29:13-46
+178            android:exported="true"
+178-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:30:13-36
+179            android:launchMode="singleTask"
+179-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:31:13-44
+180            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+180-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:32:13-72
+181            <intent-filter>
+181-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:33:13-43:29
+182                <action android:name="android.intent.action.VIEW" />
+182-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:34:17-69
+182-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:34:25-66
+183
+184                <category android:name="android.intent.category.DEFAULT" />
+184-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:36:17-76
+184-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:36:27-73
+185                <category android:name="android.intent.category.BROWSABLE" />
+185-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:37:17-78
+185-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:37:27-75
+186
+187                <data
+187-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:39:17-42:51
+188                    android:host="firebase.auth"
+188-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:40:21-49
+189                    android:path="/"
+189-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:41:21-37
+190                    android:scheme="genericidp" />
+190-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:42:21-48
+191            </intent-filter>
+192        </activity>
+193        <activity
+193-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:45:9-62:20
+194            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+194-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:46:13-79
+195            android:excludeFromRecents="true"
+195-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:47:13-46
+196            android:exported="true"
+196-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:48:13-36
+197            android:launchMode="singleTask"
+197-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:49:13-44
+198            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+198-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:50:13-72
+199            <intent-filter>
+199-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:51:13-61:29
+200                <action android:name="android.intent.action.VIEW" />
+200-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:34:17-69
+200-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:34:25-66
+201
+202                <category android:name="android.intent.category.DEFAULT" />
+202-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:36:17-76
+202-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:36:27-73
+203                <category android:name="android.intent.category.BROWSABLE" />
+203-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:37:17-78
+203-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:37:27-75
+204
+205                <data
+205-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:39:17-42:51
+206                    android:host="firebase.auth"
+206-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:40:21-49
+207                    android:path="/"
+207-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:41:21-37
+208                    android:scheme="recaptcha" />
+208-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:42:21-48
+209            </intent-filter>
+210        </activity>
+211
+212        <service
+212-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:64:9-73:19
+213            android:name="com.google.firebase.auth.api.fallback.service.FirebaseAuthFallbackService"
+213-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:65:13-101
+214            android:enabled="true"
+214-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:66:13-35
+215            android:exported="false" >
+215-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:67:13-37
+216            <intent-filter>
+216-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:68:13-72:29
+217                <action android:name="com.google.firebase.auth.api.gms.service.START" />
+217-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:69:17-89
+217-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:69:25-86
+218
+219                <category android:name="android.intent.category.DEFAULT" />
+219-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:36:17-76
+219-->[com.google.firebase:firebase-auth:21.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/fba6a590e046ae3bb28498ec65ed943f/firebase-auth-21.0.1/AndroidManifest.xml:36:27-73
+220            </intent-filter>
+221        </service>
+222        <service
+222-->[com.google.android.datatransport:transport-backend-cct:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/10f90d220abd8cbbe3b8e968d07e6fef/transport-backend-cct-3.0.0/AndroidManifest.xml:29:9-35:19
+223            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+223-->[com.google.android.datatransport:transport-backend-cct:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/10f90d220abd8cbbe3b8e968d07e6fef/transport-backend-cct-3.0.0/AndroidManifest.xml:30:13-103
+224            android:exported="false" >
+224-->[com.google.android.datatransport:transport-backend-cct:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/10f90d220abd8cbbe3b8e968d07e6fef/transport-backend-cct-3.0.0/AndroidManifest.xml:31:13-37
+225            <meta-data
+225-->[com.google.android.datatransport:transport-backend-cct:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/10f90d220abd8cbbe3b8e968d07e6fef/transport-backend-cct-3.0.0/AndroidManifest.xml:32:13-34:39
+226                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+226-->[com.google.android.datatransport:transport-backend-cct:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/10f90d220abd8cbbe3b8e968d07e6fef/transport-backend-cct-3.0.0/AndroidManifest.xml:33:17-94
+227                android:value="cct" />
+227-->[com.google.android.datatransport:transport-backend-cct:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/10f90d220abd8cbbe3b8e968d07e6fef/transport-backend-cct-3.0.0/AndroidManifest.xml:34:17-36
+228        </service>
+229
+230        <provider
+230-->[com.google.firebase:firebase-common:20.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/f974751ac5677ce8830189f78881ba9c/firebase-common-20.0.0/AndroidManifest.xml:26:9-31:39
+231            android:name="com.google.firebase.provider.FirebaseInitProvider"
+231-->[com.google.firebase:firebase-common:20.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/f974751ac5677ce8830189f78881ba9c/firebase-common-20.0.0/AndroidManifest.xml:27:13-77
+232            android:authorities="com.techsamuel.roadsideuser.firebaseinitprovider"
+232-->[com.google.firebase:firebase-common:20.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/f974751ac5677ce8830189f78881ba9c/firebase-common-20.0.0/AndroidManifest.xml:28:13-72
+233            android:directBootAware="true"
+233-->[com.google.firebase:firebase-common:20.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/f974751ac5677ce8830189f78881ba9c/firebase-common-20.0.0/AndroidManifest.xml:29:13-43
+234            android:exported="false"
+234-->[com.google.firebase:firebase-common:20.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/f974751ac5677ce8830189f78881ba9c/firebase-common-20.0.0/AndroidManifest.xml:30:13-37
+235            android:initOrder="100" />
+235-->[com.google.firebase:firebase-common:20.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/f974751ac5677ce8830189f78881ba9c/firebase-common-20.0.0/AndroidManifest.xml:31:13-36
+236
+237        <activity
+237-->[com.google.android.gms:play-services-base:17.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/efec7e0c5f71242a130c2f522d69d3f7/play-services-base-17.1.0/AndroidManifest.xml:23:9-26:75
+238            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+238-->[com.google.android.gms:play-services-base:17.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/efec7e0c5f71242a130c2f522d69d3f7/play-services-base-17.1.0/AndroidManifest.xml:24:13-79
+239            android:exported="false"
+239-->[com.google.android.gms:play-services-base:17.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/efec7e0c5f71242a130c2f522d69d3f7/play-services-base-17.1.0/AndroidManifest.xml:25:13-37
+240            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+240-->[com.google.android.gms:play-services-base:17.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/efec7e0c5f71242a130c2f522d69d3f7/play-services-base-17.1.0/AndroidManifest.xml:26:13-72
+241
+242        <receiver
+242-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:29:9-33:20
+243            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+243-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:30:13-85
+244            android:enabled="true"
+244-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:31:13-35
+245            android:exported="false" >
+245-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:32:13-37
+246        </receiver>
+247
+248        <service
+248-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:35:9-38:40
+249            android:name="com.google.android.gms.measurement.AppMeasurementService"
+249-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:36:13-84
+250            android:enabled="true"
+250-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:37:13-35
+251            android:exported="false" />
+251-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:38:13-37
+252        <service
+252-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:39:9-43:72
+253            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+253-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:40:13-87
+254            android:enabled="true"
+254-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:41:13-35
+255            android:exported="false"
+255-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:42:13-37
+256            android:permission="android.permission.BIND_JOB_SERVICE" />
+256-->[com.google.android.gms:play-services-measurement:19.0.1] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/81c849a1850caeb2a712a86533e7ab90/play-services-measurement-19.0.1/AndroidManifest.xml:43:13-69
+257
+258        <meta-data
+258-->[com.google.android.gms:play-services-basement:17.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/76d9b39004339d87bed43eb49248bfed/play-services-basement-17.1.0/AndroidManifest.xml:23:9-25:69
+259            android:name="com.google.android.gms.version"
+259-->[com.google.android.gms:play-services-basement:17.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/76d9b39004339d87bed43eb49248bfed/play-services-basement-17.1.0/AndroidManifest.xml:24:13-58
+260            android:value="@integer/google_play_services_version" />
+260-->[com.google.android.gms:play-services-basement:17.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/76d9b39004339d87bed43eb49248bfed/play-services-basement-17.1.0/AndroidManifest.xml:25:13-66
+261
+262        <provider
+262-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:21:9-25:39
+263            android:name="com.mapbox.android.telemetry.provider.MapboxTelemetryInitProvider"
+263-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:22:13-93
+264            android:authorities="com.techsamuel.roadsideuser.mapboxtelemetryinitprovider"
+264-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:23:13-79
+265            android:exported="false"
+265-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:24:13-37
+266            android:initOrder="100" />
+266-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:25:13-36
+267
+268        <service
+268-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:27:9-30:72
+269            android:name="com.mapbox.android.telemetry.errors.ErrorReporterJobIntentService"
+269-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:28:13-93
+270            android:exported="false"
+270-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:29:13-37
+271            android:permission="android.permission.BIND_JOB_SERVICE" />
+271-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:30:13-69
+272        <service
+272-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:31:9-33:40
+273            android:name="com.mapbox.android.telemetry.MapboxTelemetryService"
+273-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:32:13-79
+274            android:exported="false" />
+274-->[com.mapbox.mapboxsdk:mapbox-android-telemetry-okhttp3:8.1.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3e3c2a578b80d33eee2b8a6cbb5c89e8/mapbox-android-telemetry-okhttp3-8.1.0/AndroidManifest.xml:33:13-37
+275
+276        <provider
+276-->[androidx.lifecycle:lifecycle-process:2.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3becc717de6e59e62d3b47f2849c14a0/lifecycle-process-2.0.0/AndroidManifest.xml:23:9-27:43
+277            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+277-->[androidx.lifecycle:lifecycle-process:2.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3becc717de6e59e62d3b47f2849c14a0/lifecycle-process-2.0.0/AndroidManifest.xml:24:13-79
+278            android:authorities="com.techsamuel.roadsideuser.lifecycle-process"
+278-->[androidx.lifecycle:lifecycle-process:2.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3becc717de6e59e62d3b47f2849c14a0/lifecycle-process-2.0.0/AndroidManifest.xml:25:13-69
+279            android:exported="false"
+279-->[androidx.lifecycle:lifecycle-process:2.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3becc717de6e59e62d3b47f2849c14a0/lifecycle-process-2.0.0/AndroidManifest.xml:26:13-37
+280            android:multiprocess="true" />
+280-->[androidx.lifecycle:lifecycle-process:2.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/3becc717de6e59e62d3b47f2849c14a0/lifecycle-process-2.0.0/AndroidManifest.xml:27:13-40
+281        <provider
+281-->[com.squareup.picasso:picasso:2.71828] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/c59af69b173550bce95d0a9c1ee10656/jetified-picasso-2.71828/AndroidManifest.xml:8:9-11:40
+282            android:name="com.squareup.picasso.PicassoProvider"
+282-->[com.squareup.picasso:picasso:2.71828] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/c59af69b173550bce95d0a9c1ee10656/jetified-picasso-2.71828/AndroidManifest.xml:9:13-64
+283            android:authorities="com.techsamuel.roadsideuser.com.squareup.picasso"
+283-->[com.squareup.picasso:picasso:2.71828] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/c59af69b173550bce95d0a9c1ee10656/jetified-picasso-2.71828/AndroidManifest.xml:10:13-72
+284            android:exported="false" />
+284-->[com.squareup.picasso:picasso:2.71828] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/c59af69b173550bce95d0a9c1ee10656/jetified-picasso-2.71828/AndroidManifest.xml:11:13-37
+285
+286        <service
+286-->[com.google.android.datatransport:transport-runtime:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/a91725ad7c2e260a8e0c5c1c0dd41409/transport-runtime-3.0.0/AndroidManifest.xml:26:9-30:19
+287            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+287-->[com.google.android.datatransport:transport-runtime:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/a91725ad7c2e260a8e0c5c1c0dd41409/transport-runtime-3.0.0/AndroidManifest.xml:27:13-117
+288            android:exported="false"
+288-->[com.google.android.datatransport:transport-runtime:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/a91725ad7c2e260a8e0c5c1c0dd41409/transport-runtime-3.0.0/AndroidManifest.xml:28:13-37
+289            android:permission="android.permission.BIND_JOB_SERVICE" >
+289-->[com.google.android.datatransport:transport-runtime:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/a91725ad7c2e260a8e0c5c1c0dd41409/transport-runtime-3.0.0/AndroidManifest.xml:29:13-69
+290        </service>
+291
+292        <receiver
+292-->[com.google.android.datatransport:transport-runtime:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/a91725ad7c2e260a8e0c5c1c0dd41409/transport-runtime-3.0.0/AndroidManifest.xml:32:9-34:40
+293            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+293-->[com.google.android.datatransport:transport-runtime:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/a91725ad7c2e260a8e0c5c1c0dd41409/transport-runtime-3.0.0/AndroidManifest.xml:33:13-132
+294            android:exported="false" />
+294-->[com.google.android.datatransport:transport-runtime:3.0.0] /Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/a91725ad7c2e260a8e0c5c1c0dd41409/transport-runtime-3.0.0/AndroidManifest.xml:34:13-37
+295    </application>
+296
+297</manifest>

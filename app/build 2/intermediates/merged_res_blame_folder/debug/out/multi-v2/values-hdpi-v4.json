@@ -1,0 +1,38 @@
+{
+    "logs": [
+        {
+            "outputFile": "/Users/mirshamuelhossain/Desktop/My Projects/All Projects File/RunningJob/Khalifa1010/Apps and Admin/RoadsideApps/RoadsideUser/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-hdpi-v4/values-hdpi-v4.xml",
+            "map": [
+                {
+                    "source": "/Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/ae53acdb80ec456be61ace4434c36ea2/jetified-mapbox-android-navigation-ui-0.42.6/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2,3",
+                        "startColumns": "4,4",
+                        "startOffsets": "55,110",
+                        "endColumns": "54,47",
+                        "endOffsets": "105,153"
+                    }
+                },
+                {
+                    "source": "/Users/mirshamuelhossain/.gradle/wrapper/dists/gradle-7.0.2-bin/857tjihv64xamwrf0h14cai3r/gradle-7.0.2/bin/caches/transforms-2/files-2.1/b5d3dca558a560466ce6fc480a158988/appcompat-1.3.1/res/values-hdpi-v4/values-hdpi-v4.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endLines": "6",
+                        "endColumns": "13",
+                        "endOffsets": "327"
+                    },
+                    "to": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "158",
+                        "endLines": "8",
+                        "endColumns": "13",
+                        "endOffsets": "430"
+                    }
+                }
+            ]
+        }
+    ]
+}

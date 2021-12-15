@@ -25,30 +25,39 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.WizardActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.CurrentOrdersActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.PreviousOrderActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.OrderDetailsActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.LocationPickerActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.MessageActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.MakeOrderActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.WebViewActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -58,18 +67,23 @@
             </intent-filter>
         </activity>
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.PaymentWebview"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.WalletActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.register.VehicleRegisterActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.register.UserRegisterActivity"
             android:exported="false" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.ProfileActivity"
             android:exported="false" />
         <!--
@@ -80,9 +94,12 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-        <activity android:name=".activity.register.PhoneVerificationActivity" />
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".activity.register.PhoneVerificationActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"/>
         <activity
+            android:screenOrientation="portrait"
             android:name=".activity.register.UserLoginActivity"
             android:exported="false" />
 

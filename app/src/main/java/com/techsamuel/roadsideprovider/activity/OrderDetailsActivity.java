@@ -103,7 +103,6 @@ import retrofit2.Response;
 public class OrderDetailsActivity extends AppCompatActivity implements
         OnMapReadyCallback, PermissionsListener {
 
-
     OrderModel orderModel;
     SettingsModel settingsModel;
     UserModel userModel;
@@ -132,7 +131,7 @@ public class OrderDetailsActivity extends AppCompatActivity implements
     BeautifulProgressDialog beautifulProgressDialog;
     Button btnCancelOrder;
     Button btnAcceptOrder;
-    SwipeRefreshLayout swipeRefreshLayout;
+
 
     double userBalance;
     double orderAmount;
@@ -363,17 +362,12 @@ public class OrderDetailsActivity extends AppCompatActivity implements
         orderStatus=findViewById(R.id.order_status);
         btnCancelOrder=findViewById(R.id.cancel_order);
         btnAcceptOrder=findViewById(R.id.accept_order);
-        swipeRefreshLayout=findViewById(R.id.swipe_refresh);
+
 
         getReviewAndReason();
         setVehicleDetails();
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshOrderPage();
-            }
-        });
+
 
         userBalance= Double.parseDouble(userModel.getData().getWallet());
         orderAmount= Double.parseDouble(orderModel.getData().get(0).getTotalCost());

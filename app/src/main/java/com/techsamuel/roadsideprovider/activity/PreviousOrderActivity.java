@@ -1,26 +1,32 @@
 package com.techsamuel.roadsideprovider.activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
+import com.google.firebase.auth.FirebaseAuth;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
+import com.techsamuel.roadsideprovider.adapter.MessageAdapter;
 import com.techsamuel.roadsideprovider.adapter.OrderAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
+import com.techsamuel.roadsideprovider.listener.MessageItemClickListener;
 import com.techsamuel.roadsideprovider.listener.OrderItemClickListener;
+import com.techsamuel.roadsideprovider.model.MessageModel;
 import com.techsamuel.roadsideprovider.model.OrderModel;
 import com.techsamuel.roadsideprovider.model.OrdersModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
+import com.techsamuel.roadsideprovider.tools.Tools;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,13 +40,13 @@ public class PreviousOrderActivity extends AppCompatActivity {
     OrderAdapter orderAdapter;
     BeautifulProgressDialog beautifulProgressDialog;
     LinearLayout lytNoOrder;
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_current_orders);
-        initToolbar();
-        init();
+
     }
 
     private void initToolbar() {
@@ -54,17 +60,26 @@ public class PreviousOrderActivity extends AppCompatActivity {
         beautifulProgressDialog = new BeautifulProgressDialog(this, BeautifulProgressDialog.withLottie, null);
         beautifulProgressDialog.setLottieLocation("service.json");
         beautifulProgressDialog.setLottieLoop(true);
+        init();
 
     }
     private void init(){
         recyclerOrder=findViewById(R.id.recyler_orders);
         lytNoOrder=findViewById(R.id.lyt_no_order);
         getAllOrders("previous");
+        swipeRefreshLayout=findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initToolbar();
+            }
+        });
 
     }
 
+
     public void getAllOrders(String order_status_type){
-        Log.d("CurrentOrdersActivity","Called");
+        Log.d("PreviousOrderActivity","Called");
         beautifulProgressDialog.show();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<OrdersModel> call=apiInterface.getAllOrders(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId,order_status_type);
@@ -72,7 +87,10 @@ public class PreviousOrderActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<OrdersModel> call, Response<OrdersModel> response) {
                 beautifulProgressDialog.dismiss();
-                Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+                Log.d("PreviousOrderActivity",response.body().getMessage().toString());
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     if(response.body().getSize()>0){
                         lytNoOrder.setVisibility(View.GONE);
@@ -80,14 +98,14 @@ public class PreviousOrderActivity extends AppCompatActivity {
                         orderAdapter=new OrderAdapter(PreviousOrderActivity.this, response.body(),  new OrderItemClickListener() {
                             @Override
                             public void onItemClick(OrdersModel.Datum datum) {
-                                //Tools.showToast(CurrentOrdersActivity.this,datum.getId());
+                                //Tools.showToast(PreviousOrderActivity.this,datum.getId());
                                 getOrderDetailsById(datum.getId());
                             }
 
                         });
                         recyclerOrder.setLayoutManager(new LinearLayoutManager(PreviousOrderActivity.this));
                         recyclerOrder.setAdapter(orderAdapter);
-                        Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                        Log.d("PreviousOrderActivity",response.body().getMessage().toString());
                     }else{
                         lytNoOrder.setVisibility(View.VISIBLE);
                         recyclerOrder.setVisibility(View.GONE);
@@ -98,7 +116,7 @@ public class PreviousOrderActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<OrdersModel> call, Throwable t) {
                 beautifulProgressDialog.dismiss();
-                Log.d("CurrentOrdersActivity",t.getMessage().toString());
+                Log.d("PreviousOrderActivity",t.getMessage().toString());
                 lytNoOrder.setVisibility(View.VISIBLE);
                 recyclerOrder.setVisibility(View.GONE);
 
@@ -114,7 +132,7 @@ public class PreviousOrderActivity extends AppCompatActivity {
         call.enqueue(new Callback<OrderModel>() {
             @Override
             public void onResponse(Call<OrderModel> call, Response<OrderModel> response) {
-                Log.d("CurrentOrdersActivity",response.body().getMessage().toString());
+                Log.d("PreviousOrderActivity",response.body().getMessage().toString());
                 beautifulProgressDialog.dismiss();
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
@@ -125,12 +143,18 @@ public class PreviousOrderActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure(Call<OrderModel> call, Throwable t) {
-                Log.d("CurrentOrdersActivity",t.getMessage().toString());
+                Log.d("PreviousOrderActivity",t.getMessage().toString());
                 beautifulProgressDialog.dismiss();
 
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initToolbar();
     }
 
     @Override

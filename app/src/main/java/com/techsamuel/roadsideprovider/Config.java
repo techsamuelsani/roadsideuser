@@ -12,7 +12,7 @@ public class Config {
     public static final Double MINIMUM_RECHARGE_AMOUNT = 10.00;
     public static final Double MAXIMUM_RECHARGE_AMOUNT = 500.00;
     public static final String SHARED_PREF_DEVICE_ID = "device_id";
-    public static final long SPLASH_SCREEN_TIMEOUT = 2000;
+    public static final long SPLASH_SCREEN_TIMEOUT = 0;
     public static final String SHARED_PREF_SETTINGS_MODEL = "settings_model";
     public static final String SHARED_PREF_ORDER_MODEL = "order_model";
     public static final String PAGE_PROVIDER = "provider";
