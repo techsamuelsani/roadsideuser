@@ -37,10 +37,12 @@
         <entry key="app/src/main/res/layout/activity_message.xml" value="0.18885869565217392" />
         <entry key="app/src/main/res/layout/activity_order_details.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_order_details_new.xml" value="0.20697463768115942" />
+        <entry key="app/src/main/res/layout/activity_pre_order_details.xml" value="0.12708333333333333" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/activity_register_step_three.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.24895833333333334" />
         <entry key="app/src/main/res/layout/activity_vehicle_register.xml" value="0.182518115942029" />
+        <entry key="app/src/main/res/layout/activity_wallet.xml" value="0.24895833333333334" />
         <entry key="app/src/main/res/layout/activity_wizard.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/dialog_add_review.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/dialog_provider_info.xml" value="0.17889492753623187" />

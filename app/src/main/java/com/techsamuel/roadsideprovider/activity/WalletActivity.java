@@ -141,7 +141,7 @@ public class WalletActivity extends AppCompatActivity {
 
     private void getAllTransaction() {
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
-        Call<TransactionModel> call=apiInterface.getAllTransactionById(userId);
+        Call<TransactionModel> call=apiInterface.getAllTransactionById(Config.USER_TYPE,userId);
         call.enqueue(new Callback<TransactionModel>() {
             @Override
             public void onResponse(Call<TransactionModel> call, Response<TransactionModel> response) {

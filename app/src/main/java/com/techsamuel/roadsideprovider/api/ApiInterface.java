@@ -42,7 +42,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("getAllTransactionById")
-    Call<TransactionModel> getAllTransactionById(@Field("user_id") String user_id);
+    Call<TransactionModel> getAllTransactionById(@Field("user_type") String user_type,@Field("user_id") String user_id);
 
     @Multipart
     @POST("saveUserDetails")
