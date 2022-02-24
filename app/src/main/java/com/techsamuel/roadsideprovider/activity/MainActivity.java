@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +30,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -77,14 +79,22 @@ import com.techsamuel.roadsideprovider.activity.register.UserLoginActivity;
 import com.techsamuel.roadsideprovider.activity.register.VehicleRegisterActivity;
 import com.techsamuel.roadsideprovider.adapter.PageAdapter;
 import com.techsamuel.roadsideprovider.adapter.ServiceAdapter;
+import com.techsamuel.roadsideprovider.adapter.ServiceCategoryAdapter;
+import com.techsamuel.roadsideprovider.adapter.ServiceSubCategoryAdapter;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
+import com.techsamuel.roadsideprovider.fragment.MakeOrderFragment;
+import com.techsamuel.roadsideprovider.fragment.SubCategoryFragment;
 import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
 import com.techsamuel.roadsideprovider.listener.PageItemClickListener;
+import com.techsamuel.roadsideprovider.listener.ServiceCategoryItemClickListener;
 import com.techsamuel.roadsideprovider.listener.ServiceItemClickListener;
+import com.techsamuel.roadsideprovider.listener.ServiceSubCategoryItemClickListener;
+import com.techsamuel.roadsideprovider.model.CategoryAndSubcategoryModel;
 import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.PageModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
+import com.techsamuel.roadsideprovider.model.ServiceCategoryModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
 import com.techsamuel.roadsideprovider.model.UserModel;
@@ -139,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements
     BottomSheetBehavior bottomSheetBehavior;
     RecyclerView recyclerService;
     ServiceAdapter serviceAdapter;
+    ServiceCategoryAdapter serviceCategoryAdapter;
     LinearLayout lytregisterVehicle;
     LinearLayout lytSearch;
     String userId;
@@ -147,6 +158,10 @@ public class MainActivity extends AppCompatActivity implements
     BeautifulProgressDialog beautifulProgressDialog;
     EditText etSearch;
     RecyclerView recyclerPage;
+    FrameLayout fragmentContainer;
+
+    ImageView serviceBack;
+    TextView service_sheet_title;
 
 
 
@@ -245,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements
         lytCurrentOrders=findViewById(R.id.lyt_current_orders);
         lytPreviousOrders=findViewById(R.id.lyt_previous_orders);
         lytMessage=findViewById(R.id.lyt_message);
+        lytLanguages=findViewById(R.id.lyt_languages);
         lytNotification=findViewById(R.id.lyt_notifications);
 //        lytAbout=findViewById(R.id.lyt_about);
 //        lytTerms=findViewById(R.id.lyt_terms);
@@ -260,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements
         userPhone=findViewById(R.id.userPhone);
         currency=findViewById(R.id.currency);
         etSearch=findViewById(R.id.et_search);
+        serviceBack=findViewById(R.id.service_back);
 
         currency.setText(settingsModel.getData().getAppCurrency());
 
@@ -314,6 +331,13 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(MainActivity.this,MessageActivity.class);
+                startActivity(intent);
+            }
+        });
+        lytLanguages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,TestActivity.class);
                 startActivity(intent);
             }
         });
@@ -384,6 +408,8 @@ public class MainActivity extends AppCompatActivity implements
     private void initBottomSheet(){
         LinearLayout llBottomSheet = (LinearLayout) findViewById(R.id.bottom_sheet);
         recyclerService=findViewById(R.id.recycler_service);
+        fragmentContainer=findViewById(R.id.fragment_container);
+        service_sheet_title=findViewById(R.id.service_sheet_title);
         // init the bottom sheet behavior
         bottomSheetBehavior = BottomSheetBehavior.from(llBottomSheet);
         // change the state of the bottom sheet
@@ -432,37 +458,153 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
+//    public void fetchAllServices(){
+//        Log.d("MainActivity","Called");
+//        ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
+//        Call<ServiceModel> call=apiInterface.getAllServices(Config.DEVICE_TYPE,Config.LANG_CODE);
+//        call.enqueue(new Callback<ServiceModel>() {
+//            @Override
+//            public void onResponse(Call<ServiceModel> call, Response<ServiceModel> response) {
+//                Log.d("MainActivity",response.body().getMessage().toString());
+//                if(response.body().getStatus()== Config.API_SUCCESS){
+//                    serviceAdapter=new ServiceAdapter(MainActivity.this, response.body(), false, new ServiceItemClickListener() {
+//                        @Override
+//                        public void onItemClick(ServiceModel.Datum item) {
+//                            setAllProviderStoreLocation(mapboxMap,lastLocation,item.getId());
+//                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//                            Tools.showToast(MainActivity.this,"Searching... "+item.getName()+" service provider in your location");
+//                        }
+//                    });
+//                    recyclerService.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+//                    recyclerService.setAdapter(serviceAdapter);
+//                    Log.d("MainActivity",response.body().getMessage().toString());
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ServiceModel> call, Throwable t) {
+//                Log.d("MainActivity",t.getMessage().toString());
+//
+//            }
+//        });
+//
+//    }
+    private int level=0;
     public void fetchAllServices(){
-        Log.d("MainActivity","Called");
+
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
-        Call<ServiceModel> call=apiInterface.getAllServices(Config.DEVICE_TYPE,Config.LANG_CODE);
-        call.enqueue(new Callback<ServiceModel>() {
+        Call<ServiceCategoryModel> call=apiInterface.getServiceCategory();
+
+
+        call.enqueue(new Callback<ServiceCategoryModel>() {
             @Override
-            public void onResponse(Call<ServiceModel> call, Response<ServiceModel> response) {
-                Log.d("MainActivity",response.body().getMessage().toString());
-                if(response.body().getStatus()== Config.API_SUCCESS){
-                    serviceAdapter=new ServiceAdapter(MainActivity.this, response.body(), false, new ServiceItemClickListener() {
-                        @Override
-                        public void onItemClick(ServiceModel.Datum item) {
-                            setAllProviderStoreLocation(mapboxMap,lastLocation,item.getId());
-                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            Tools.showToast(MainActivity.this,"Searching... "+item.getName()+" service provider in your location");
+            public void onResponse(Call<ServiceCategoryModel> call, Response<ServiceCategoryModel> response) {
+                serviceCategoryAdapter=new ServiceCategoryAdapter(MainActivity.this, response.body(), false, new ServiceCategoryItemClickListener() {
+                    @Override
+                    public void onItemClick(List<ServiceCategoryModel.Subcategory> subcategories,ServiceCategoryModel.Category category) {
+
+                        ServiceSubCategoryAdapter serviceSubCategoryAdapter=new ServiceSubCategoryAdapter(MainActivity.this, subcategories, false, new ServiceSubCategoryItemClickListener() {
+                            @Override
+                            public void onItemClick(ServiceCategoryModel.Subcategory subcategory) {
+                                CategoryAndSubcategoryModel categoryAndSubcategoryModel=new CategoryAndSubcategoryModel(
+                                        subcategory.getName(),
+                                        subcategory.getParent(),
+                                        subcategory.getServiceId(),
+                                        subcategory.getImage(),
+                                        subcategory.getBasePrice(),
+                                        subcategory.getPriceApplicableOnKm(),
+                                        subcategory.getPriceApplicableOnMinute(),
+                                        subcategory.getPricePerKm(),
+                                        subcategory.getPricePerMinute(),
+                                        subcategory.getDescription()
+                                );
+                                    initiateOrderFragment(categoryAndSubcategoryModel);
+                                    level=2;
+                            }
+                        });
+
+                        recyclerService.setVisibility(View.GONE);
+
+                        if(category.getIsSubcategoryAvailable()){
+                            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                            ft.replace(R.id.fragment_container, new SubCategoryFragment(serviceSubCategoryAdapter));
+                            ft.addToBackStack(null);
+                            ft.commit();
+                            serviceBack.setVisibility(View.VISIBLE);
+                            service_sheet_title.setText(category.getName());
+                            level=1;
+                        }else{
+                            CategoryAndSubcategoryModel categoryAndSubcategoryModel=new CategoryAndSubcategoryModel(
+                                    category.getName(),
+                                    category.getParent(),
+                                    category.getServiceId(),
+                                    category.getImage(),
+                                    category.getBasePrice(),
+                                    category.getPriceApplicableOnKm(),
+                                    category.getPriceApplicableOnMinute(),
+                                    category.getPricePerKm(),
+                                    category.getPricePerMinute(),
+                                    category.getDescription()
+                            );
+                            initiateOrderFragment(categoryAndSubcategoryModel);
+
                         }
-                    });
+
+                        serviceBack.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                getSupportFragmentManager().popBackStack();
+                                if(level!=0){
+                                    level--;
+                                }
+                                //serviceBack.setVisibility(View.GONE);
+                                if(level==0){
+                                    service_sheet_title.setText(R.string.services);
+                                    serviceBack.setVisibility(View.GONE);
+                                    recyclerService.setVisibility(View.VISIBLE);
+                                }else if(level==1){
+                                    service_sheet_title.setText(category.getName());
+                                    serviceBack.setVisibility(View.VISIBLE);
+                                }else if(level==2){
+                                    service_sheet_title.setText("Purchase this service");
+                                    serviceBack.setVisibility(View.VISIBLE);
+                                }
+
+                            }
+                        });
+
+//                        ServiceSubCategoryAdapter serviceSubCategoryAdapter=new ServiceSubCategoryAdapter(MainActivity.this, subcategories, false, new ServiceSubCategoryItemClickListener() {
+//                            @Override
+//                            public void onItemClick(ServiceCategoryModel.Subcategory subcategory) {
+//
+//                            }
+//                        });
+                    }
+                });
                     recyclerService.setLayoutManager(new LinearLayoutManager(MainActivity.this));
-                    recyclerService.setAdapter(serviceAdapter);
-                    Log.d("MainActivity",response.body().getMessage().toString());
-                }
+                    recyclerService.setAdapter(serviceCategoryAdapter);
+
+
             }
 
             @Override
-            public void onFailure(Call<ServiceModel> call, Throwable t) {
+            public void onFailure(Call<ServiceCategoryModel> call, Throwable t) {
                 Log.d("MainActivity",t.getMessage().toString());
 
             }
         });
 
     }
+
+    private void initiateOrderFragment(CategoryAndSubcategoryModel data){
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, new MakeOrderFragment(data,lastLocation));
+        ft.addToBackStack(null);
+        ft.commit();
+        serviceBack.setVisibility(View.VISIBLE);
+        service_sheet_title.setText("Purchase this service");
+    }
+
 
     private void logoutApp(){
         new AlertDialog.Builder(MainActivity.this)
@@ -637,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements
                     Button moreInfo=(dialog).findViewById(R.id.more_info);
                     Button reportProvider=(dialog).findViewById(R.id.report_provider);
                     RecyclerView recyclerView=(dialog).findViewById(R.id.recycler_service);
-                    getSelectedProviderSerices(providerId,recyclerView);
+                    getSelectedProviderServices(providerId,recyclerView);
 
                     makeOrder.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -681,7 +823,7 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    private void getSelectedProviderSerices(String providerId, RecyclerView recyclerView) {
+    private void getSelectedProviderServices(String providerId, RecyclerView recyclerView) {
         Log.d("MainActivity","Called");
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<ServiceModel> call=apiInterface.getServicesByProviderId(providerId);

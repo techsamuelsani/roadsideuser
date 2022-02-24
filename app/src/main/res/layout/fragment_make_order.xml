@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.MakeOrderFragment">
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progress_bar"
+        android:layout_gravity="center"
+        android:layout_width="80dp"
+        android:layout_height="80dp"/>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/lyt_no_provider"
+        android:background="@color/grey_100"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_marginTop="@dimen/spacing_xlarge"
+            android:id="@+id/img_no_provider"
+            android:layout_centerHorizontal="true"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/empty_box"
+            />
+
+        <TextView
+            android:layout_below="@+id/img_no_provider"
+            android:padding="@dimen/spacing_xlarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:text="No provider with your input service found within your area"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+       android:visibility="visible"
+        android:id="@+id/layout_order"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/first_layout"
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/layout_starting_form"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:background="@color/white"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_starting_form"
+                    android:layout_gravity="center"
+                    app:tint="@color/colorPrimary" />
+                <TextView
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Starting From"
+                    android:textColor="@color/grey_60"
+                    />
+
+                <TextView
+                    android:id="@+id/price_starting_form"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USD 15.00"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@color/colorPrimary"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_minutes"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:background="@color/white"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_minute"
+                    android:layout_gravity="center"
+                    app:tint="@color/colorPrimary" />
+                <TextView
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Minutes"
+                    android:textColor="@color/grey_60"
+                    />
+
+                <TextView
+                    android:id="@+id/price_minutes"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USD 15.00"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@color/colorPrimary"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_kilometers"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:background="@color/white"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_kilometer"
+                    android:layout_gravity="center"
+                    app:tint="@color/colorPrimary" />
+                <TextView
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Kilometers"
+                    android:textColor="@color/grey_60"
+                    />
+
+                <TextView
+                    android:id="@+id/price_kilometers"
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="USD 15.00"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@color/colorPrimary"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginRight="@dimen/spacing_medium"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:id="@+id/second_layout"
+            android:layout_below="@+id/first_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <RadioButton
+                    android:id="@+id/radio_pickup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pickup"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    />
+                <EditText
+                    android:focusable="false"
+                    android:id="@+id/input_pickup"
+                    android:inputType="none"
+                    android:layout_marginLeft="@dimen/spacing_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/provider_marker"
+                    android:hint="Go tho this Location"
+                    android:background="@color/grey_100"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/spacing_large"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/radio_dropoff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dropoff"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    />
+                <EditText
+                    android:focusable="false"
+                    android:id="@+id/input_dropoff"
+                    android:inputType="none"
+                    android:layout_marginLeft="@dimen/spacing_medium"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@drawable/user_marker"
+                    android:hint="Click here to select location"
+                    android:background="@color/white"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginRight="@dimen/spacing_xlarge"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:id="@+id/third_layout"
+            android:layout_below="@+id/second_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="left"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Choose the payment method to pay any amount after completing the request"
+                android:textColor="@color/grey_60"
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginRight="@dimen/spacing_medium"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:id="@+id/fourth_layout"
+            android:layout_below="@+id/third_layout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/radio_cash"
+                    android:textColor="@color/colorPrimary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cash"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginLeft="@dimen/spacing_large"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/radio_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Credit Card"
+                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginRight="@dimen/spacing_xlarge"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:id="@+id/fifth_layout"
+            android:layout_below="@+id/fourth_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/aproximate_cost"
+                android:layout_gravity="left"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Approximate cost 150-180 USD"
+                android:textColor="@color/colorPrimary"
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginRight="@dimen/spacing_xlarge"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:id="@+id/sixth_layout"
+            android:layout_below="@+id/fifth_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_gravity="left"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Do you have any Notes?"
+                android:textColor="@color/grey_60"
+                />
+            <EditText
+                android:id="@+id/input_notes"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Write details here..."
+                android:gravity="top|left"
+                android:minHeight="80dp"
+                android:background="@drawable/rounded_corners"
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginLeft="@dimen/spacing_large"
+            android:layout_marginRight="@dimen/spacing_xlarge"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:id="@+id/seventh_layout"
+            android:layout_below="@+id/sixth_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_marginBottom="@dimen/spacing_xlarge"
+                android:id="@+id/btn_make_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Make an Order"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</FrameLayout>

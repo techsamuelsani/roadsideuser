@@ -8,6 +8,7 @@ import com.techsamuel.roadsideprovider.model.OrdersModel;
 import com.techsamuel.roadsideprovider.model.PageModel;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.ReviewReasonModel;
+import com.techsamuel.roadsideprovider.model.ServiceCategoryModel;
 import com.techsamuel.roadsideprovider.model.ServiceModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
 import com.techsamuel.roadsideprovider.model.TransactionModel;
@@ -21,6 +22,7 @@ import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
@@ -30,6 +32,9 @@ public interface ApiInterface {
 
     @POST("fetchAllAdmin")
     Call<AdminUser> fetchAllAdmin();
+
+    @GET("getServiceCategory")
+    Call<ServiceCategoryModel> getServiceCategory();
 
 
     @FormUrlEncoded
@@ -88,6 +93,13 @@ public interface ApiInterface {
                                         @Field("user_lat") String user_lat, @Field("user_long") String user_long,
                                         @Field("service_id") String service_id
                                         );
+    @FormUrlEncoded
+    @POST("getNearestProvider")
+    Call<ProviderModel> getNearestProvider(@Field("device_type") String device_type, @Field("lang_code") String lang_code,
+                                        @Field("user_type") String user_type, @Field("user_id") String user_id,
+                                        @Field("user_lat") String user_lat, @Field("user_long") String user_long,
+                                        @Field("service_id") String service_id
+    );
 
     @FormUrlEncoded
     @POST("getProviderById")

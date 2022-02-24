@@ -5,6 +5,7 @@
     android:id="@+id/lyt_service"
     android:clickable="true"
     android:focusable="true"
+    android:weightSum="1"
     android:background="?attr/selectableItemBackground"
     android:layout_margin="@dimen/spacing_small"
     android:layout_height="wrap_content">
@@ -12,7 +13,7 @@
     <RelativeLayout
         android:background="@color/colorPrimary"
         android:layout_width="@dimen/spacing_xxxlarge"
-        android:layout_height="@dimen/spacing_xxxlarge"
+        android:layout_height="match_parent"
         >
         <ImageView
             android:layout_centerInParent="true"
@@ -26,6 +27,7 @@
 
     <LinearLayout
         android:layout_marginLeft="@dimen/spacing_middle"
+        android:layout_weight="1"
         android:layout_gravity="center_vertical"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -49,5 +51,21 @@
              />
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_marginLeft="@dimen/spacing_middle"
+        android:layout_height="match_parent"
+         android:layout_width="130dp">
+
+        <TextView
+            android:id="@+id/service_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Starting From: USD 50.00"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/grey_80" />
+
+    </RelativeLayout>
 
 </LinearLayout>

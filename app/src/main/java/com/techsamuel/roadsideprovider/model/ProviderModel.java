@@ -31,6 +31,18 @@ public class ProviderModel {
     @Expose
     private List<Datum> data = null;
 
+    @SerializedName("distance")
+    @Expose
+    private List<Double> distance = null;
+
+    public List<Double> getDistance() {
+        return distance;
+    }
+
+    public void setDistance(List<Double> distance) {
+        this.distance = distance;
+    }
+
     public Integer getStatus() {
         return status;
     }
