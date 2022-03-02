@@ -42,6 +42,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -101,6 +103,22 @@ public class Tools {
     public static int dpToPx(Context c, int dp) {
         Resources r = c.getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    public static <T extends Comparable<T>> List<Integer> sortIndex(List<T> in) {
+        ArrayList<Integer> index = new ArrayList<>();
+        for (int i = 0; i < in.size(); i++) {
+            index.add(i);
+        }
+
+        Collections.sort(index, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer idx1, Integer idx2) {
+                return in.get(idx1).compareTo(in.get(idx2));
+            }
+        });
+
+        return index;
     }
 
     public static String getAdressFromLatLong(Context context,String latitude, String longitude) {

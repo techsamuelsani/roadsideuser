@@ -36,6 +36,8 @@ import com.techsamuel.roadsideprovider.model.SettingsModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -220,7 +222,8 @@ public class MakeOrderFragment extends Fragment {
             public void onResponse(Call<ProviderModel> call, Response<ProviderModel> response) {
                 assert response.body() != null;
                 if (response.body().getSize() > 0) {
-                    assignOrderToAProvider(response.body());
+                    System.out.println(response.body().getDistance().toString());
+                    //assignOrderToAProvider(response.body());
                     } else {
                         progressBar.setVisibility(View.GONE);
                         lyt_order.setVisibility(View.GONE);
@@ -240,9 +243,16 @@ public class MakeOrderFragment extends Fragment {
     }
 
     private void assignOrderToAProvider(ProviderModel providerModel) {
+
+        List sortedProviderIndex=Tools.sortIndex(providerModel.getDistance());
+        int selectedIndex= (int) sortedProviderIndex.get(0);
+
         progressBar.setVisibility(View.GONE);
         lyt_order.setVisibility(View.VISIBLE);
         lyt_no_provider.setVisibility(View.GONE);
+        ProviderModel.Datum choosenProvider=providerModel.getData().get(selectedIndex);
+        inputPickup.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(userLocation.getLatitude()),String.valueOf(userLocation.getLongitude())));
+        inputDropOff.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(choosenProvider.getLatitude()),String.valueOf(choosenProvider.getLongitude())));
 
 
     }
