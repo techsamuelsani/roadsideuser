@@ -19,6 +19,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -223,7 +224,7 @@ public class MakeOrderFragment extends Fragment {
                 assert response.body() != null;
                 if (response.body().getSize() > 0) {
                     System.out.println(response.body().getDistance().toString());
-                    //assignOrderToAProvider(response.body());
+                    assignOrderToAProvider(response.body());
                     } else {
                         progressBar.setVisibility(View.GONE);
                         lyt_order.setVisibility(View.GONE);
@@ -243,6 +244,8 @@ public class MakeOrderFragment extends Fragment {
     }
 
     private void assignOrderToAProvider(ProviderModel providerModel) {
+//        Gson gson = new Gson();
+//        String jsonStr = gson.toJson(providerModel);
 
         List sortedProviderIndex=Tools.sortIndex(providerModel.getDistance());
         int selectedIndex= (int) sortedProviderIndex.get(0);
@@ -250,9 +253,16 @@ public class MakeOrderFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
         lyt_order.setVisibility(View.VISIBLE);
         lyt_no_provider.setVisibility(View.GONE);
+       // Tools.showToast(getContext(), String.valueOf(selectedIndex));
+
         ProviderModel.Datum choosenProvider=providerModel.getData().get(selectedIndex);
-        inputPickup.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(userLocation.getLatitude()),String.valueOf(userLocation.getLongitude())));
-        inputDropOff.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(choosenProvider.getLatitude()),String.valueOf(choosenProvider.getLongitude())));
+
+//        Gson gson2 = new Gson();
+//        String jsonSt2r = gson.toJson(choosenProvider);
+//        System.out.println(jsonSt2r);
+
+       inputDropOff.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(userLocation.getLatitude()),String.valueOf(userLocation.getLongitude())));
+       inputPickup.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(choosenProvider.getLatitude()),String.valueOf(choosenProvider.getLongitude())));
 
 
     }
