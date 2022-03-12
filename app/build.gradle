@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-database'
 
     //Third party dependencies here
     implementation 'com.hbb20:ccp:2.4.7' //Country code picker

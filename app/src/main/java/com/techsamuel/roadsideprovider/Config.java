@@ -25,6 +25,8 @@ public class Config {
     public static String USER_TYPE="user";
     public static String ORDER_TYPE_DELIVERY="delivery";
     public static String ORDER_TYPE_PICKUP="pickup";
+    public static String PAYMENT_TYPE_CASH="cash";
+    public static String PAYMENT_TYPE_CARD="card";
     //All Configuration will go here
 
     public static long LOCATION_BUTTON_INVISIBLE_TIME=3000; //1 sec =1000
