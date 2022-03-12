@@ -136,9 +136,7 @@ public class CurrentOrdersActivity extends AppCompatActivity {
                 beautifulProgressDialog.dismiss();
                 if(response.body().getStatus()== Config.API_SUCCESS){
                     AppSharedPreferences.writeOrderModel(Config.SHARED_PREF_ORDER_MODEL,response.body());
-                    Intent intent=new Intent(CurrentOrdersActivity.this,OrderDetailsActivity.class);
-                    intent.putExtra(Config.APP_PAGE,Config.PAGE_CURRENT_ORDERS);
-                    startActivity(intent);
+
                 }
             }
             @Override

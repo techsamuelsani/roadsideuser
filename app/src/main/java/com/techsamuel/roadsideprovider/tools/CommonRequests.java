@@ -6,16 +6,11 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-
-import com.google.firebase.auth.FirebaseUser;
-import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.activity.MainActivity;
 import com.techsamuel.roadsideprovider.activity.register.UserRegisterActivity;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
-import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.UserModel;
 
 import retrofit2.Call;

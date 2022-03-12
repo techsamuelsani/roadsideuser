@@ -150,4 +150,18 @@ public interface ApiInterface {
                                          @Field("user_type") String user_type,@Field("user_id") String user_id,
                                          @Field("order_id") String order_id,@Field("details") String details,@Field("type") String type,@Field("ratings") String ratings);
 
+    @FormUrlEncoded
+    @POST("saveOrderRequestGetId")
+        // id	user_id	provider_id	service_id	service_name	accepted	date	timezone	base_price	price_per_minute
+        // price_per_km	totalMinutes	totalKms	approx_cost1	approx_cost2	userLat	userLong	providerLat	providerLong
+        // order_type	payment_type	notes
+
+    Call<DataSavedModel> saveOrderRequestGetId(@Field("user_id") int user_id, @Field("provider_id") int provider_id,
+                                               @Field("service_id") int service_id, @Field("service_name") String service_name,
+                                              @Field("accepted") boolean accepted,@Field("rejected") boolean rejected,@Field("date") String date,
+                                              @Field("timeZone") String timeZone,@Field("base_price") double base_price,@Field("price_per_minute") double price_per_minute,@Field("price_per_km") double price_per_km,
+                                              @Field("totalMinutes") double totalMinutes,@Field("totalKms") double totalKms,@Field("approx_cost1") double approx_cost1,@Field("approx_cost2") double approx_cost2,@Field("userLat") double userLat,
+                                              @Field("userLong") double userLong,@Field("providerLat") double providerLat,@Field("providerLong") double providerLong,@Field("order_type") String order_type,
+                                              @Field("payment_type") String payment_type, @Field("notes") String notes);
+
 }

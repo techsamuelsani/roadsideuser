@@ -1,10 +1,5 @@
 package com.techsamuel.roadsideprovider.activity;
 
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconSize;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -15,15 +10,14 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,44 +29,26 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.mapbox.android.core.location.LocationEngineCallback;
-import com.mapbox.android.core.location.LocationEngineResult;
-import com.mapbox.android.core.permissions.PermissionsListener;
-import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.geojson.Feature;
-import com.mapbox.geojson.FeatureCollection;
-import com.mapbox.geojson.Point;
-import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
-import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
-import com.mapbox.mapboxsdk.annotations.PolygonOptions;
-import com.mapbox.mapboxsdk.camera.CameraPosition;
-import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
-import com.mapbox.mapboxsdk.geometry.LatLng;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.mapboxsdk.location.modes.RenderMode;
-import com.mapbox.mapboxsdk.maps.MapView;
-import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
-import com.mapbox.mapboxsdk.maps.Style;
-import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
-import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
-import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
 import com.techsamuel.roadsideprovider.activity.register.UserLoginActivity;
@@ -85,7 +61,6 @@ import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.fragment.MakeOrderFragment;
 import com.techsamuel.roadsideprovider.fragment.SubCategoryFragment;
-import com.techsamuel.roadsideprovider.listener.OnItemClickListener;
 import com.techsamuel.roadsideprovider.listener.PageItemClickListener;
 import com.techsamuel.roadsideprovider.listener.ServiceCategoryItemClickListener;
 import com.techsamuel.roadsideprovider.listener.ServiceItemClickListener;
@@ -101,32 +76,19 @@ import com.techsamuel.roadsideprovider.model.UserModel;
 import com.techsamuel.roadsideprovider.model.VehicleModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements
-        OnMapReadyCallback, PermissionsListener{
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     int REQUEST_CODE_AUTOCOMPLETE=2127;
-    private MapView mapView;
-    private PermissionsManager permissionsManager;
-    private MapboxMap mapboxMap;
-    LocationEngineCallback<LocationEngineResult> locationEngineCallback;
-    Marker clickOnMapMaker;
-    Marker providerStoreMarker;
     LatLng selectedLocation;
     LatLng lastLocation=null;
     public static UserModel userModel;
     public static SettingsModel settingsModel;
     FloatingActionButton floatingActionButton;
-    Style mapboxStyle;
     boolean isActivated;
     TextView providerName;
     ImageView providerImage;
@@ -163,6 +125,10 @@ public class MainActivity extends AppCompatActivity implements
     ImageView serviceBack;
     TextView service_sheet_title;
 
+    GoogleMap mMap;
+    Marker currentLocationMarker=null;
+    FusedLocationProviderClient fusedLocationClient;
+
 
 
     @Override
@@ -174,13 +140,14 @@ public class MainActivity extends AppCompatActivity implements
         if(userModel.equals("")||settingsModel.equals("")){
             MainActivity.this.finish();
         }
-        Mapbox.getInstance(this,getString(R.string.mapbox_access_token));
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         setContentView(R.layout.activity_main);
-        mapView=(MapView)findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
-        //Tools.hideSystemUI(this);
-        init();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        init(false);
+        initView();
         initSideMenuItem();
     }
 
@@ -223,30 +190,44 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-    private void init(){
-       // CommonRequests.updateFcmToServer(this);
+    @SuppressLint("MissingPermission")
+    private void init(boolean locationBtn){
         userId=AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,"");
-        locationEngineCallback=new LocationEngineCallback<LocationEngineResult>() {
-            @Override
-            public void onSuccess(LocationEngineResult locationEngineResult) {
-                lastLocation=new LatLng(locationEngineResult.getLastLocation().getLatitude(),locationEngineResult.getLastLocation().getLongitude());
-                updateDeviceInformationToServer(Config.DEVICE_TYPE,Config.USER_TYPE,AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,""),
-                        Config.LANG_CODE,locationEngineResult.getLastLocation().getLatitude(),
-                        locationEngineResult.getLastLocation().getLongitude(),AppSharedPreferences.read(Config.SHARED_PREF_KEY_FCM,""),
-                        AppSharedPreferences.read(Config.SHARED_PREF_DEVICE_ID,""),FirebaseAuth.getInstance().getCurrentUser().getUid());
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            lastLocation=new LatLng(location.getLatitude(),location.getLongitude());
+                            Log.d("DeviceLocation",location.toString());
+                            // Logic to handle location object
+                            updateDeviceInformationToServer(Config.DEVICE_TYPE,Config.USER_TYPE,AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,""),
+                                    Config.LANG_CODE,location.getLatitude(),
+                                    location.getLongitude(),AppSharedPreferences.read(Config.SHARED_PREF_KEY_FCM,""),
+                                    AppSharedPreferences.read(Config.SHARED_PREF_DEVICE_ID,""),FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            if(mMap!=null){
+                                setAllProviderStoreLocation(lastLocation,"0");
+                                LatLng currentLatLng=new LatLng(location.getLatitude(),location.getLongitude());
+                                currentLocationMarker=mMap.addMarker(new MarkerOptions().position(currentLatLng).title("Marker in current location"));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12.0f));
 
-            }
+                            }
 
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Tools.showToast(MainActivity.this,"Location Updates Failed, please turn on gps");
-                updateDeviceInformationToServer(Config.DEVICE_TYPE,Config.USER_TYPE,AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,""),
-                        Config.LANG_CODE,0, 0,
-                        AppSharedPreferences.read(Config.SHARED_PREF_KEY_FCM,""),
-                        AppSharedPreferences.read(Config.SHARED_PREF_DEVICE_ID,""),FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        }else{
+                            updateDeviceInformationToServer(Config.DEVICE_TYPE,Config.USER_TYPE,AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,""),
+                                    Config.LANG_CODE,0, 0,
+                                    AppSharedPreferences.read(Config.SHARED_PREF_KEY_FCM,""),
+                                    AppSharedPreferences.read(Config.SHARED_PREF_DEVICE_ID,""),FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        }
+                    }
+                });
 
-            }
-        };
+
+    }
+
+    void initView(){
         initNavigationMenu();
         initBottomSheet();
         beautifulProgressDialog = new BeautifulProgressDialog(MainActivity.this, BeautifulProgressDialog.withLottie, null);
@@ -298,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                enableLocationComponent(mapboxStyle);
+                init(true);
             }
         });
         lytExit.setOnClickListener(new View.OnClickListener() {
@@ -351,8 +332,7 @@ public class MainActivity extends AppCompatActivity implements
         lytPreviousOrders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,PreviousOrderActivity.class);
-                startActivity(intent);
+
             }
         });
         lytRate.setOnClickListener(new View.OnClickListener() {
@@ -365,18 +345,9 @@ public class MainActivity extends AppCompatActivity implements
         etSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new PlaceAutocomplete.IntentBuilder()
-                        .accessToken(Mapbox.getAccessToken() != null ? Mapbox.getAccessToken() : getString(R.string.mapbox_access_token))
-                        .placeOptions(PlaceOptions.builder()
-                                .backgroundColor(Color.parseColor("#EEEEEE"))
-                                .limit(10)
-                                .build(PlaceOptions.MODE_CARDS))
-                        .build(MainActivity.this);
-                startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
+
             }
         });
-
-
     }
 
     private void updateDeviceInformationToServer(String deviceType,String userType,String userId, String langCode, double latitude, double longitude,
@@ -432,7 +403,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void getRegisteredVehicle(){
-
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<VehicleModel> call=apiInterface.getRegisteredVehicle(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId);
         call.enqueue(new Callback<VehicleModel>() {
@@ -657,63 +627,36 @@ public class MainActivity extends AppCompatActivity implements
 
 
 
-
     @Override
-    public void onMapReady(@NonNull MapboxMap mapboxMap) {
-        MainActivity.this.mapboxMap = mapboxMap;
-        mapboxMap.setStyle(Style.MAPBOX_STREETS, new Style.OnStyleLoaded() {
-            @Override
-            public void onStyleLoaded(@NonNull Style style) {
-//                mapboxMap.addPolygon(generatePerimeter(
-//                        new LatLng(Double.valueOf(userModel.getData().getLatitude()), Double.valueOf(userModel.getData().getLongitude())),
-//                        Double.valueOf(settingsModel.getData().getRadius()),
-//                        64));
-                enableLocationComponent(style);
-                mapboxStyle=style;
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+        double userLat=Double.valueOf(userModel.getData().getLatitude());
+        double userLong=Double.valueOf(userModel.getData().getLongitude());
+        LatLng userLocation = new LatLng(userLat, userLong);
+        mMap.addMarker(new MarkerOptions().position(userLocation).title("Marker in User Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 12.0f));
 
-            }
-        });
     }
 
-    private PolygonOptions generatePerimeter(LatLng centerCoordinates, double radiusInKilometers, int numberOfSides) {
-        List<LatLng> positions = new ArrayList<>();
-        double distanceX = radiusInKilometers / (111.319 * Math.cos(centerCoordinates.getLatitude() * Math.PI / 180));
-        double distanceY = radiusInKilometers / 110.574;
 
-        double slice = (2 * Math.PI) / numberOfSides;
 
-        double theta;
-        double x;
-        double y;
-        LatLng position;
-        for (int i = 0; i < numberOfSides; ++i) {
-            theta = i * slice;
-            x = distanceX * Math.cos(theta);
-            y = distanceY * Math.sin(theta);
 
-            position = new LatLng(centerCoordinates.getLatitude() + y,
-                    centerCoordinates.getLongitude() + x);
-            positions.add(position);
-        }
-        return new PolygonOptions()
-                .addAll(positions)
-                .fillColor(Color.BLUE)
-                .alpha(0.1f);
-    }
-
-    private void setAllProviderStoreLocation(MapboxMap mapboxMap, LatLng lastLocation,String service_id){
-        mapboxMap.clear();
+    private void setAllProviderStoreLocation(LatLng lastLocation,String service_id){
+        mMap.clear();
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<ProviderModel> call=apiInterface.getAllProviders(Config.DEVICE_TYPE,Config.LANG_CODE,Config.USER_TYPE,userId,
-                String.valueOf(lastLocation.getLatitude()),String.valueOf(lastLocation.getLongitude()),service_id);
+                String.valueOf(lastLocation.latitude),String.valueOf(lastLocation.longitude),service_id);
         call.enqueue(new Callback<ProviderModel>() {
             @Override
             public void onResponse(Call<ProviderModel> call, Response<ProviderModel> response) {
-                mapboxMap.addPolygon(generatePerimeter(lastLocation,
-                        Double.valueOf(settingsModel.getData().getRadius()),
-                        64));
-                Log.d("MainActivity",response.body().getMessage().toString());
-                if(response.body().getStatus()== Config.API_SUCCESS){
+                CircleOptions circleOptions = new CircleOptions()
+                        .center(lastLocation)
+                        .radius(Double.parseDouble(settingsModel.getData().getRadius())*1000).fillColor(0x1A0000FF).strokeColor(Color.TRANSPARENT); // In meters
+                Circle circle = mMap.addCircle(circleOptions);
+                System.out.println(response.body().getMessage());
+
+                if(response.body().getStatus()==Config.API_SUCCESS){
 
                     if(response.body().getSize()>0){
                         Tools.showToast(MainActivity.this,response.body().getSize()+" Provider found within your area Zoom-In for more details");
@@ -721,17 +664,13 @@ public class MainActivity extends AppCompatActivity implements
                         Tools.showToast(MainActivity.this,"No provider found within your area, try to search in another location");
                     }
                     for(int i=0;i<response.body().getData().size();i++){
-                        //Tools.showToast(MainActivity.this,response.body().getServices().get(i).getServices().toString());
-                        Bitmap bitmap=Tools.drawableToBitmap(MainActivity.this.getDrawable(R.drawable.provider_marker));
-                        IconFactory iconFactory = IconFactory.getInstance(MainActivity.this);
-                        Icon icon=iconFactory.fromBitmap(bitmap);
-                        mapboxMap.addMarker(new MarkerOptions()
+                        mMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(Double.valueOf(response.body().getData().get(i).getLatitude()),Double.valueOf(response.body().getData().get(i).getLongitude())))
-                                .setTitle(response.body().getData().get(i).getStoreName()).setIcon(icon))
+                                .title(response.body().getData().get(i).getStoreName()).icon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker)))
                                 .setSnippet("Store ID: "+response.body().getData().get(i).getId());
 
                     }
-                    mapboxMap.setOnMarkerClickListener(new MapboxMap.OnMarkerClickListener() {
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(@NonNull Marker marker) {
                             String providerId=marker.getSnippet().replace("Store ID: ","");
@@ -742,13 +681,13 @@ public class MainActivity extends AppCompatActivity implements
                     });
 
                 }else{
-                    Tools.showToast(MainActivity.this,"No provider found within your area, try to search in another location");
+                    Tools.showToast(MainActivity.this,"Failed: No provider found within your area, try to search in another location");
                 }
             }
             @Override
             public void onFailure(Call<ProviderModel> call, Throwable t) {
                 Log.d("MainActivity",t.getMessage().toString());
-                Tools.showToast(MainActivity.this,"No provider found within your area, try to search in another location");
+                Tools.showToast(MainActivity.this,"Error: No provider found within your area, try to search in another location");
 
             }
         });
@@ -785,9 +724,7 @@ public class MainActivity extends AppCompatActivity implements
                         @Override
                         public void onClick(View view) {
                             if(isVehicleRegistered){
-                                Intent intent=new Intent(MainActivity.this,MakeOrderActivity.class);
-                                intent.putExtra("provider_id",providerId);
-                                startActivity(intent);
+
                             }else{
                                 Tools.showToast(MainActivity.this,"Please register a vehicle in order to make and order");
                             }
@@ -856,60 +793,19 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-    @SuppressWarnings( {"MissingPermission"})
-    private void enableLocationComponent(@NonNull Style loadedMapStyle) {
-        if (PermissionsManager.areLocationPermissionsGranted(this)) {
-            LocationComponent locationComponent = mapboxMap.getLocationComponent();
-            locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(this, loadedMapStyle).build());
-            locationComponent.setLocationComponentEnabled(true);
-            locationComponent.setCameraMode(CameraMode.TRACKING);
-            locationComponent.setRenderMode(RenderMode.COMPASS);
-            locationComponent.getLocationEngine().getLastLocation(locationEngineCallback);
-            setAllProviderStoreLocation(mapboxMap,lastLocation,"0");
 
 
-        } else {
-            permissionsManager = new PermissionsManager(this);
-            permissionsManager.requestLocationPermissions(this);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        permissionsManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
-    @Override
-    public void onExplanationNeeded(List<String> permissionsToExplain) {
-        Toast.makeText(this, permissionsToExplain.toString(), Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void onPermissionResult(boolean granted) {
-        if (granted) {
-            mapboxMap.getStyle(new Style.OnStyleLoaded() {
-                @Override
-                public void onStyleLoaded(@NonNull Style style) {
-                    enableLocationComponent(style);
-                }
-            });
-        } else {
-            finish();
-        }
-    }
 
     @Override
     @SuppressWarnings( {"MissingPermission"})
     protected void onStart() {
         super.onStart();
-        mapView.onStart();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mapView.onResume();
         getRegisteredVehicle();
         balance.setText(String.valueOf(Config.balance));
     }
@@ -917,31 +813,29 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        mapView.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mapView.onStop();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mapView.onDestroy();
+
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+
     }
 
     @Override
@@ -952,33 +846,8 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_AUTOCOMPLETE) {
-            CarmenFeature selectedCarmenFeature = PlaceAutocomplete.getPlace(data);
-            if (mapboxMap != null) {
-                Style style = mapboxMap.getStyle();
-                if (style != null) {
-                    GeoJsonSource source = style.getSourceAs("geojsonSourceLayerId");
-                    if (source != null) {
-                        source.setGeoJson(FeatureCollection.fromFeatures(
-                                new Feature[] {Feature.fromJson(selectedCarmenFeature.toJson())}));
-                    }
 
-                    LatLng selectedLocation=new LatLng(((Point) selectedCarmenFeature.geometry()).latitude(),
-                            ((Point) selectedCarmenFeature.geometry()).longitude());
-
-                    setAllProviderStoreLocation(mapboxMap,selectedLocation,"0");
-                    mapboxMap.addPolygon(generatePerimeter(selectedLocation,
-                            Double.valueOf(settingsModel.getData().getRadius()),
-                            64));
-                    mapboxMap.addMarker(new MarkerOptions()
-                            .position(selectedLocation));
-                    mapboxMap.animateCamera(CameraUpdateFactory.newCameraPosition(
-                            new CameraPosition.Builder()
-                                    .target(selectedLocation)
-                                    .zoom(7)
-                                    .build()), 4000);
-                }
-            }
-        }
     }
+
+
 }

@@ -19,13 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.mapbox.mapboxsdk.maps.MapView
-            android:id="@+id/mapView"
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            mapbox:mapbox_cameraZoom="7" >
-
-        </com.mapbox.mapboxsdk.maps.MapView>
+            android:layout_height="match_parent"/>
 
         <RelativeLayout
             android:layout_width="match_parent"

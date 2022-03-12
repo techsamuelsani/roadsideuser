@@ -14,8 +14,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
-import android.os.Bundle;
+
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Log;
@@ -26,11 +27,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView;
 
-import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
+
+import com.google.android.gms.maps.model.LatLng;
+
 import com.techsamuel.roadsideprovider.Config;
-import com.techsamuel.roadsideprovider.activity.CurrentOrdersActivity;
-import com.techsamuel.roadsideprovider.activity.MainActivity;
-import com.techsamuel.roadsideprovider.activity.OrderDetailsActivity;
+
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
 import com.techsamuel.roadsideprovider.model.OrderModel;
@@ -145,6 +146,44 @@ public class Tools {
 
 
     }
+
+
+
+    public static double distanceInKm(LatLng start, LatLng end){
+        try {
+            Location location1 = new Location("locationA");
+            location1.setLatitude(start.latitude);
+            location1.setLongitude(start.longitude);
+            Location location2 = new Location("locationB");
+            location2.setLatitude(end.latitude);
+            location2.setLongitude(end.longitude);
+            double distance = location1.distanceTo(location2);
+            return distance/1000;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+    public static double timeInMintues(LatLng start, LatLng end){
+        try {
+            Location location1 = new Location("locationA");
+            location1.setLatitude(start.latitude);
+            location1.setLongitude(start.longitude);
+            Location location2 = new Location("locationB");
+            location2.setLatitude(end.latitude);
+            location2.setLongitude(end.longitude);
+            double distance = location1.distanceTo(location2);
+            return (distance/1000)*60/50;
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+        return 0;
+    }
+
 
     private void showConfirmDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

@@ -320,6 +320,7 @@
     <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
     <color name="grey_1000">#1a1a1a</color>
+    <color name="colorRadius">#1A0000FF</color>
 
 
     <!--for random color generator -->
