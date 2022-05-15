@@ -46,9 +46,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging'
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-database'
+<<<<<<< HEAD
 
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
 
     //Third party dependencies here
     implementation 'com.hbb20:ccp:2.4.7' //Country code picker

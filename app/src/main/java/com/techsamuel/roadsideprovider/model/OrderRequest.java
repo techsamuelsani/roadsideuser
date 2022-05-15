@@ -20,20 +20,27 @@ public class OrderRequest {
     double totalKms;
     double approx_cost1;
     double approx_cost2;
+<<<<<<< HEAD
     double final_cost;
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
     double userLat;
     double userLong;
     double providerLat;
     double providerLong;
+<<<<<<< HEAD
     double providerStoreLat;
     double providerStoreLong;
     double dropOfffLat;
     double dropOffLong;
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
 
     String order_type;
     String payment_type;
     String notes;
 
+<<<<<<< HEAD
     String providerPhone;
     String userPhone;
     boolean markAsArrived;
@@ -63,6 +70,10 @@ public class OrderRequest {
                         String order_type, String payment_type, String notes, String providerPhone,String userPhone, boolean markAsArrived, boolean markAsCompleted,boolean
                                 vehicleDetailsSaved,long timeInSeconds,boolean timerSaved,boolean vehicleFullPhotoSaved,boolean cashReceived,boolean orderPaid,
                         String ratings,String reviewsNotes) {
+=======
+
+    public OrderRequest(int id, int user_id, int provider_id, int service_id, String service_name, boolean accepted, boolean rejected, String date, String timeZone, double base_price, double price_per_minute, double price_per_km, double totalMinutes, double totalKms, double approx_cost1, double approx_cost2, double userLat, double userLong, double providerLat, double providerLong, String order_type, String payment_type, String notes) {
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
         this.id = id;
         this.user_id = user_id;
         this.provider_id = provider_id;
@@ -79,11 +90,15 @@ public class OrderRequest {
         this.totalKms = totalKms;
         this.approx_cost1 = approx_cost1;
         this.approx_cost2 = approx_cost2;
+<<<<<<< HEAD
         this.final_cost=final_cost;
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
         this.userLat = userLat;
         this.userLong = userLong;
         this.providerLat = providerLat;
         this.providerLong = providerLong;
+<<<<<<< HEAD
         this.providerStoreLat=providerStoreLat;
         this.providerStoreLong=providerStoreLong;
         this.order_type = order_type;
@@ -215,12 +230,18 @@ public class OrderRequest {
 
     public void setMarkAsArrived(boolean markAsArrived) {
         this.markAsArrived = markAsArrived;
+=======
+        this.order_type = order_type;
+        this.payment_type = payment_type;
+        this.notes = notes;
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
     }
 
     public OrderRequest(){
 
     }
 
+<<<<<<< HEAD
     public double getDropOfffLat() {
         return dropOfffLat;
     }
@@ -237,6 +258,8 @@ public class OrderRequest {
         this.dropOffLong = dropOffLong;
     }
 
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
     public boolean isRejected() {
         return rejected;
     }

@@ -27,9 +27,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.widget.NestedScrollView;
 
+<<<<<<< HEAD
 
 import com.google.android.gms.maps.model.LatLng;
 
+=======
+import com.basusingh.beautifulprogressdialog.BeautifulProgressDialog;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
 import com.techsamuel.roadsideprovider.Config;
 
 import com.techsamuel.roadsideprovider.api.ApiInterface;
@@ -152,11 +157,19 @@ public class Tools {
     public static double distanceInKm(LatLng start, LatLng end){
         try {
             Location location1 = new Location("locationA");
+<<<<<<< HEAD
             location1.setLatitude(start.latitude);
             location1.setLongitude(start.longitude);
             Location location2 = new Location("locationB");
             location2.setLatitude(end.latitude);
             location2.setLongitude(end.longitude);
+=======
+            location1.setLatitude(start.getLatitude());
+            location1.setLongitude(start.getLongitude());
+            Location location2 = new Location("locationB");
+            location2.setLatitude(end.getLatitude());
+            location2.setLongitude(end.getLongitude());
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
             double distance = location1.distanceTo(location2);
             return distance/1000;
         } catch (Exception e) {
@@ -169,11 +182,19 @@ public class Tools {
     public static double timeInMintues(LatLng start, LatLng end){
         try {
             Location location1 = new Location("locationA");
+<<<<<<< HEAD
             location1.setLatitude(start.latitude);
             location1.setLongitude(start.longitude);
             Location location2 = new Location("locationB");
             location2.setLatitude(end.latitude);
             location2.setLongitude(end.longitude);
+=======
+            location1.setLatitude(start.getLatitude());
+            location1.setLongitude(start.getLongitude());
+            Location location2 = new Location("locationB");
+            location2.setLatitude(end.getLatitude());
+            location2.setLongitude(end.getLongitude());
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
             double distance = location1.distanceTo(location2);
             return (distance/1000)*60/50;
         } catch (Exception e) {

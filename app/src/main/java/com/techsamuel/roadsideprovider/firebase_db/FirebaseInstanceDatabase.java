@@ -1,12 +1,18 @@
 package com.techsamuel.roadsideprovider.firebase_db;
 
 import androidx.annotation.NonNull;
+<<<<<<< HEAD
 import androidx.lifecycle.LiveData;
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+<<<<<<< HEAD
 import com.google.android.gms.tasks.OnSuccessListener;
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -14,8 +20,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.techsamuel.roadsideprovider.model.OrderRequest;
 
+<<<<<<< HEAD
 import java.util.HashMap;
 
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
 public class FirebaseInstanceDatabase {
     FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
 
@@ -23,7 +32,11 @@ public class FirebaseInstanceDatabase {
     public MutableLiveData<Boolean> addOrderRequest(OrderRequest orderRequest){
         final MutableLiveData<Boolean> successOrderRequest = new MutableLiveData<>();
 
+<<<<<<< HEAD
         firebaseDatabase.getReference(DatabaseReferenceName.ORDER_REQUESTS).child(String.valueOf(orderRequest.getId())).setValue(orderRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+=======
+        firebaseDatabase.getReference(DatabaseReferenceName.ORDER_REQUESTS).push().setValue(orderRequest).addOnCompleteListener(new OnCompleteListener<Void>() {
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 successOrderRequest.setValue(true);
@@ -55,6 +68,7 @@ public class FirebaseInstanceDatabase {
     }
 
 
+<<<<<<< HEAD
     public LiveData<DataSnapshot> fetchProviderLocation(int orderId) {
         final MutableLiveData<DataSnapshot> fetchProviderLocation = new MutableLiveData<>();
         firebaseDatabase.getReference(DatabaseReferenceName.PROVIDER_LOCATION).child(String.valueOf(orderId)).addValueEventListener(new ValueEventListener() {
@@ -89,4 +103,6 @@ public class FirebaseInstanceDatabase {
 
         return successAddTrueFalseInDatabase;
     }
+=======
+>>>>>>> 02f1a7db7727c46dadc56cea6317dbadb9372209
 }
