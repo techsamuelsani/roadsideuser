@@ -5,8 +5,12 @@
       <map>
         <entry key="../../../../../../../../../../layout/custom_preview.xml" value="0.17592592592592593" />
         <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/drawable/provider_marker.xml" value="0.2095" />
+        <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/layout/activity_location_picker.xml" value="0.33605072463768115" />
         <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/layout/activity_main.xml" value="0.18854166666666666" />
-        <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/layout/fragment_make_order.xml" value="0.18854166666666666" />
+        <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/layout/fragment_make_order.xml" value="0.33" />
+        <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/layout/order_accept_sheet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/layout/popup_invoice_sheet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideAppGoogleMaps/roadsideuser/app/src/main/res/layout/popup_rating_reviews_sheet.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideApps/roadsideuser/app/src/main/res/drawable/ic_close.xml" value="0.34629629629629627" />
         <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideApps/roadsideuser/app/src/main/res/drawable/ic_search.xml" value="0.34629629629629627" />
         <entry key="..\:/Users/MIR SHAMUEL HOSSAIN/Desktop/RoadsideApps/roadsideuser/app/src/main/res/layout/activity_current_orders.xml" value="0.2971014492753623" />

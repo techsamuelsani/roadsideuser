@@ -161,7 +161,8 @@ public interface ApiInterface {
                                               @Field("accepted") boolean accepted,@Field("rejected") boolean rejected,@Field("date") String date,
                                               @Field("timeZone") String timeZone,@Field("base_price") double base_price,@Field("price_per_minute") double price_per_minute,@Field("price_per_km") double price_per_km,
                                               @Field("totalMinutes") double totalMinutes,@Field("totalKms") double totalKms,@Field("approx_cost1") double approx_cost1,@Field("approx_cost2") double approx_cost2,@Field("userLat") double userLat,
-                                              @Field("userLong") double userLong,@Field("providerLat") double providerLat,@Field("providerLong") double providerLong,@Field("order_type") String order_type,
-                                              @Field("payment_type") String payment_type, @Field("notes") String notes);
+                                              @Field("userLong") double userLong,@Field("providerLat") double providerLat,@Field("providerLong") double providerLong,@Field("dropOffLat") double dropOffLat,@Field("dropOffLong") double dropOffLong,
+                                               @Field("order_type") String order_type, @Field("payment_type") String payment_type, @Field("notes") String notes,
+                                               @Field("providerPhone") String providerPhone, @Field("markAsArrived") boolean markAsArrived, @Field("markAsCompleted") boolean markAsCompleted);
 
 }

@@ -18,6 +18,7 @@ public class Config {
     public static final String PAGE_PROVIDER = "provider";
     public static final String APP_PAGE = "page";
     public static final String PAGE_CURRENT_ORDERS = "current_orders";
+    public static  int ORDER_ID = 0;
     public static int PHONE_VERIFICATION_CODE=101;
     public static int API_SUCCESS=200;
     public static int API_FAILED=500;

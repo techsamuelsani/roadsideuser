@@ -1,9 +1,13 @@
 package com.techsamuel.roadsideprovider.fragment;
 
+import static android.app.Activity.RESULT_CANCELED;
+
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 
@@ -24,6 +28,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 import com.techsamuel.roadsideprovider.Config;
 import com.techsamuel.roadsideprovider.R;
+import com.techsamuel.roadsideprovider.activity.LocationPickerActivity;
 import com.techsamuel.roadsideprovider.activity.MainActivity;
 import com.techsamuel.roadsideprovider.api.ApiInterface;
 import com.techsamuel.roadsideprovider.api.ApiServiceGenerator;
@@ -33,6 +38,7 @@ import com.techsamuel.roadsideprovider.model.DataSavedModel;
 import com.techsamuel.roadsideprovider.model.OrderRequest;
 import com.techsamuel.roadsideprovider.model.ProviderModel;
 import com.techsamuel.roadsideprovider.model.SettingsModel;
+import com.techsamuel.roadsideprovider.model.UserModel;
 import com.techsamuel.roadsideprovider.tools.AppSharedPreferences;
 import com.techsamuel.roadsideprovider.tools.Tools;
 
@@ -58,11 +64,14 @@ public class MakeOrderFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int PICK_LOCATION = 101;
 
 
     LinearLayout lytStartingFrom;
     LinearLayout lytMinutes;
     LinearLayout lytKilometers;
+    LinearLayout firstLayout;
+    LinearLayout secondLayout;
     TextView priceStartingForm;
     TextView priceMinutes;
     TextView priceKilometers;
@@ -76,6 +85,8 @@ public class MakeOrderFragment extends Fragment {
     EditText inputDropOff;
     Button btnMakeOrder;
     LatLng userLocation;
+    double dropOffLat=0;
+    double dropOffLong=0;
     ProgressBar progressBar;
     RelativeLayout lyt_no_provider;
     RelativeLayout lyt_order;
@@ -89,29 +100,26 @@ public class MakeOrderFragment extends Fragment {
     String order_type;
     String payment_type;
 
-
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     CategoryAndSubcategoryModel data;
     SettingsModel settingsModel;
+    UserModel userModel;
+    boolean hasActiveOrder;
 
-    public MakeOrderFragment(CategoryAndSubcategoryModel data) {
-        this.data=data;
-        settingsModel= AppSharedPreferences.readSettingsModel(Config.SHARED_PREF_SETTINGS_MODEL,"");
-        //userId=AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,"");
 
-    }
     public MakeOrderFragment() {
         // Required empty public constructor
     }
 
-    public MakeOrderFragment(CategoryAndSubcategoryModel data, LatLng lastLocation) {
+    public MakeOrderFragment(CategoryAndSubcategoryModel data, LatLng lastLocation,boolean hasActiveOrder) {
         this.userLocation=lastLocation;
         this.data=data;
+        this.hasActiveOrder=hasActiveOrder;
         settingsModel= AppSharedPreferences.readSettingsModel(Config.SHARED_PREF_SETTINGS_MODEL,"");
         userId=AppSharedPreferences.read(Config.SHARED_PREF_USER_ID,"");
+        userModel=AppSharedPreferences.readUserModel(Config.SHARED_PREF_USER_MODEL,"");
 
     }
 
@@ -148,10 +156,10 @@ public class MakeOrderFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_make_order, container, false);
 
-        lytStartingFrom=view.findViewById(R.id.layout_starting_form);
-        lytMinutes=view.findViewById(R.id.layout_minutes);
-        lytKilometers=view.findViewById(R.id.layout_kilometers);
-        priceStartingForm=view.findViewById(R.id.price_starting_form);
+         lytStartingFrom=view.findViewById(R.id.layout_starting_form);
+         lytMinutes=view.findViewById(R.id.layout_minutes);
+         lytKilometers=view.findViewById(R.id.layout_kilometers);
+         priceStartingForm=view.findViewById(R.id.price_starting_form);
          priceMinutes=view.findViewById(R.id.price_minutes);
          priceKilometers=view.findViewById(R.id.price_kilometers);;
          radioPickup=view.findViewById(R.id.radio_pickup);
@@ -167,6 +175,8 @@ public class MakeOrderFragment extends Fragment {
          lyt_no_provider=view.findViewById(R.id.lyt_no_provider);
          lyt_order=view.findViewById(R.id.layout_order);
          lyt_order_success=view.findViewById(R.id.lyt_order_success);
+         firstLayout=view.findViewById(R.id.first_layout);
+         secondLayout=view.findViewById(R.id.second_layout);
          init();
         return view;
     }
@@ -237,19 +247,39 @@ public class MakeOrderFragment extends Fragment {
 
         choosenProvider=providerModel.getData().get(selectedIndex);
 
+        inputDropOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(), LocationPickerActivity.class);
+                startActivityForResult(intent,PICK_LOCATION);
+            }
+        });
+
 
 //        Gson gson2 = new Gson();
 //        String jsonSt2r = gson.toJson(choosenProvider);
 //        System.out.println(jsonSt2r);
 
-       inputDropOff.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(userLocation.latitude),String.valueOf(userLocation.longitude)));
+       //inputDropOff.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(userLocation.latitude),String.valueOf(userLocation.longitude)));
        inputPickup.setText(Tools.getAdressFromLatLong(getContext(),String.valueOf(choosenProvider.getLatitude()),String.valueOf(choosenProvider.getLongitude())));
-
         initView();
-
 
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_CANCELED) {
+            if(requestCode==PICK_LOCATION){
+                if(data!=null){
+                    dropOffLat = data.getDoubleExtra("latitude", 0.0);
+                    dropOffLong= data.getDoubleExtra("longitude", 0.0);
+                    String location = data.getStringExtra("location");
+                    inputDropOff.setText(location);
+                }
+            }
+        }
+    }
 
     private void initView(){
 
@@ -262,6 +292,19 @@ public class MakeOrderFragment extends Fragment {
         int approxCost1= (int) (data.getBasePrice()+TotalminutesCost+TotalkmCost);
         int approxCost2= (int) (data.getBasePrice()+TotalminutesCost+TotalkmCost+20);
         approximateCost.setText(getString(R.string.approximate_cost)+" "+approxCost1+"-"+approxCost2+" "+settingsModel.getData().getAppCurrency());
+
+        if(!data.getPriceApplicableOnKm()&&!data.getPriceApplicableOnMinute()){
+                firstLayout.setVisibility(View.GONE);
+                secondLayout.setVisibility(View.GONE);
+                order_type="none";
+        }else{
+            firstLayout.setVisibility(View.VISIBLE);
+            secondLayout.setVisibility(View.VISIBLE);
+        }
+
+
+
+
 
         radioPickup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,11 +346,37 @@ public class MakeOrderFragment extends Fragment {
         btnMakeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveOrderRequestGetId();
+                if(!hasActiveOrder){
+                    if(order_type==Config.ORDER_TYPE_DELIVERY){
+                        if(dropOffLat==0&&dropOffLong==0){
+                            Tools.showToast(getContext(),"Please select dropoff location");
+                        }else{
+                            saveOrderRequestGetId();
+                        }
+                    }else if(order_type==Config.ORDER_TYPE_PICKUP){
+                        if(userLocation.latitude==0&&userLocation.longitude==0){
+                            Tools.showToast(getContext(),"Pickup location is empty, try again");
+                        }else{
+                            saveOrderRequestGetId();
+                        }
+                    }else{
+                        if(userLocation.latitude==0&&userLocation.longitude==0){
+                            Tools.showToast(getContext(),"User location is empty, try again");
+                        }else{
+                            saveOrderRequestGetId();
+                        }
+
+                    }
+                }else{
+                    Tools.showToast(getContext(),"You already have an active order");
+                }
+
+
             }
         });
     }
 
+    double finalCost;
     private void saveOrderRequestGetId() {
 
         progressBar.setVisibility(View.VISIBLE);
@@ -343,19 +412,37 @@ public class MakeOrderFragment extends Fragment {
 
         double approxCost1=data.getBasePrice()+TotalminutesCost+TotalkmCost;
         double approxCost2=data.getBasePrice()+TotalminutesCost+TotalkmCost+20;
+        finalCost=data.getBasePrice();
+        if(data.getPriceApplicableOnMinute()&&data.getPriceApplicableOnKm()){
+            finalCost=0;
+        }
         double userLat=userLocation.latitude;
         double userLong=userLocation.longitude;
         double providerLat=Double.valueOf(choosenProvider.getLatitude());
         double providerLong=Double.valueOf(choosenProvider.getLongitude());
+        double providerStoreLat=Double.valueOf(choosenProvider.getLatitude());
+        double providerStoreLong=Double.valueOf(choosenProvider.getLongitude());
         String orderType=order_type;
         String paymentType=payment_type;
         String notes=inputNotes.getText().toString();
 
+        String providerPhone=choosenProvider.getPhone();
+        String userPhone=userModel.getData().getPhone();
+        boolean markAsArrived=false;
+        boolean markAsCompleted=false;
+        boolean vehicleDetailsSaved=false;
+        long timeInSeconds=0;
+        boolean timerSaved=false;
+        boolean vehicleFullPhotoSaved=false;
+        boolean isCashReceived=false;
+        boolean isOrderPaid=false;
+        String ratings="";
+        String reviewsNotes="";
 
         ApiInterface apiInterface= ApiServiceGenerator.createService(ApiInterface.class);
         Call<DataSavedModel> call=apiInterface.saveOrderRequestGetId(user_id,provider_id,serviceId,serviceName,accepted,rejected,
                 strDate,timeZone,basePrice,perMinuteCost, perKmCost,totalMinutes,totalKms,approxCost1,approxCost2,
-                userLat,userLong,providerLat,providerLong,orderType,paymentType,notes);
+                userLat,userLong,providerLat,providerLong,dropOffLat,dropOffLong,orderType,paymentType,notes,providerPhone,markAsArrived,markAsCompleted);
         call.enqueue(new Callback<DataSavedModel>() {
             @Override
             public void onResponse(Call<DataSavedModel> call, Response<DataSavedModel> response) {
@@ -363,13 +450,13 @@ public class MakeOrderFragment extends Fragment {
                     System.out.println("Order id"+response.body().getId());
                     int orderId=response.body().getId();
                     OrderRequest orderRequest=new OrderRequest(orderId,user_id,provider_id,serviceId,serviceName,accepted,rejected,strDate,timeZone,
-                            basePrice,perMinuteCost,perKmCost,totalMinutes,totalKms,approxCost1,approxCost2,userLat,userLong,providerLat,
-                            providerLong,payment_type,orderType,notes);
+                            basePrice,perMinuteCost,perKmCost,totalMinutes,totalKms,approxCost1,approxCost2,finalCost,userLat,userLong,providerLat,
+                            providerLong,providerStoreLat,providerStoreLong,dropOffLat,dropOffLong,order_type,payment_type,notes,providerPhone,
+                            userPhone,markAsArrived,markAsCompleted,vehicleDetailsSaved,timeInSeconds,timerSaved,vehicleFullPhotoSaved,isCashReceived,isOrderPaid,ratings,reviewsNotes);
                     makeOrder(orderRequest);
                 }else{
                     Tools.showToast(getContext(),response.body().getMessage().toString());
                 }
-
             }
 
             @Override
@@ -385,7 +472,7 @@ public class MakeOrderFragment extends Fragment {
 
     private void makeOrder(OrderRequest orderRequest) {
         DatabaseViewModel databaseViewModel=new DatabaseViewModel();
-        databaseViewModel.addUserDatabase(orderRequest);
+        databaseViewModel.addOrderRequestInDatabase(orderRequest);
         databaseViewModel.successAddOrderRequest.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {

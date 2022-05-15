@@ -235,7 +235,6 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                     />
                 <EditText
-                    android:focusable="false"
                     android:id="@+id/input_dropoff"
                     android:inputType="none"
                     android:layout_marginLeft="@dimen/spacing_medium"
@@ -353,6 +352,7 @@
                 android:textColor="@color/grey_60"
                 />
             <EditText
+                android:padding="@dimen/spacing_medium"
                 android:id="@+id/input_notes"
                 android:layout_marginTop="@dimen/spacing_large"
                 android:layout_width="match_parent"
@@ -361,6 +361,7 @@
                 android:gravity="top|left"
                 android:minHeight="80dp"
                 android:background="@drawable/rectangle_shape"
+                android:backgroundTint="@color/grey_300"
                 />
 
 
